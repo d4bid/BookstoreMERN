@@ -1,5 +1,5 @@
 import express, { request, response } from "express";
-import { PORT, mongoDBURL } from "./config.js";
+import { PORT, mongoDBURL, mongoDBURLLocal } from "./config.js";
 import mongoose from "mongoose";
 import { Book } from "./models/bookModel.js";
 import booksRoute from './routes/booksRoute.js';
@@ -30,7 +30,7 @@ app.get('/', (request, response) => {
 app.use('/books', booksRoute);
 
 mongoose
-    .connect(mongoDBURL)
+    .connect(mongoDBURLLocal)
     .then(() => {
         console.log('App connected to database');
         app.listen(PORT, () => {

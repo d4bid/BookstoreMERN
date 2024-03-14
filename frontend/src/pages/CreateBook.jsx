@@ -25,7 +25,7 @@ const CreateBooks = () => {
       })
       .catch((error) => {
         setLoading(false);
-        alert('An error happened. Please check console');
+        alert('An error occurred. Please check console');
         console.log(error);
       });
   };
@@ -56,7 +56,7 @@ const CreateBooks = () => {
         <div className="my-4">
           <label className='text-xl mr-4 text-gray-500'>Publish Year</label>
           <input
-            type='text'
+            type='number'
             value={publishYear}
             onChange={(e) => setPublishYear(e.target.value)}
             className='border-2 border-gray-500 px-4 py-2 w-full'
