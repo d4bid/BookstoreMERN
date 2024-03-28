@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import BackButton from '../../components/BackButton'
+import BackButton from '../../components/BackButtonHome'
 import Spinner from '../../components/Spinner'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -18,7 +18,7 @@ const DeleteBook = () => {
       .then(() => {
         setLoading(false);
         enqueueSnackbar('Book Deleted Succesfully', {variant: 'success'});
-        navigate('/');
+        navigate('/books');
       })
       .catch((error) => {
         setLoading(false);
@@ -30,7 +30,7 @@ const DeleteBook = () => {
 
   return (
     <div className='p-4'>
-      <BackButton />
+      <BackButton destination="/books" />
       <h1 className='text-3xl my-4'>Delete Book</h1>
       {loading ? <Spinner /> : ''}
       <div className="flex flex-col items-center border-2 border-sky-400 rounded-xl w-[600px] p-8 mx-auto">

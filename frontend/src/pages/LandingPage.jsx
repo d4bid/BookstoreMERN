@@ -6,7 +6,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/books/home');
+    navigate('/home');
   };
 
   return (
@@ -15,7 +15,7 @@ const LandingPage = () => {
       onClick={handleClick}
     >
       <img src={logo} alt="HPI Logo" className="w-1/4 mb-4" />
-      <p className="text-white text-2xl cursor-pointer">Press to Start</p>
+      <p className="text-white text-2xl cursor-pointer">Touch to Start</p>
     </div>
   );
 };
