@@ -3,7 +3,13 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import nodemailer from 'nodemailer';
-import { sendEmail } from '../utils/sendEmail.js';
+import dotenv from 'dotenv';
+import OAuth2 from 'google-auth-library';
+import mongoose from 'mongoose';
+import Token from '../models/Token.js';
+import cron from 'node-cron';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -40,21 +46,48 @@ router.post('/save-image', (req, res) => {
   }
 });
 
-// New endpoint to send email
 router.post('/send-email', async (req, res) => {
   const { to, subject, text, imagePath } = req.body;
 
   try {
-    const result = await sendEmail(to, subject, text);  // Use sendEmail function
-    if (result.success) {
-      res.status(200).json({ message: 'Email sent successfully' });
-    } else {
-      res.status(500).json({ error: result.error });
-    }
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_USER,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+      
+    });
+
+    // Define email options
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      text,
+      attachments: [
+        {
+          path: imagePath
+        }
+      ]
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: 'Failed to send email' });
   }
 });
+
 
 export default router;
