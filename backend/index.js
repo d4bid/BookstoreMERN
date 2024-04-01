@@ -8,20 +8,14 @@ import cors from 'cors';
 
 const app = express();
 
+app.use(express.json({ limit: '50mb' })); // Increase JSON payload limit
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 //Middleware for parsing request body
 app.use(express.json());
 
 //Middleware for handling CORS POLICY
-//Option 1: Allow All Origins with Default of CORS(*)
 app.use(cors());
-//Option 2: Allow Custom Origins
-// app.use(
-//     cors({
-//         origin: 'http://localhost:3000',
-//         methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//         allowedHeaders: ['Content-Type'],
-//     })
-// );
 
 app.get('/', (request, response) => {
     console.log(request)
