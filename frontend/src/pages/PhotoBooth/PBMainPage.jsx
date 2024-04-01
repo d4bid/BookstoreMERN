@@ -29,16 +29,16 @@ const PBMainPage = () => {
     image.onload = () => {
       canvas.width = image.width;
       canvas.height = image.height;
-      
+
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-      
+
       if (selectedFrame) {
         const frameImage = new Image();
         frameImage.src = selectedFrame;
-        
+
         frameImage.onload = () => {
           ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-          
+
           const newImageSrc = canvas.toDataURL('image/jpeg');
           setCapturedImage(newImageSrc);
           setIsPreviewOpen(true);
@@ -90,7 +90,7 @@ const PBMainPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-red-500">
       <BackButton destination="/home" />
       <div className="relative mb-4">
-        <Webcam 
+        <Webcam
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
@@ -98,7 +98,7 @@ const PBMainPage = () => {
           style={{ width: '100%', height: 'auto' }}
         />
         {selectedFrame && (
-          <img 
+          <img
             src={selectedFrame}
             alt="Selected Frame"
             className="absolute top-0 left-0 w-full h-full"
@@ -109,10 +109,10 @@ const PBMainPage = () => {
       <FrameSelector onSelectFrame={handleSelectFrame} />
       <CaptureButton onCapture={handleCapture} />
       {isPreviewOpen && (
-        <PreviewModal 
-          imageSrc={capturedImage} 
-          onClose={handleClosePreview} 
-          onSave={handleSaveImage} 
+        <PreviewModal
+          imageSrc={capturedImage}
+          onClose={handleClosePreview}
+          onSave={handleSaveImage}
           onSendEmail={handleSendEmail}  // Passing handleSendEmail here
         />
       )}
