@@ -9,6 +9,7 @@ import { useSnackbar } from 'notistack'
 
 const PBMainPage = () => {
   const webcamRef = useRef(null);
+
   const [selectedFrame, setSelectedFrame] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -30,6 +31,8 @@ const PBMainPage = () => {
       canvas.width = image.width;
       canvas.height = image.height;
 
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
       if (selectedFrame) {
@@ -95,14 +98,14 @@ const PBMainPage = () => {
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           className="mb-4"
-          style={{ width: '100%', height: 'auto' }}
+          style={{ width: '100%', height: 'auto' ,transform: 'scaleX(-1)'}}
         />
         {selectedFrame && (
           <img
             src={selectedFrame}
             alt="Selected Frame"
-            className="absolute top-0 left-0 w-full h-full"
-            style={{ width: '100%', height: 'auto' }}
+            className="absolute bottom-0 left-0 w-full h-full"
+            style={{ width: '100%',transform: 'scaleX(-1)'}}
           />
         )}
       </div>
