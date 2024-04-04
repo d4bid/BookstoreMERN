@@ -1,6 +1,6 @@
 // FrameSelector.jsx
 import React from 'react';
-import frametest from '../../assets/tite.png';
+import frametest from '../../assets/2a.png';
 
 const FrameSelector = ({ onSelectFrame }) => {
   return (
