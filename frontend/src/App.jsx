@@ -9,8 +9,9 @@ import EditBook from './pages/Books/EditBook'
 import DeleteBook from './pages/Books/DeleteBook'
 import PhotoBook from './pages/PhotoBooth/PBMainPage'
 import FrameList from './pages/Frames/Framelist'
-import AddFrame from './pages/Frames/AddFrame'
-
+import AddFrame from './pages/Frames/AddFrameModal'
+import EditFrame from './pages/Frames/EditFrameModal'
+  
 
 const App = () => {
   return (
@@ -35,9 +36,9 @@ const App = () => {
       {/* Frames CRUD routes */}
       <Route path='/frames' element={<FrameList />} />
       <Route path='/frames/add' element={<AddFrame />} />
-      {/* <Route path='/frames/view/:id' element={<ViewFrame />} />
       <Route path='/frames/edit/:id' element={<EditFrame />} />
-      <Route path='/frames/delete/:id' element={<DeleteFrame />} /> */}
+      {/* <Route path='/frames/view/:id' element={<ViewFrame />} /> */}
+      {/* <Route path='/frames/delete/:id' element={<DeleteFrame />} /> */}
 
     </Routes>
   )
