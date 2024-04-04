@@ -28,6 +28,7 @@ const EditBook = () => {
       console.log(error);
     })
   }, [])
+  
   const handleEditBook = () => {
     const data = {
       title,
