@@ -1,13 +1,14 @@
 import React from 'react';
 import Slideshow from '../components/Home/Slideshow';
 import Card from '../components/Home/Card';
+import PhotoboothButton from '../components/Home/PhotoboothButton';
 import { useNavigate } from 'react-router-dom';
 
 const InitialPage = () => {
     const slideshowImages = [
-        'path/to/image1.jpg',
-        'path/to/image2.jpg',
-        'path/to/image3.jpg',
+        '../src/assets/slideshow/slide1.jpg',
+        '../src/assets/slideshow/slide2.jpg',
+        '../src/assets/slideshow/slide3.jpg',
     ];
 
     const navigate = useNavigate();
@@ -27,10 +28,12 @@ const InitialPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Slideshow images={slideshowImages} />
-            <div className="flex-grow flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4">
+        <div className="min-h-screen flex flex-col justify-center relative">
+            <div className="flex-grow">
+                <Slideshow images={slideshowImages} className="w-full" />
+            </div>
+            <div className="absolute left-0 right-0 mb-0 flex justify-center">
+                <div className="flex flex-col lg:flex-row gap-4 items-center">
                     <Card
                         title="About Us"
                         onClick={handleAboutUsClick}
@@ -41,16 +44,11 @@ const InitialPage = () => {
                     />
                 </div>
             </div>
-            <div className="flex justify-center mb-4">
-                <button
+            <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
+                <PhotoboothButton
+                    title="Tap to open photo booth"
                     onClick={handlePhotoboothClick}
-                    className="w-full md:w-auto bg-blue-500 text-white py-6 md:py-4 rounded-none flex items-center justify-center"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 md:h-6 md:w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Photobooth
-                </button>
+                />
             </div>
         </div>
     );

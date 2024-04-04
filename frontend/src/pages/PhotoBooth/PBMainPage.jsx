@@ -5,7 +5,7 @@ import FrameSelector from '../../components/PhotoBooth/FrameSelector';
 import CaptureButton from '../../components/PhotoBooth/CaptureButton';
 import PreviewModal from '../../components/PhotoBooth/PreviewModal';
 import BackButton from '../../components/BackButtonHome';
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from 'notistack';
 
 const PBMainPage = () => {
   const webcamRef = useRef(null);
@@ -62,9 +62,9 @@ const PBMainPage = () => {
     try {
       const response = await axios.post('http://localhost:5555/photos/save-image', { imageData: capturedImage });
       const { imagePath } = response.data;
-      enqueueSnackbar(`Image saved successfully at ${imagePath}`, {variant: 'success'});
+      enqueueSnackbar(`Image saved successfully at ${imagePath}`, { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar(`Failed to save image`, {variant: 'error'});
+      enqueueSnackbar(`Failed to save image`, { variant: 'error' });
     }
   };
 
@@ -90,22 +90,22 @@ const PBMainPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-red-500">
-      <BackButton destination="/home" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white-500">
+      <h2>Photo Booth</h2>
       <div className="relative mb-4">
         <Webcam
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           className="mb-4"
-          style={{ width: '100%', height: 'auto' ,transform: 'scaleX(-1)'}}
+          style={{ width: '100vw', height: 'auto', transform: 'scaleX(-1)' }}
         />
         {selectedFrame && (
           <img
             src={selectedFrame}
             alt="Selected Frame"
             className="absolute bottom-0 left-0 w-full h-full"
-            style={{ width: '100%',transform: 'scaleX(-1)'}}
+            style={{ width: '100%' }}
           />
         )}
       </div>
@@ -119,7 +119,9 @@ const PBMainPage = () => {
           onSendEmail={handleSendEmail}  // Passing handleSendEmail here
         />
       )}
+       <BackButton destination="/home" />
     </div>
+
   );
 };
 
