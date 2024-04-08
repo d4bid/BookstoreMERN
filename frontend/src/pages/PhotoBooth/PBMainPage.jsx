@@ -21,33 +21,55 @@ const PBMainPage = () => {
 
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
+    
     const image = new Image();
     image.src = imageSrc;
-
+  
     image.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+  
       canvas.width = image.width;
       canvas.height = image.height;
-
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
+  
+      // Draw the image onto the canvas
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
+  
+      // Create a new canvas for flipped image
+      const flippedCanvas = document.createElement('canvas');
+      const flippedCtx = flippedCanvas.getContext('2d');
+  
+      flippedCanvas.width = canvas.width;
+      flippedCanvas.height = canvas.height;
+  
+      // Flip the image horizontally
+      flippedCtx.translate(flippedCanvas.width, 0);
+      flippedCtx.scale(-1, 1);
+      flippedCtx.drawImage(image, 0, 0, flippedCanvas.width, flippedCanvas.height);
+  
       if (selectedFrame) {
+        const frameCanvas = document.createElement('canvas');
+        const frameCtx = frameCanvas.getContext('2d');
+  
+        frameCanvas.width = canvas.width;
+        frameCanvas.height = canvas.height;
+  
         const frameImage = new Image();
         frameImage.src = selectedFrame;
-
+  
         frameImage.onload = () => {
-          ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-
-          const newImageSrc = canvas.toDataURL('image/jpeg');
+          // Draw the flipped image onto the frame canvas
+          frameCtx.drawImage(flippedCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
+  
+          // Draw the frame on top of the flipped image
+          frameCtx.drawImage(frameImage, 0, 0, frameCanvas.width, frameCanvas.height);
+  
+          const newImageSrc = frameCanvas.toDataURL('image/jpeg');
           setCapturedImage(newImageSrc);
           setIsPreviewOpen(true);
         };
       } else {
-        const newImageSrc = canvas.toDataURL('image/jpeg');
+        const newImageSrc = flippedCanvas.toDataURL('image/jpeg');
         setCapturedImage(newImageSrc);
         setIsPreviewOpen(true);
       }
@@ -119,7 +141,7 @@ const PBMainPage = () => {
           onSendEmail={handleSendEmail}  // Passing handleSendEmail here
         />
       )}
-       <BackButton destination="/home" />
+      <BackButton destination="/home" />
     </div>
 
   );
