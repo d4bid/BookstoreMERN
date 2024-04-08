@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import Webcam from 'react-webcam';
 import FrameSelector from '../../components/PhotoBooth/FrameSelector';
 import CaptureButton from '../../components/PhotoBooth/CaptureButton';
 import PreviewModal from '../../components/PhotoBooth/PreviewModal';
 import BackButton from '../../components/BackButtonHome';
+import Spinner from '../../components/Spinner'; // Import Spinner component
 import { useSnackbar } from 'notistack';
 
 const PBMainPage = () => {
@@ -12,8 +13,20 @@ const PBMainPage = () => {
 
   const [selectedFrame, setSelectedFrame] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    const loadCamera = async () => {
+      // Simulate camera loading delay (You can replace this with actual camera loading logic)
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    };
+
+    loadCamera();
+  }, []);
 
   const handleSelectFrame = (frame) => {
     setSelectedFrame(frame);
@@ -111,9 +124,17 @@ const PBMainPage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white-500">
+        <Spinner /> {/* Centered Spinner */}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white-500">
-      <h2>Photo Booth</h2>
+      <h1>Photo Booth</h1>
       <div className="relative mb-4">
         <Webcam
           audio={false}
@@ -143,7 +164,6 @@ const PBMainPage = () => {
       )}
       <BackButton destination="/home" />
     </div>
-
   );
 };
 
