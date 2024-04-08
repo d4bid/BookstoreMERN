@@ -17,28 +17,20 @@ const Slideshow = ({ images }) => {
   return (
     <div className="relative">
       <div className="relative w-full h-0 overflow-hidden" style={{ paddingTop: "56.25%" }}>
-        <div className="absolute inset-0 flex" style={{ width: `${(images.length + 2) * 100}%`, transform: `translateX(-${(currentImageIndex + 1) * (100 / (images.length + 2))}%)`, transition: "transform 0.5s ease-in-out" }}>
-          <img
-            src={images[images.length - 1]}
-            alt="Slideshow"
-            className="w-full h-full object-cover"
-            style={{ flex: `0 0 ${100 / (images.length + 2)}%` }}
-          />
+        <div className="absolute inset-0 flex" style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImageIndex * (100 / images.length)}%)`, transition: "transform 0.5s ease-in-out" }}>
           {images.map((image, index) => (
             <img
               key={index}
               src={image}
               alt="Slideshow"
               className="w-full h-full object-cover"
-              style={{ flex: `0 0 ${100 / (images.length + 2)}%` }}
+              style={{
+                opacity: currentImageIndex === index ? 1 : 0,
+                transition: "opacity 0.5s ease-in-out",
+                flex: `0 0 ${100 / images.length}%`
+              }}
             />
           ))}
-          <img
-            src={images[0]}
-            alt="Slideshow"
-            className="w-full h-full object-cover"
-            style={{ flex: `0 0 ${100 / (images.length + 2)}%` }}
-          />
         </div>
       </div>
       <div className="absolute inset-0 flex items-center justify-between p-4">

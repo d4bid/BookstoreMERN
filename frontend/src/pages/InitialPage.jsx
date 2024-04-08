@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const InitialPage = () => {
     const slideshowImages = [
-        '../src/assets/slideshow/slide1.jpg',
+        '../src/assets/frametest.png',
         '../src/assets/slideshow/slide2.jpg',
         '../src/assets/slideshow/slide3.jpg',
     ];
