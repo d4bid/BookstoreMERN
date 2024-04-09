@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import booksRoute from './routes/booksRoute.js';
 import framesRoute from './routes/framesRoute.js';
 import photosRoute from './routes/photosRoute.js';
+import partnersRoute from './routes/partnersRoute.js';
 import cors from 'cors';
 
 const app = express();
@@ -25,6 +26,7 @@ app.get('/', (request, response) => {
 app.use('/books', booksRoute);
 app.use('/frames', framesRoute);
 app.use('/photos', photosRoute);
+app.use('/partners', partnersRoute);
 
 mongoose
     .connect(mongoDBURLLocal)

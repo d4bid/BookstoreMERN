@@ -1,5 +1,6 @@
 import React from 'react'
 import {Routes, Route} from 'react-router-dom'
+// import { IdleTimerProvider } from './IdleTimerContext';
 import LandingPage from './pages/LandingPage'
 import InitialPage from './pages/InitialPage'
 import BookList from './pages/Books/Booklist'
@@ -11,6 +12,9 @@ import PhotoBook from './pages/PhotoBooth/PBMainPage'
 import FrameList from './pages/Frames/Framelist'
 import AddFrame from './pages/Frames/AddFrameModal'
 import EditFrame from './pages/Frames/EditFrameModal'
+import AdminPage from './pages/Admin/AdminPage'
+import PartnersPage from './pages/Partners/PartnerList'
+import AddPartner from './pages/Partners/AddPartnerModal'
   
 
 const App = () => {
@@ -33,10 +37,19 @@ const App = () => {
       <Route path='/photobooth' element={<PhotoBook />} />
 
 
+      {/* ADMIN CRUD routes */}
+      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin/frames" element={<FrameList />} />
+      <Route path='/admin/frames/add' element={<AddFrame />} />
+      <Route path='/admin/frames/edit/:id' element={<EditFrame />} />
+
+      <Route path="/admin/partners" element={<PartnersPage />} />
+      <Route path='/admin/partners/add' element={<AddPartner />} />
+      {/* <Route path="/admin/clients" element={<ClientsPage />} /> */}
+
+
       {/* Frames CRUD routes */}
-      <Route path='/frames' element={<FrameList />} />
-      <Route path='/frames/add' element={<AddFrame />} />
-      <Route path='/frames/edit/:id' element={<EditFrame />} />
+      {/* <Route path='/frames' element={<FrameList />} /> */}
       {/* <Route path='/frames/view/:id' element={<ViewFrame />} /> */}
       {/* <Route path='/frames/delete/:id' element={<DeleteFrame />} /> */}
 

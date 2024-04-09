@@ -7,7 +7,7 @@ const frameSchema = mongoose.Schema(
             required: true,
         },
         image: {
-            type: Buffer,  // Changed type to Buffer
+            type: Buffer,
             required: true,
         },
     },
