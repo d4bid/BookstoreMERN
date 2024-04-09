@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import hytecLogo from '../assets/hytecLogo.png';
 
 const Spinner = () => {
   return (
-    <div className='animate-ping w-16 h-16 m-8 rounded-full bg-sky-600'></div>
-  )
+    <div className='flex justify-center items-center h-screen'>
+      <img src={hytecLogo} alt="Loading..." className='w-1/4 animate-zoom' />
+    </div>
+  );
 }
 
-export default Spinner
+export default Spinner;
