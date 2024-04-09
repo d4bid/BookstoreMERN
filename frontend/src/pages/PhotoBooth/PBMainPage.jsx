@@ -34,49 +34,49 @@ const PBMainPage = () => {
 
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    
+
     const image = new Image();
     image.src = imageSrc;
-  
+
     image.onload = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-  
+
       canvas.width = image.width;
       canvas.height = image.height;
-  
+
       // Draw the image onto the canvas
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  
+
       // Create a new canvas for flipped image
       const flippedCanvas = document.createElement('canvas');
       const flippedCtx = flippedCanvas.getContext('2d');
-  
+
       flippedCanvas.width = canvas.width;
       flippedCanvas.height = canvas.height;
-  
+
       // Flip the image horizontally
       flippedCtx.translate(flippedCanvas.width, 0);
       flippedCtx.scale(-1, 1);
       flippedCtx.drawImage(image, 0, 0, flippedCanvas.width, flippedCanvas.height);
-  
+
       if (selectedFrame) {
         const frameCanvas = document.createElement('canvas');
         const frameCtx = frameCanvas.getContext('2d');
-  
+
         frameCanvas.width = canvas.width;
         frameCanvas.height = canvas.height;
-  
+
         const frameImage = new Image();
         frameImage.src = selectedFrame;
-  
+
         frameImage.onload = () => {
           // Draw the flipped image onto the frame canvas
           frameCtx.drawImage(flippedCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
-  
+
           // Draw the frame on top of the flipped image
           frameCtx.drawImage(frameImage, 0, 0, frameCanvas.width, frameCanvas.height);
-  
+
           const newImageSrc = frameCanvas.toDataURL('image/jpeg');
           setCapturedImage(newImageSrc);
           setIsPreviewOpen(true);
@@ -131,18 +131,24 @@ const PBMainPage = () => {
       </div>
     );
   }
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white-500">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none' }}>
+
+      <div className="absolute top-0 left-0 mt-4 ml-4">
+        <BackButton destination="/home" />
+      </div>
+
       <h1>Photo Booth</h1>
+
       <div className="relative mb-4">
         <Webcam
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           className="mb-4"
-          style={{ width: '100vw', height: 'auto', transform: 'scaleX(-1)' }}
+          style={{ width: '80vw', height: 'auto', transform: 'scaleX(-1)' }}
         />
+
         {selectedFrame && (
           <img
             src={selectedFrame}
@@ -152,19 +158,25 @@ const PBMainPage = () => {
           />
         )}
       </div>
+
       <FrameSelector onSelectFrame={handleSelectFrame} />
-      <CaptureButton onCapture={handleCapture} />
+
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center mb-4">
+        <CaptureButton onCapture={handleCapture} />
+      </div>
+
       {isPreviewOpen && (
         <PreviewModal
           imageSrc={capturedImage}
           onClose={handleClosePreview}
           onSave={handleSaveImage}
-          onSendEmail={handleSendEmail}  // Passing handleSendEmail here
+          onSendEmail={handleSendEmail}
         />
       )}
-      <BackButton destination="/home" />
+
     </div>
   );
-};
+
+}
 
 export default PBMainPage;

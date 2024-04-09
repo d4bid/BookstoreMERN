@@ -29,18 +29,18 @@ const FrameSelector = ({ onSelectFrame }) => {
   };
 
   return (
-    <div className="flex items-center space-x-4 mb-4 overflow-x-auto p-4 bg-gray-100 rounded-md border-2 border-gray-300" style={{ maxWidth: '100vw', maxHeight: '20vh' }}>
+    <div className="flex items-center space-x-4 mb-4 overflow-x-auto p-4 bg-white rounded-md" style={{ maxWidth: '80vw', maxHeight: '20vh' }}>
       {frames.map((frame, index) => (
-        <button 
-          key={index} 
-          onClick={() => handleFrameClick(frame)} 
+        <button
+          key={index}
+          onClick={() => handleFrameClick(frame)}
           className={`border p-2 rounded-md transition-colors duration-300 ${selectedFrame === frame ? 'bg-blue-200' : 'hover:bg-gray-200'}`}
           style={{ flex: '0 0 auto', minWidth: '20%', height: '100px' }} // Adjust size for 6 frames in a row
         >
-          <img 
-            src={`data:image/jpeg;base64,${frame.image}`} 
-            alt={`Frame ${index + 1}`} 
-            className="w-full h-full object-cover rounded-md" 
+          <img
+            src={`data:image/jpeg;base64,${frame.image}`}
+            alt={`Frame ${index + 1}`}
+            className="w-full h-full object-cover rounded-md"
           />
           <span className="text-center">{frame.name}</span> {/* Display name below the image */}
 
