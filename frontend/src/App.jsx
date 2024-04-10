@@ -8,12 +8,12 @@ import ShowBook from './pages/Books/ShowBook';
 import EditBook from './pages/Books/EditBook';
 import DeleteBook from './pages/Books/DeleteBook';
 import PhotoBook from './pages/PhotoBooth/PBMainPage';
-import FrameList from './pages/Frames/Framelist';
-import AddFrame from './pages/Frames/AddFrameModal';
-import EditFrame from './pages/Frames/EditFrameModal';
+import FrameList from './pages/Admin/Frames/Framelist';
+import AddFrame from './pages/Admin/Frames/AddFrameModal';
+import EditFrame from './pages/Admin/Frames/EditFrameModal';
 import AdminPage from './pages/Admin/AdminPage';
-import PartnersPage from './pages/Partners/PartnerList';
-import AddPartner from './pages/Partners/AddPartnerModal';
+import PartnersPage from './pages/Admin/Partners/PartnerList';
+import AddPartner from './pages/Admin/Partners/AddPartnerModal';
 
 const App = () => {
   const navigate = useNavigate();
@@ -27,8 +27,8 @@ const App = () => {
       timer = setTimeout(() => {
         setIsActive(false);
         navigate('/');
-        // console.log('Navigated to home page');
-      }, 30000); // 30 seconds
+        console.log('Navigated to home page');
+      }, 3000000); // 30 seconds if 30000
       console.log('Timer reset');
     };
 
