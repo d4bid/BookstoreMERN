@@ -28,7 +28,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         // console.log('Navigated to home page');
-      }, 5000); // 5 seconds
+      }, 30000); // 30 seconds
       console.log('Timer reset');
     };
 
