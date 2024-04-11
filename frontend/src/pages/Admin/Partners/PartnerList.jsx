@@ -23,6 +23,27 @@ const PartnerList = () => {
         console.log(error);
         setLoading(false);
       });
+
+    // Listen for newPartnerAdded and partnerUpdated events
+    const updatePartners = () => {
+      axios
+        .get("http://localhost:5555/partners")
+        .then((response) => {
+          setPartners(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    window.addEventListener('newPartnerAdded', updatePartners);
+    window.addEventListener('partnerUpdated', updatePartners);
+
+    // Cleanup the event listeners
+    return () => {
+      window.removeEventListener('newPartnerAdded', updatePartners);
+      window.removeEventListener('partnerUpdated', updatePartners);
+    };
   }, []);
 
   const filteredPartners = selectedType === "all" ? partners : partners.filter(partner => partner.type === selectedType);
