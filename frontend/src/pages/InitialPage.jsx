@@ -5,6 +5,9 @@ import PhotoboothButton from '../components/Home/PhotoboothButton';
 import UrlModal from '../components/UrlModal';
 import { useNavigate } from 'react-router-dom';
 
+// fdffs
+
+
 const InitialPage = () => {
   const slideshowImages = [
     '../src/assets/frametest.png',
