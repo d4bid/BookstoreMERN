@@ -5,8 +5,10 @@ import FrameSelector from '../../components/PhotoBooth/FrameSelector';
 import CaptureButton from '../../components/PhotoBooth/CaptureButton';
 import PreviewModal from '../../components/PhotoBooth/PreviewModal';
 import BackButton from '../../components/BackButtonHome';
-import Spinner from '../../components/Spinner'; // Import Spinner component
+import Spinner from '../../components/Spinner';
 import { useSnackbar } from 'notistack';
+import hytecLogo from '../../assets/hytecLogo.png';
+import Timer from '../../components/PhotoBooth/Timer';
 
 const PBMainPage = () => {
   const webcamRef = useRef(null);
@@ -15,6 +17,9 @@ const PBMainPage = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [showFrameSelector, setShowFrameSelector] = useState(true); // Manage visibility of frame selector
+  const [showCountdown, setShowCountdown] = useState(false); // Manage visibility of countdown timer
+  const [showCaptureButton, setShowCaptureButton]=useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -31,6 +36,7 @@ const PBMainPage = () => {
   const handleSelectFrame = (frame) => {
     setSelectedFrame(frame);
   };
+
 
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -124,6 +130,19 @@ const PBMainPage = () => {
     }
   };
 
+  const handleCountdown = () => {
+    setShowFrameSelector(false);
+    setShowCountdown(true);
+    setShowCaptureButton(false);
+  };
+
+  const handleCountdownEnd = () => {
+    handleCapture(); // Capture photo
+    setShowCountdown(false); // Hide countdown timer
+    setShowFrameSelector(true); // Make frame selector reappear
+    setShowCaptureButton(true);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white-500">
@@ -132,22 +151,26 @@ const PBMainPage = () => {
     );
   }
   return (
-    <div className="flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none' }}>
+    <div className="flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none', minHeight: '100vh' }}>
 
-      <div className="absolute top-0 left-0 mt-4 ml-4">
+      <div className="absolute top-0 left-0 mt-4 ml-4" style={{width:'10vw', height:'auto'}}>
         <BackButton destination="/home" />
       </div>
 
-      <div className="flex flex-col items-center justify-center">
-        <h1>Photo Booth</h1>
+      <div className="flex-grow"></div>
 
-        <div className="relative">
+      <div className="flex-grow" style={{maxWidth:'40vw'}}>
+        <img src={hytecLogo} alt="Photo Booth" />
+      </div>
+
+      <div className="flex flex-col items-center justify-start">
+        <div className="relative mb-8" style={{ width: '80vw', maxWidth:'1536px' }}>
           <Webcam
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="mb-4"
-            style={{ width: '80vw', height: 'auto', transform: 'scaleX(-1)' }}
+            style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)' }}
           />
 
           {selectedFrame && (
@@ -159,17 +182,22 @@ const PBMainPage = () => {
             />
           )}
         </div>
+      </div>
 
-        <div className="mt-8">
+      <div style={{ flex: 1 }}></div>
+      {showCountdown && <Timer durationInSeconds={3} onCountdownEnd={handleCountdownEnd} />}
+
+      {showFrameSelector && (
+        <div className="mt-auto mb-8">
           <FrameSelector onSelectFrame={handleSelectFrame} />
         </div>
-      </div>
-
-      <div className="flex-grow"></div> {/* This will push the capture button to the bottom */}
-
-      <div className="mb-8">
-        <CaptureButton onCapture={handleCapture} />
-      </div>
+      )}
+        <div style={{ flex: 1 }}></div>
+      {showCaptureButton && (
+              <div className="mb-8">
+              <CaptureButton onCapture={handleCountdown} />
+            </div>
+      )}
 
       {isPreviewOpen && (
         <PreviewModal
@@ -184,6 +212,6 @@ const PBMainPage = () => {
   );
 
 
-  }
+}
 
 export default PBMainPage;

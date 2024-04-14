@@ -6,9 +6,10 @@ const BackButton = ({ destination }) => {
     <div className="flex">
       <Link
         to={destination}
-        className="bg-sky-800 text-white px-4 py-1 rounded-lg w-fit"
+        className="bg-white text-red-500 rounded-lg flex items-center justify-center"
+        style={{ padding: "0.5rem 1rem" }} // Adjust padding as needed
       >
-        <BsArrowLeft className="text-2xl" />
+        <BsArrowLeft className="text-4xl lg:text-6xl" /> {/* Adjust icon size */}
       </Link>
     </div>
   );
