@@ -72,15 +72,19 @@ router.get('/:id', async (request, response) => {
 // Route for updating a partner
 router.put('/:id', async (request, response) => {
     try {
-        if (!request.body.name || !request.body.type) {
-            return response.status(400).send({
-                message: 'Send all required fields: name, type',
-            });
-        }
-
         const { id } = request.params;
+        
+        const updateData = {
+            name: request.body.name,
+            type: request.body.type,
+            address: request.body.address,
+            contact: request.body.contact,
+            email: request.body.email,
+            website: request.body.website,
+            image: request.body.image && request.body.image.base64 ? Buffer.from(request.body.image.base64, 'base64') : undefined,
+        };
 
-        const result = await Partner.findByIdAndUpdate(id, request.body);
+        const result = await Partner.findByIdAndUpdate(id, updateData);
 
         if (!result) {
             return response.status(404).json({ message: 'Partner not found' });

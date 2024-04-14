@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Spinner from '../../../components/Spinner';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
@@ -8,6 +8,10 @@ const AddPartnerModal = ({ onClose }) => {
     const [type, setType] = useState('company');
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [address, setAddress] = useState('');
+    const [contact, setContact] = useState('');
+    const [email, setEmail] = useState('');
+    const [website, setWebsite] = useState('');
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -44,6 +48,10 @@ const AddPartnerModal = ({ onClose }) => {
                 name,
                 type,
                 image: base64Image,
+                address,
+                contact,
+                email,
+                website,
             };
 
             await axios.post('http://localhost:5555/partners', formData);
@@ -99,6 +107,42 @@ const AddPartnerModal = ({ onClose }) => {
                             className="mt-4 max-w-[300px] mx-auto"
                         />
                     )}
+                </div>
+                <div className="my-4">
+                    <label className='text-xl mr-4 text-gray-500'>Address</label>
+                    <input
+                        type='text'
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className='border-2 border-gray-500 px-4 py-2 w-full'
+                    />
+                </div>
+                <div className="my-4">
+                    <label className='text-xl mr-4 text-gray-500'>Contact</label>
+                    <input
+                        type='text'
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        className='border-2 border-gray-500 px-4 py-2 w-full'
+                    />
+                </div>
+                <div className="my-4">
+                    <label className='text-xl mr-4 text-gray-500'>Email</label>
+                    <input
+                        type='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className='border-2 border-gray-500 px-4 py-2 w-full'
+                    />
+                </div>
+                <div className="my-4">
+                    <label className='text-xl mr-4 text-gray-500'>Website</label>
+                    <input
+                        type='text'
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                        className='border-2 border-gray-500 px-4 py-2 w-full'
+                    />
                 </div>
                 <div className="flex justify-end">
                     <button className='p-2 bg-sky-300 mr-4' onClick={onClose}>

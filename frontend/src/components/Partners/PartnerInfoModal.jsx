@@ -1,12 +1,32 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useSnackbar } from "notistack";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
-const PartnerInfoModal = ({ partner, onClose, showDeleteButton = false }) => {
+const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
   const modalRef = useRef(null);
   const [editedPartner, setEditedPartner] = useState(partner);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleCloseModal = () => {
     onClose();
+  };
+
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
+    previewImage(selectedImage);
+  };
+
+  const previewImage = (image) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
   };
 
   const handleInputChange = (event) => {
@@ -17,17 +37,79 @@ const PartnerInfoModal = ({ partner, onClose, showDeleteButton = false }) => {
     });
   };
 
+  const convertImageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.put(`/api/partners/${partner._id}`, editedPartner);
+      let base64Image = editedPartner.image ? editedPartner.image.base64 : ''; // Default to an empty string
+
+      if (image) {
+        base64Image = await convertImageToBase64(image);
+      } else if (imagePreview) {
+        // If a new image is not selected but an image is displayed, use the displayed image
+        const base64ImageFromPreview = await convertImageToBase64(imagePreview);
+        base64Image = base64ImageFromPreview;
+      }
+
+      const requestData = {
+        name: editedPartner.name,
+        type: editedPartner.type,
+        address: editedPartner.address || '',
+        contact: editedPartner.contact || '',
+        email: editedPartner.email || '',
+        website: editedPartner.website || '',
+        image: {
+          base64: base64Image,
+          subType: "00", // Assuming the subType remains the same
+        },
+      };
+
+      const response = await axios.put(`http://localhost:5555/partners/${partner._id}`, requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (response.status === 200) {
-        alert('Partner updated successfully');
+        enqueueSnackbar('Partner updated successfully', { variant: 'success' });
         onClose();
+        window.dispatchEvent(new Event('partnerUpdated')); // Trigger re-fetch in Parent Component
       }
     } catch (error) {
-      alert('Error updating partner');
+      enqueueSnackbar(`Error updating partner: ${error.response ? error.response.data.message : error.message}`, { variant: 'error' });
+      console.log(error.response ? error.response.data.message : error.message);
+    }
+  };
+
+  const handleDelete = () => {
+    setIsConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5555/partners/${partner._id}`
+      );
+      if (response.status === 200) {
+        enqueueSnackbar("Partner deleted successfully", { variant: "success" });
+        onClose();
+        window.dispatchEvent(new Event("partnerUpdated")); // Trigger re-fetch in Parent Component
+      }
+    } catch (error) {
+      enqueueSnackbar("Error deleting partner", { variant: "error" });
       console.log(error.message);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setIsConfirmOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -47,85 +129,140 @@ const PartnerInfoModal = ({ partner, onClose, showDeleteButton = false }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div ref={modalRef} className="bg-white rounded-lg w-70vw p-6">
-        <button className="absolute top-4 right-4 text-xl text-gray-500" onClick={handleCloseModal}>
+        <button
+          className="absolute top-4 right-4 text-xl text-gray-500"
+          onClick={handleCloseModal}
+        >
           &times;
         </button>
-        {editedPartner.image && (
-          <img src={`data:image/png;base64,${editedPartner.image}`} alt={editedPartner.name} className="w-full h-40 object-cover rounded-lg mb-4" />
+        {imagePreview ? (
+          <img
+            src={imagePreview}
+            alt={editedPartner.name}
+            className="w-full h-40 object-cover rounded-lg mb-2"
+          />
+        ) : (
+          editedPartner.image && (
+            <img
+              src={`data:image/png;base64,${editedPartner.image}`}
+              alt={editedPartner.name}
+              className="w-full h-40 object-cover rounded-lg mb-2"
+            />
+          )
         )}
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold mb-2">{editedPartner.name}</h2>
-          <p className="text-gray-600">{editedPartner.type}</p>
-        </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Name</h3>
+        {isAdmin && (
+          <div className="mb-4">
+            <label htmlFor="imageInput" className="text-xl mr-4 text-gray-500">
+              Change Image
+            </label>
+            <input
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="border-2 border-gray-500 px-4 py-2 w-full"
+            />
+          </div>
+        )}
+        <div className="my-4">
+          <label className="text-xl mr-4 text-gray-500">Name</label>
           <input
             type="text"
             name="name"
             value={editedPartner.name}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            className="border-2 border-gray-500 px-4 py-2 w-full"
           />
         </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Type</h3>
-          <input
-            type="text"
-            name="type"
-            value={editedPartner.type}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Address</h3>
+        {isAdmin && (
+          <div className="my-4">
+            <label className="text-xl mr-4 text-gray-500">Type</label>
+            <select
+              name="type"
+              value={editedPartner.type}
+              onChange={handleInputChange}
+              className="border-2 border-gray-500 px-4 py-2 w-full"
+            >
+              <option value="academe">Academe</option>
+              <option value="company">Company</option>
+            </select>
+          </div>
+        )}
+        <div className="my-4">
+          <label className="text-xl mr-4 text-gray-500">Address</label>
           <input
             type="text"
             name="address"
             value={editedPartner.address || ""}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            className="border-2 border-gray-500 px-4 py-2 w-full"
             placeholder="No address provided"
           />
         </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Contact</h3>
+        <div className="my-4">
+          <label className="text-xl mr-4 text-gray-500">Contact</label>
           <input
             type="text"
             name="contact"
             value={editedPartner.contact || ""}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            className="border-2 border-gray-500 px-4 py-2 w-full"
             placeholder="No contact provided"
           />
         </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Email</h3>
+        <div className="my-4">
+          <label className="text-xl mr-4 text-gray-500">Email</label>
           <input
             type="text"
             name="email"
             value={editedPartner.email || ""}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            className="border-2 border-gray-500 px-4 py-2 w-full"
             placeholder="No email provided"
           />
         </div>
-        <div className="mb-2">
-          <h3 className="text-lg font-semibold mb-1">Website</h3>
+        <div className="my-4">
+          <label className="text-xl mr-4 text-gray-500">Website</label>
           <input
             type="text"
             name="website"
             value={editedPartner.website || ""}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            className="border-2 border-gray-500 px-4 py-2 w-full"
             placeholder="No website provided"
           />
         </div>
-        <div className="flex justify-end mt-4">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleSaveChanges}>
-            Save Changes
-          </button>
+        <div className="flex justify-between mt-4">
+          {isAdmin && (
+            <button
+              className="p-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          )}
+          {isAdmin && (
+            <button
+              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={handleSaveChanges}
+            >
+              Save Changes
+            </button>
+          )}
         </div>
+
+        <ConfirmDialog
+          title="Confirm Delete"
+          message="Are you sure you want to delete this partner?"
+          isOpen={isConfirmOpen}
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+        />
       </div>
     </div>
   );

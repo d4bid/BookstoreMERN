@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PartnerInfoModal from "../../components/Partners/PartnerInfoModal";
 
-const PartnerSingleCard = ({ partner }) => {
+const PartnerSingleCard = ({ partner, isAdmin = false }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -20,7 +20,7 @@ const PartnerSingleCard = ({ partner }) => {
       <div className="flex justify-start items-center gap-x-2">
         <h2 className="my-1">{partner.name}</h2>
       </div>
-      {showModal && <PartnerInfoModal partner={partner} onClose={handleCloseModal} showEditButton={true} showDeleteButton={true} />}
+      {showModal && <PartnerInfoModal partner={partner} onClose={handleCloseModal} isAdmin={isAdmin} />}
     </div>
   );
 };

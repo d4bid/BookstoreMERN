@@ -10,6 +10,7 @@ const PartnerList = () => {
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true); // Add isAdmin state
 
   useEffect(() => {
     setLoading(true);
@@ -23,6 +24,27 @@ const PartnerList = () => {
         console.log(error);
         setLoading(false);
       });
+
+    // Listen for newPartnerAdded and partnerUpdated events
+    const updatePartners = () => {
+      axios
+        .get("http://localhost:5555/partners")
+        .then((response) => {
+          setPartners(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    window.addEventListener('newPartnerAdded', updatePartners);
+    window.addEventListener('partnerUpdated', updatePartners);
+
+    // Cleanup the event listeners
+    return () => {
+      window.removeEventListener('newPartnerAdded', updatePartners);
+      window.removeEventListener('partnerUpdated', updatePartners);
+    };
   }, []);
 
   const filteredPartners = selectedType === "all" ? partners : partners.filter(partner => partner.type === selectedType);
@@ -33,6 +55,10 @@ const PartnerList = () => {
 
   const handleCloseAddModal = () => {
     setShowAddModal(false);
+  };
+
+  const handleToggleAdmin = () => {
+    setIsAdmin(!isAdmin);
   };
 
   return (
@@ -61,9 +87,19 @@ const PartnerList = () => {
         </div>
         <MdOutlineAddBox className="text-sky-800 text-4xl cursor-pointer" onClick={handleOpenAddModal} />
       </div>
+      <div className="flex justify-end mb-4">
+        <label className="text-gray-500 mr-2">Admin Mode:</label>
+        <input type="checkbox" checked={isAdmin} onChange={handleToggleAdmin} />
+      </div>
       {loading ? <Spinner /> : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {filteredPartners.map(partner => <PartnerSingleCard key={partner._id} partner={partner} />)}
+          {filteredPartners.map(partner => (
+            <PartnerSingleCard 
+              key={partner._id} 
+              partner={partner} 
+              isAdmin={isAdmin} 
+            />
+          ))}
         </div>
       )}
       {showAddModal && <AddPartnerModal onClose={handleCloseAddModal} />}
