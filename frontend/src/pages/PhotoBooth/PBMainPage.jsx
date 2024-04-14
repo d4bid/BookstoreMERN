@@ -132,36 +132,42 @@ const PBMainPage = () => {
     );
   }
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none' }}>
+    <div className="flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none' }}>
 
       <div className="absolute top-0 left-0 mt-4 ml-4">
         <BackButton destination="/home" />
       </div>
 
-      <h1>Photo Booth</h1>
+      <div className="flex flex-col items-center justify-center">
+        <h1>Photo Booth</h1>
 
-      <div className="relative mb-4">
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          className="mb-4"
-          style={{ width: '80vw', height: 'auto', transform: 'scaleX(-1)' }}
-        />
-
-        {selectedFrame && (
-          <img
-            src={selectedFrame}
-            alt="Selected Frame"
-            className="absolute bottom-0 left-0 w-full h-full"
-            style={{ width: '100%' }}
+        <div className="relative">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            className="mb-4"
+            style={{ width: '80vw', height: 'auto', transform: 'scaleX(-1)' }}
           />
-        )}
+
+          {selectedFrame && (
+            <img
+              src={selectedFrame}
+              alt="Selected Frame"
+              className="absolute bottom-0 left-0 w-full h-full"
+              style={{ width: '100%' }}
+            />
+          )}
+        </div>
+
+        <div className="mt-8">
+          <FrameSelector onSelectFrame={handleSelectFrame} />
+        </div>
       </div>
 
-      <FrameSelector onSelectFrame={handleSelectFrame} />
+      <div className="flex-grow"></div> {/* This will push the capture button to the bottom */}
 
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center mb-4">
+      <div className="mb-8">
         <CaptureButton onCapture={handleCapture} />
       </div>
 
@@ -177,6 +183,7 @@ const PBMainPage = () => {
     </div>
   );
 
-}
+
+  }
 
 export default PBMainPage;

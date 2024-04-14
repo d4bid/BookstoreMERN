@@ -35,7 +35,7 @@ const FrameSelector = ({ onSelectFrame }) => {
           key={index}
           onClick={() => handleFrameClick(frame)}
           className={`border p-2 rounded-md transition-colors duration-300 ${selectedFrame === frame ? 'bg-blue-200' : 'hover:bg-gray-200'}`}
-          style={{ flex: '0 0 auto', minWidth: '20%', height: '100px' }} // Adjust size for 6 frames in a row
+          style={{ flex: '0 0 grow', minWidth: '20vw', height: '10vh' }} // Adjust size for 6 frames in a row
         >
           <img
             src={`data:image/jpeg;base64,${frame.image}`}
