@@ -4,13 +4,13 @@ import Spinner from "../../../components/Spinner";
 import { MdOutlineAddBox } from "react-icons/md";
 import PartnerSingleCard from "../../../components/Partners/PartnerSingleCard";
 import AddPartnerModal from "./AddPartnerModal";
+import BackButton from "../../../components/BackButtonHome"; // Import BackButton component
 
-const PartnerList = () => {
+const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = "/admin/" }) => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true); // Add isAdmin state
 
   useEffect(() => {
     setLoading(true);
@@ -57,14 +57,10 @@ const PartnerList = () => {
     setShowAddModal(false);
   };
 
-  const handleToggleAdmin = () => {
-    setIsAdmin(!isAdmin);
-  };
-
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Partners List</h1>
+        <BackButton destination={backDestination} />
         <div className="flex gap-x-4">
           <button
             className={`px-4 py-1 rounded-lg ${selectedType === 'all' ? 'bg-sky-600 text-white' : 'bg-sky-300'}`}
@@ -85,14 +81,10 @@ const PartnerList = () => {
             Academe
           </button>
         </div>
-        <MdOutlineAddBox className="text-sky-800 text-4xl cursor-pointer" onClick={handleOpenAddModal} />
-      </div>
-      <div className="flex justify-end mb-4">
-        <label className="text-gray-500 mr-2">Admin Mode:</label>
-        <input type="checkbox" checked={isAdmin} onChange={handleToggleAdmin} />
+        {!hideAddButton && <MdOutlineAddBox className="text-sky-800 text-4xl cursor-pointer" onClick={handleOpenAddModal} />}
       </div>
       {loading ? <Spinner /> : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           {filteredPartners.map(partner => (
             <PartnerSingleCard 
               key={partner._id} 

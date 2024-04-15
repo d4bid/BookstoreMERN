@@ -1,7 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { FaSave, FaTrash } from "react-icons/fa"; // Importing react-icons
 import ConfirmDialog from "../../components/ConfirmDialog";
+import UrlModal from '../../components/UrlModal'; // Importing UrlModal
+import { useNavigate } from 'react-router-dom';
 
 const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
   const modalRef = useRef(null);
@@ -9,7 +12,9 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [redirectUrl, setRedirectUrl] = useState(null); // Added redirectUrl state
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate(); // Added useNavigate
 
   const handleCloseModal = () => {
     onClose();
@@ -48,12 +53,11 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
 
   const handleSaveChanges = async () => {
     try {
-      let base64Image = editedPartner.image ? editedPartner.image.base64 : ''; // Default to an empty string
+      let base64Image = editedPartner.image ? editedPartner.image.base64 : '';
 
       if (image) {
         base64Image = await convertImageToBase64(image);
       } else if (imagePreview) {
-        // If a new image is not selected but an image is displayed, use the displayed image
         const base64ImageFromPreview = await convertImageToBase64(imagePreview);
         base64Image = base64ImageFromPreview;
       }
@@ -67,7 +71,7 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
         website: editedPartner.website || '',
         image: {
           base64: base64Image,
-          subType: "00", // Assuming the subType remains the same
+          subType: "00",
         },
       };
 
@@ -80,7 +84,7 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
       if (response.status === 200) {
         enqueueSnackbar('Partner updated successfully', { variant: 'success' });
         onClose();
-        window.dispatchEvent(new Event('partnerUpdated')); // Trigger re-fetch in Parent Component
+        window.dispatchEvent(new Event('partnerUpdated'));
       }
     } catch (error) {
       enqueueSnackbar(`Error updating partner: ${error.response ? error.response.data.message : error.message}`, { variant: 'error' });
@@ -100,7 +104,7 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
       if (response.status === 200) {
         enqueueSnackbar("Partner deleted successfully", { variant: "success" });
         onClose();
-        window.dispatchEvent(new Event("partnerUpdated")); // Trigger re-fetch in Parent Component
+        window.dispatchEvent(new Event("partnerUpdated"));
       }
     } catch (error) {
       enqueueSnackbar("Error deleting partner", { variant: "error" });
@@ -112,10 +116,10 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
     setIsConfirmOpen(false);
   };
 
-  const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      handleCloseModal();
-    }
+  const handleVisitWebsite = () => {
+    setRedirectUrl(
+      editedPartner.website.startsWith('http') ? editedPartner.website : `http://${editedPartner.website}`
+    );
   };
 
   useEffect(() => {
@@ -125,6 +129,12 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      handleCloseModal();
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -140,6 +150,7 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
             src={imagePreview}
             alt={editedPartner.name}
             className="w-full h-40 object-cover rounded-lg mb-2"
+            style={{ objectFit: 'contain' }}
           />
         ) : (
           editedPartner.image && (
@@ -147,9 +158,11 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
               src={`data:image/png;base64,${editedPartner.image}`}
               alt={editedPartner.name}
               className="w-full h-40 object-cover rounded-lg mb-2"
+              style={{ objectFit: 'contain' }}
             />
           )
         )}
+
         {isAdmin && (
           <div className="mb-4">
             <label htmlFor="imageInput" className="text-xl mr-4 text-gray-500">
@@ -227,31 +240,49 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
         </div>
         <div className="my-4">
           <label className="text-xl mr-4 text-gray-500">Website</label>
-          <input
-            type="text"
-            name="website"
-            value={editedPartner.website || ""}
-            onChange={isAdmin ? handleInputChange : null}
-            readOnly={!isAdmin}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
-            placeholder="No website provided"
-          />
+          <div className="flex items-center">
+            <input
+              type="text"
+              name="website"
+              value={editedPartner.website || ""}
+              onChange={isAdmin ? handleInputChange : null}
+              readOnly={!isAdmin}
+              className="border-2 border-gray-500 px-4 py-2 w-full mr-2"
+              placeholder="No website provided"
+            />
+            {editedPartner.website && (
+              <button
+                className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={handleVisitWebsite}
+              >
+                Visit
+              </button>
+            )}
+          </div>
+          {redirectUrl && (
+            <UrlModal
+              isOpen={true}
+              onClose={() => setRedirectUrl(null)}
+              url={redirectUrl}
+            />
+          )}
         </div>
-        <div className="flex justify-between mt-4">
+
+        <div className="flex justify-end mt-4"> {/* Changed justify-between to justify-end */}
           {isAdmin && (
             <button
-              className="p-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2"
+              className="p-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2 w-20 flex items-center justify-center"  // Adjusted width and added flex and items-center
               onClick={handleDelete}
             >
-              Delete
+              <FaTrash className="mr-1" /> Delete
             </button>
           )}
           {isAdmin && (
             <button
-              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-20 flex items-center justify-center"  // Adjusted width and added flex and items-center
               onClick={handleSaveChanges}
             >
-              Save Changes
+              <FaSave className="mr-1" /> Save
             </button>
           )}
         </div>

@@ -14,6 +14,7 @@ import EditFrame from './pages/Admin/Frames/EditFrameModal';
 import AdminPage from './pages/Admin/AdminPage';
 import PartnersPage from './pages/Admin/Partners/PartnerList';
 import AddPartner from './pages/Admin/Partners/AddPartnerModal';
+import Partners from './pages/PartnersPage';
 
 const App = () => {
   const navigate = useNavigate();
@@ -73,6 +74,9 @@ const App = () => {
 
       {/* Photo booth routes */}
       <Route path='/photobooth' element={<PhotoBook />} />
+
+      {/* Partners routes */}
+      <Route path='/partners' element={<Partners />} />
 
       {/* ADMIN CRUD routes */}
       <Route path="/admin" element={<AdminPage />} />
