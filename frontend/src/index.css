@@ -33,3 +33,10 @@
     animation: blink 1s infinite;
   }
   
+  .modal-back {
+    transform: rotateY(-180deg);
+  }
+  
+  .hidden {
+    display: none;
+  }

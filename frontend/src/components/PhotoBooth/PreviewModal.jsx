@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaSave, FaShare } from 'react-icons/fa'; // Importing save and share icons
+import { FaSave, FaShare } from 'react-icons/fa';
+import EmailDialog from '../EmailDialog'; // Import EmailDialog
 
-const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
+const PreviewModal = ({ imageSrc, onClose, onSave }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false); // State for EmailDialog
   const modalRef = useRef(null);
 
   useEffect(() => {
     const animationTimeout = setTimeout(() => {
       setIsAnimationFinished(true);
-    }, 300); // Adjust the animation duration as needed
+    }, 300);
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -30,7 +32,7 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
   };
 
   const handleSendEmail = () => {
-    onSendEmail();
+    setIsEmailDialogOpen(true);
   };
 
   const closeModal = () => {
@@ -63,18 +65,20 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
 
   const buttonContainerStyles = {
     display: 'flex',
-    justifyContent: 'space-between', // Arrange buttons with equal space between them
+    justifyContent: 'flex-end', // Move buttons to the right
     marginTop: '10px',
   };
 
   const buttonStyles = {
-    backgroundColor: 'red',
-    color: 'white',
+    border: '2px solid red', // Add red border
+    backgroundColor: 'white',
+    color: 'red',
     padding: '10px',
     borderRadius: '4px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center', // Align icon and text vertically
+    marginLeft: '10px', // Add margin between buttons
   };
 
   return (
@@ -89,6 +93,14 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
             <FaSave style={{ marginRight: '5px' }} /> Save
           </button>
         </div>
+        {/* EmailDialog */}
+        {isEmailDialogOpen && (
+          <EmailDialog 
+            isOpen={isEmailDialogOpen} 
+            onClose={() => setIsEmailDialogOpen(false)} 
+            imagePath={imageSrc} 
+          />
+        )}
       </div>
     </div>
   );

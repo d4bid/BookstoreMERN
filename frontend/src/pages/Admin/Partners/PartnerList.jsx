@@ -84,7 +84,7 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
         {!hideAddButton && <MdOutlineAddBox className="text-sky-800 text-4xl cursor-pointer" onClick={handleOpenAddModal} />}
       </div>
       {loading ? <Spinner /> : (
-        <div className="grid grid-cols-1 md:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-4">
           {filteredPartners.map(partner => (
             <PartnerSingleCard 
               key={partner._id} 
