@@ -36,23 +36,31 @@ const InitialPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center relative">
-      <div className="flex-grow">
-        <Slideshow images={slideshowImages} className="w-full" />
+
+      <div className="flex-fill">
+        <Slideshow images={slideshowImages} className="w-20vw" />
       </div>
-      <div className="absolute left-0 right-0 mb-0 flex justify-center">
-        <div className="flex flex-col lg:flex-row gap-4 items-center">
-          <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
-          <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
+
+      <div className="flex-grow"></div>
+
+      <div className="relative flex justify-center">
+  <div className="flex flex-wrap justify-center">
+    <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
+    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
+    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
+    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
+  </div>
+</div>
+
+      <div className="flex-grow"></div>
+
+      <div className="mb-4 flex justify-center">
         <PhotoboothButton
           title="Tap to open photo booth"
           onClick={handlePhotoboothClick}
         />
       </div>
-      
-      {/* About Us UrlModal */}
+
       <UrlModal
         isOpen={isAboutUsModalOpen}
         onClose={closeAboutUsModal}
@@ -60,6 +68,6 @@ const InitialPage = () => {
       />
     </div>
   );
-};
 
+}
 export default InitialPage;

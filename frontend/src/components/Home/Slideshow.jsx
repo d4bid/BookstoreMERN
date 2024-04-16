@@ -16,7 +16,7 @@ const Slideshow = ({ images }) => {
 
   return (
     <div className="relative">
-      <div className="relative w-full h-0 overflow-hidden" style={{ paddingTop: "56.25%" }}>
+      <div className="relative h-0 overflow-hidden" style={{ paddingTop: "56.25%" }}>
         <div className="absolute inset-0 flex" style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImageIndex * (100 / images.length)}%)`, transition: "transform 0.5s ease-in-out" }}>
           {images.map((image, index) => (
             <img
@@ -47,7 +47,7 @@ const Slideshow = ({ images }) => {
           <ChevronRight size={40} />
         </button>
       </div>
-      <div className="absolute bottom-4 right-0 left-0">
+      <div className="absolute bottom-4 right-0 left-0 flex items-center justify-center">
         <div className="flex items-center justify-center gap-2">
           {images.map((_, i) => (
             <div
