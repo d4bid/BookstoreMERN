@@ -40,7 +40,11 @@ const InitialPage = () => {
   };
 
   const handleClientsClick = () => {
-    navigate('/partners');  // Navigate to the PartnersPage
+    navigate('/partners');
+  };
+
+  const handleProductsClick = () => {
+    navigate('/partners');
   };
 
   return (
@@ -55,7 +59,7 @@ const InitialPage = () => {
       <div className="relative flex justify-center">
         <div className="flex flex-wrap justify-center">
           <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
-          <Card title="Products" icon={IoPricetagsSharp} onClick={handleAboutUsClick} />
+          <Card title="Products" icon={IoPricetagsSharp} onClick={handleClientsClick} />
           <Card title="News" icon={IoNewspaperSharp} onClick={handleNewsClick} />
           <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
         </div>
