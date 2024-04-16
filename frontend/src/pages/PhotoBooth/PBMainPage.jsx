@@ -9,6 +9,8 @@ import Spinner from '../../components/Spinner';
 import { useSnackbar } from 'notistack';
 import hytecLogo from '../../assets/hytecLogo.png';
 import Timer from '../../components/PhotoBooth/Timer';
+import CountdownVideo from '../../assets/Countdown.mp4'; //
+
 
 const PBMainPage = () => {
   const webcamRef = useRef(null);
@@ -165,6 +167,7 @@ const PBMainPage = () => {
 
       <div className="flex flex-col items-center justify-start">
         <div className="relative mb-8" style={{ width: '80vw', maxWidth:'1536px' }}>
+
           <Webcam
             audio={false}
             ref={webcamRef}
@@ -185,7 +188,7 @@ const PBMainPage = () => {
       </div>
 
       <div style={{ flex: 1 }}></div>
-      {showCountdown && <Timer durationInSeconds={0} onCountdownEnd={handleCountdownEnd} />}
+      {showCountdown && <Timer durationInSeconds={7} onCountdownEnd={handleCountdownEnd} />}
 
       {showFrameSelector && (
         <div className="mt-auto mb-8">

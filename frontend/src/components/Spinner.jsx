@@ -3,7 +3,7 @@ import hytecLogo from '../assets/hytecLogo.png';
 
 const Spinner = () => {
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex justify-center items-center h-screen animate-pulse'>
       <img src={hytecLogo} alt="Loading..." className='w-1/4 animate-zoom' />
     </div>
   );
