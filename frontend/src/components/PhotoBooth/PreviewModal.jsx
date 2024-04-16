@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaSave, FaShare } from 'react-icons/fa'; // Importing save and share icons
 
 const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const animationTimeout = setTimeout(() => {
       setIsAnimationFinished(true);
     }, 300); // Adjust the animation duration as needed
 
-    return () => clearTimeout(animationTimeout);
-  }, []);
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      clearTimeout(animationTimeout);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   const handleSaveImage = async () => {
     onSave();
@@ -22,7 +35,7 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
 
   const closeModal = () => {
     setIsVisible(false);
-    setTimeout(() => onClose(), 300); // Wait for the animation to finish before closing
+    setTimeout(() => onClose(), 300);
   };
 
   const modalStyles = {
@@ -31,10 +44,11 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
     left: '0',
     width: '100%',
     height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: '999', // Ensure modal covers the entire page
     transition: 'top 0.3s ease-in-out', // Apply slide-in transition
   };
 
@@ -44,21 +58,35 @@ const PreviewModal = ({ imageSrc, onClose, onSave, onSendEmail }) => {
     borderRadius: '8px',
     opacity: isAnimationFinished ? '1' : '0', // Fade in after slide-in animation finishes
     transition: 'opacity 0.3s ease-in-out', // Apply fade-in transition
+    position: 'relative', // Ensure absolute positioning of close button
+  };
+
+  const buttonContainerStyles = {
+    display: 'flex',
+    justifyContent: 'space-between', // Arrange buttons with equal space between them
+    marginTop: '10px',
+  };
+
+  const buttonStyles = {
+    backgroundColor: 'red',
+    color: 'white',
+    padding: '10px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center', // Align icon and text vertically
   };
 
   return (
     <div style={modalStyles}>
-      <div style={contentStyles}>
+      <div ref={modalRef} style={contentStyles}>
         <img src={imageSrc} alt="Captured" className="w-full rounded-md" />
-        <div className="flex justify-between mt-2">
-          <button onClick={handleSaveImage} className="bg-blue-500 text-white p-2 rounded-md mr-2">
-            Save Image
+        <div style={buttonContainerStyles}>
+          <button onClick={handleSendEmail} style={buttonStyles}>
+            <FaShare style={{ marginRight: '5px' }} /> Share
           </button>
-          <button onClick={handleSendEmail} className="bg-green-500 text-white p-2 rounded-md">
-            Send to Email
-          </button>
-          <button onClick={closeModal} className="bg-red-500 text-white p-2 rounded-md ml-2">
-            Close
+          <button onClick={handleSaveImage} style={buttonStyles}>
+            <FaSave style={{ marginRight: '5px' }} /> Save
           </button>
         </div>
       </div>
