@@ -4,20 +4,19 @@ import Card from '../components/Home/Card';
 import PhotoboothButton from '../components/Home/PhotoboothButton';
 import UrlModal from '../components/UrlModal';
 import { useNavigate } from 'react-router-dom';
-
-// fdffs
-
+import { BsFillPeopleFill } from "react-icons/bs";
+import { BsFillInfoCircleFill } from "react-icons/bs";
+import { IoPeopleCircleSharp } from "react-icons/io5";
+import { IoInformationCircleSharp } from "react-icons/io5";
 
 const InitialPage = () => {
   const slideshowImages = [
-    '../src/assets/frametest.png',
     '../src/assets/slideshow/slide2.jpg',
     '../src/assets/slideshow/slide3.jpg',
   ];
 
   const navigate = useNavigate();
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
-  const [isClientsModalOpen, setIsClientsModalOpen] = useState(false);
 
   const handlePhotoboothClick = () => {
     navigate('/photobooth');
@@ -27,16 +26,12 @@ const InitialPage = () => {
     setIsAboutUsModalOpen(true);
   };
 
-  const handleClientsClick = () => {
-    setIsClientsModalOpen(true);
-  };
-
   const closeAboutUsModal = () => {
     setIsAboutUsModalOpen(false);
   };
 
-  const closeClientsModal = () => {
-    setIsClientsModalOpen(false);
+  const handleClientsClick = () => {
+    navigate('/partners');  // Navigate to the PartnersPage
   };
 
   return (
@@ -46,8 +41,8 @@ const InitialPage = () => {
       </div>
       <div className="absolute left-0 right-0 mb-0 flex justify-center">
         <div className="flex flex-col lg:flex-row gap-4 items-center">
-          <Card title="About Us" onClick={handleAboutUsClick} />
-          <Card title="Clients & Partners" onClick={handleClientsClick} />
+          <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
+          <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
         </div>
       </div>
       <div className="absolute bottom-0 left-0 right-0 mb-4 flex justify-center">
@@ -62,13 +57,6 @@ const InitialPage = () => {
         isOpen={isAboutUsModalOpen}
         onClose={closeAboutUsModal}
         url="https://hytecpower.com/about-us/"
-      />
-
-      {/* Clients & Partners UrlModal */}
-      <UrlModal
-        isOpen={isClientsModalOpen}
-        onClose={closeClientsModal}
-        url="https://hytecpower.com/"
       />
     </div>
   );
