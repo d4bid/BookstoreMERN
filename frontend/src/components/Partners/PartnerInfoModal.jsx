@@ -5,6 +5,12 @@ import { FaSave, FaTrash } from "react-icons/fa"; // Importing react-icons
 import ConfirmDialog from "../../components/ConfirmDialog";
 import UrlModal from '../../components/UrlModal'; // Importing UrlModal
 import { useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
 
 const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
   const modalRef = useRef(null);
@@ -116,12 +122,6 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
     setIsConfirmOpen(false);
   };
 
-  const handleVisitWebsite = () => {
-    setRedirectUrl(
-      editedPartner.website.startsWith('http') ? editedPartner.website : `http://${editedPartner.website}`
-    );
-  };
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -131,14 +131,23 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
   }, []);
 
   const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
+    if (
+      modalRef.current &&
+      !modalRef.current.contains(event.target) &&
+      event.target.tagName !== "UL" &&
+      event.target.tagName !== "LI" &&
+      event.target.tagName !== "INPUT" &&
+      event.target.tagName !== "SELECT" &&
+      event.target.tagName !== "OPTION"
+    ) {
       handleCloseModal();
     }
   };
 
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div ref={modalRef} className="bg-white rounded-lg w-70vw p-6">
+      <div ref={modalRef} className="bg-white rounded-lg max-w-3xl p-6">
         <button
           className="absolute top-4 right-4 text-xl text-gray-500"
           onClick={handleCloseModal}
@@ -165,9 +174,6 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
 
         {isAdmin && (
           <div className="mb-4">
-            <label htmlFor="imageInput" className="text-xl mr-4 text-gray-500">
-              Change Image
-            </label>
             <input
               id="imageInput"
               type="file"
@@ -178,87 +184,88 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
           </div>
         )}
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Name</label>
-          <input
-            type="text"
+          <TextField
+            id="outlined-basic"
+            label="Name"
+            variant="outlined"
             name="name"
             value={editedPartner.name}
             onChange={isAdmin ? handleInputChange : null}
             readOnly={!isAdmin}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
+            fullWidth
           />
         </div>
         {isAdmin && (
           <div className="my-4">
-            <label className="text-xl mr-4 text-gray-500">Type</label>
-            <select
-              name="type"
-              value={editedPartner.type}
-              onChange={handleInputChange}
-              className="border-2 border-gray-500 px-4 py-2 w-full"
-            >
-              <option value="academe">Academe</option>
-              <option value="company">Company</option>
-            </select>
+            <FormControl fullWidth>
+              <InputLabel id="type-label">Type</InputLabel>
+              <Select
+                labelId="type-label"
+                id="outlined-basic"
+                name="type"
+                value={editedPartner.type}
+                onChange={handleInputChange}
+                variant="outlined"
+                label="Type"
+              >
+                <MenuItem value="academe">Academe</MenuItem>
+                <MenuItem value="company">Company</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         )}
+
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Address</label>
-          <input
-            type="text"
+          <TextField
+            id="outlined-basic"
+            label="Address"
+            variant="outlined"
             name="address"
             value={editedPartner.address || ""}
             onChange={isAdmin ? handleInputChange : null}
             readOnly={!isAdmin}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
+            fullWidth
             placeholder="No address provided"
           />
         </div>
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Contact</label>
-          <input
-            type="text"
+          <TextField
+            id="outlined-basic"
+            label="Contact"
+            variant="outlined"
             name="contact"
             value={editedPartner.contact || ""}
             onChange={isAdmin ? handleInputChange : null}
             readOnly={!isAdmin}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
+            fullWidth
             placeholder="No contact provided"
           />
         </div>
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Email</label>
-          <input
-            type="text"
+          <TextField
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
             name="email"
             value={editedPartner.email || ""}
             onChange={isAdmin ? handleInputChange : null}
             readOnly={!isAdmin}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
+            fullWidth
             placeholder="No email provided"
           />
         </div>
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Website</label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              name="website"
-              value={editedPartner.website || ""}
-              onChange={isAdmin ? handleInputChange : null}
-              readOnly={!isAdmin}
-              className="border-2 border-gray-500 px-4 py-2 w-full mr-2"
-              placeholder="No website provided"
-            />
-            {editedPartner.website && (
-              <button
-                className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={handleVisitWebsite}
-              >
-                Visit
-              </button>
-            )}
-          </div>
+          <TextField
+            id="outlined-basic"
+            label="Website"
+            variant="outlined"
+            name="website"
+            value={editedPartner.website || ""}
+            onChange={isAdmin ? handleInputChange : null}
+            readOnly={!isAdmin}
+            fullWidth
+            placeholder="No website provided"
+          />
           {redirectUrl && (
             <UrlModal
               isOpen={true}
@@ -268,22 +275,27 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
           )}
         </div>
 
-        <div className="flex justify-end mt-4"> {/* Changed justify-between to justify-end */}
+        <div className="flex justify-end mt-4">
           {isAdmin && (
-            <button
-              className="p-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2 w-20 flex items-center justify-center"  // Adjusted width and added flex and items-center
+            <Button
+              variant="contained"
+              color="secondary"
+              className="mr-2"
+              startIcon={<FaTrash />}
               onClick={handleDelete}
             >
-              <FaTrash className="mr-1" /> Delete
-            </button>
+              Delete
+            </Button>
           )}
           {isAdmin && (
-            <button
-              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-20 flex items-center justify-center"  // Adjusted width and added flex and items-center
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<FaSave />}
               onClick={handleSaveChanges}
             >
-              <FaSave className="mr-1" /> Save
-            </button>
+              Save
+            </Button>
           )}
         </div>
 

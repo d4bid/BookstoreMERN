@@ -8,6 +8,7 @@ import { IoPeopleCircleSharp } from "react-icons/io5";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { IoPricetagsSharp } from "react-icons/io5";
+import { MdWork } from "react-icons/md";
 
 const InitialPage = () => {
   const slideshowImages = [
@@ -18,6 +19,7 @@ const InitialPage = () => {
   const navigate = useNavigate();
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
+  const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
 
   const handlePhotoboothClick = () => {
     navigate('/photobooth');
@@ -31,12 +33,20 @@ const InitialPage = () => {
     setIsNewsModalOpen(true);
   };
 
+  const handleCareersClick = () => {
+    setIsCareersModalOpen(true);
+  };
+
   const closeAboutUsModal = () => {
     setIsAboutUsModalOpen(false);
   };
 
   const closeNewsModal = () => {
     setIsNewsModalOpen(false);
+  };
+  
+  const closeCareersModal = () => {
+    setIsCareersModalOpen(false);
   };
 
   const handleClientsClick = () => {
@@ -59,7 +69,8 @@ const InitialPage = () => {
       <div className="relative flex justify-center">
         <div className="flex flex-wrap justify-center">
           <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
-          <Card title="Products" icon={IoPricetagsSharp} onClick={handleClientsClick} />
+          {/* <Card title="Products" icon={IoPricetagsSharp} onClick={handleClientsClick} /> */}
+          <Card title="Careers" icon={MdWork} onClick={handleCareersClick} />
           <Card title="News" icon={IoNewspaperSharp} onClick={handleNewsClick} />
           <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
         </div>
@@ -84,6 +95,12 @@ const InitialPage = () => {
         isOpen={isNewsModalOpen}
         onClose={closeNewsModal}
         url="https://hytecpower.com/news/"
+      />
+      
+      <UrlModal
+        isOpen={isCareersModalOpen}
+        onClose={closeCareersModal}
+        url="https://hytecpower.com/careers/"
       />
     </div>
   );
