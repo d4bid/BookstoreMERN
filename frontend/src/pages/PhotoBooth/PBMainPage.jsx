@@ -109,26 +109,26 @@ const PBMainPage = () => {
     }
   };
 
-  const handleSendEmail = async () => {
-    const email = prompt('Enter recipient email:');
-    if (!email) return;
+  // const handleSendEmail = async () => {
+  //   const email = prompt('Enter recipient email:');
+  //   if (!email) return;
 
-    const subject = 'Captured Image from Photo Booth';
-    const text = 'Please find the captured image attached.';
-    const imagePath = capturedImage;
+  //   const subject = 'Captured Hytec Photo Booth';
+  //   const text = 'Thank you for visiting Hytec Power Incorporated. Please find the captured image attached.';
+  //   const imagePath = capturedImage;
 
-    try {
-      const response = await axios.post('http://localhost:5555/photos/send-email', {
-        to: email,
-        subject,
-        text,
-        imagePath,
-      });
-      enqueueSnackbar('Email sent successfully', { variant: 'success' });
-    } catch (error) {
-      enqueueSnackbar('Failed to send email', { variant: 'error' });
-    }
-  };
+  //   try {
+  //     const response = await axios.post('http://localhost:5555/photos/send-email', {
+  //       to: email,
+  //       subject,
+  //       text,
+  //       imagePath,
+  //     });
+  //     enqueueSnackbar('Email sent successfully', { variant: 'success' });
+  //   } catch (error) {
+  //     enqueueSnackbar('Failed to send email', { variant: 'error' });
+  //   }
+  // };
 
   const handleCountdown = () => {
     setShowFrameSelector(false);
@@ -185,7 +185,7 @@ const PBMainPage = () => {
       </div>
 
       <div style={{ flex: 1 }}></div>
-      {showCountdown && <Timer durationInSeconds={3} onCountdownEnd={handleCountdownEnd} />}
+      {showCountdown && <Timer durationInSeconds={0} onCountdownEnd={handleCountdownEnd} />}
 
       {showFrameSelector && (
         <div className="mt-auto mb-8">
@@ -204,7 +204,7 @@ const PBMainPage = () => {
           imageSrc={capturedImage}
           onClose={handleClosePreview}
           onSave={handleSaveImage}
-          onSendEmail={handleSendEmail}
+          // onSendEmail={handleSendEmail}
         />
       )}
 
