@@ -3,7 +3,7 @@ import React from 'react';
 const Card = ({ title, description, icon: Icon, onClick }) => {
   return (
     <div
-      className="bg-white rounded-xl p-6 shadow-md cursor-pointer transition-transform duration-300 hover:scale-105 flex flex-col items-center justify-center text-center border border-red-500"
+      className="bg-white rounded-xl p-6 shadow-md cursor-pointer transition-transform duration-300 hover:scale-105 flex flex-col items-center justify-center text-center border-2 border-red-500"
       onClick={onClick}
       style={{ width: '30vw', height: '30vw', margin: '3vw' }} // Adjusted margin for responsiveness
     >

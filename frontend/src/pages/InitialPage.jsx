@@ -4,10 +4,10 @@ import Card from '../components/Home/Card';
 import PhotoboothButton from '../components/Home/PhotoboothButton';
 import UrlModal from '../components/UrlModal';
 import { useNavigate } from 'react-router-dom';
-import { BsFillPeopleFill } from "react-icons/bs";
-import { BsFillInfoCircleFill } from "react-icons/bs";
 import { IoPeopleCircleSharp } from "react-icons/io5";
 import { IoInformationCircleSharp } from "react-icons/io5";
+import { IoNewspaperSharp } from "react-icons/io5";
+import { IoPricetagsSharp } from "react-icons/io5";
 
 const InitialPage = () => {
   const slideshowImages = [
@@ -17,6 +17,7 @@ const InitialPage = () => {
 
   const navigate = useNavigate();
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
+  const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
 
   const handlePhotoboothClick = () => {
     navigate('/photobooth');
@@ -26,8 +27,16 @@ const InitialPage = () => {
     setIsAboutUsModalOpen(true);
   };
 
+  const handleNewsClick = () => {
+    setIsNewsModalOpen(true);
+  };
+
   const closeAboutUsModal = () => {
     setIsAboutUsModalOpen(false);
+  };
+
+  const closeNewsModal = () => {
+    setIsNewsModalOpen(false);
   };
 
   const handleClientsClick = () => {
@@ -44,13 +53,13 @@ const InitialPage = () => {
       <div className="flex-grow"></div>
 
       <div className="relative flex justify-center">
-  <div className="flex flex-wrap justify-center">
-    <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
-    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
-    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
-    <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
-  </div>
-</div>
+        <div className="flex flex-wrap justify-center">
+          <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
+          <Card title="Products" icon={IoPricetagsSharp} onClick={handleAboutUsClick} />
+          <Card title="News" icon={IoNewspaperSharp} onClick={handleNewsClick} />
+          <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
+        </div>
+      </div>
 
       <div className="flex-grow"></div>
 
@@ -66,8 +75,14 @@ const InitialPage = () => {
         onClose={closeAboutUsModal}
         url="https://hytecpower.com/about-us/"
       />
+
+      <UrlModal
+        isOpen={isNewsModalOpen}
+        onClose={closeNewsModal}
+        url="https://hytecpower.com/news/"
+      />
     </div>
   );
-
 }
+
 export default InitialPage;

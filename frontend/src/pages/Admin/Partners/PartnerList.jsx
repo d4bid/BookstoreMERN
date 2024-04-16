@@ -63,19 +63,19 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
         <BackButton destination={backDestination} />
         <div className="flex gap-x-4">
           <button
-            className={`px-4 py-1 rounded-lg ${selectedType === 'all' ? 'bg-sky-600 text-white' : 'bg-sky-300'}`}
+            className={`px-4 py-1 rounded-lg ${selectedType === 'all' ? 'bg-red-600 text-white' : 'bg-red-300'}`}
             onClick={() => setSelectedType("all")}
           >
             All
           </button>
           <button
-            className={`px-4 py-1 rounded-lg ${selectedType === 'company' ? 'bg-sky-600 text-white' : 'bg-sky-300'}`}
+            className={`px-4 py-1 rounded-lg ${selectedType === 'company' ? 'bg-red-600 text-white' : 'bg-red-300'}`}
             onClick={() => setSelectedType("company")}
           >
             Company
           </button>
           <button
-            className={`px-4 py-1 rounded-lg ${selectedType === 'academe' ? 'bg-sky-600 text-white' : 'bg-sky-300'}`}
+            className={`px-4 py-1 rounded-lg ${selectedType === 'academe' ? 'bg-red-600 text-white' : 'bg-red-300'}`}
             onClick={() => setSelectedType("academe")}
           >
             Academe
