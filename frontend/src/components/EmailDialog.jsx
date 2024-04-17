@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
 
 const EmailDialog = ({ isOpen, onClose, imagePath }) => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSend = async () => {
@@ -13,8 +16,10 @@ const EmailDialog = ({ isOpen, onClose, imagePath }) => {
       return;
     }
 
-    const subject = 'Captured Hytec Photo Booth';
-    const text = 'Thank you for visiting Hytec Power Incorporated. Please find the captured image attached.';
+    const subject = 'Hytec Power Inc. Photo Booth';
+    const text = 'Thank you for visiting Hytec Power Incorporated. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.';
+
+    setLoading(true); // Set loading to true when sending email
 
     try {
       const response = await axios.post('http://localhost:5555/photos/send-email', {
@@ -27,6 +32,8 @@ const EmailDialog = ({ isOpen, onClose, imagePath }) => {
       onClose();
     } catch (error) {
       enqueueSnackbar('Failed to send email', { variant: 'error' });
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -51,12 +58,15 @@ const EmailDialog = ({ isOpen, onClose, imagePath }) => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <div className="flex justify-end mt-2">
-          <button
-            className="mr-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <LoadingButton
             onClick={handleSend}
+            loading={loading}
+            endIcon={<SendIcon />}
+            variant="contained"
+            sx={{ marginRight: 2 }} // Adjust margin as needed
           >
             Send
-          </button>
+          </LoadingButton>
           <button
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
             onClick={handleCancel}
