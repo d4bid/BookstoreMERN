@@ -29,7 +29,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 3000000); // 30 seconds if 30000
+      }, 20000); // 30 seconds if 30000
       //console.log('Timer reset');
     };
 

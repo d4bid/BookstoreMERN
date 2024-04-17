@@ -146,8 +146,8 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
 
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div ref={modalRef} className="bg-white rounded-lg max-w-3xl p-6">
+    <div className="fixed flex scale-150 top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-999">
+      <div ref={modalRef} className="bg-white rounded-lg max-w-width p-6">
         <button
           className="absolute top-4 right-4 text-xl text-gray-500"
           onClick={handleCloseModal}
