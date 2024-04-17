@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import TextField from '@mui/material/TextField';
 
 const EmailDialog = ({ isOpen, onClose, imagePath }) => {
   const [email, setEmail] = useState('');
@@ -41,14 +42,15 @@ const EmailDialog = ({ isOpen, onClose, imagePath }) => {
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Send Email</h2>
-        <input
+        <TextField
+          variant="outlined"
+          label="Recipient Email"
           type="email"
           className="w-full p-2 border rounded mb-4"
-          placeholder="Recipient Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-2">
           <button
             className="mr-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={handleSend}
