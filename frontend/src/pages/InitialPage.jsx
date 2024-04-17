@@ -44,7 +44,7 @@ const InitialPage = () => {
   const closeNewsModal = () => {
     setIsNewsModalOpen(false);
   };
-  
+
   const closeCareersModal = () => {
     setIsCareersModalOpen(false);
   };
@@ -80,7 +80,7 @@ const InitialPage = () => {
 
       <div className="mb-4 flex justify-center">
         <PhotoboothButton
-          title="Tap to open photo booth"
+          title="BETA VERSION"
           onClick={handlePhotoboothClick}
         />
       </div>
@@ -96,7 +96,7 @@ const InitialPage = () => {
         onClose={closeNewsModal}
         url="https://hytecpower.com/news/"
       />
-      
+
       <UrlModal
         isOpen={isCareersModalOpen}
         onClose={closeCareersModal}
