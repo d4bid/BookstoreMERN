@@ -17,7 +17,7 @@ const Card = ({ title, description, icon: Icon, onClick }) => {
 
   return (
     <div
-      className={`rounded-xl p-6 shadow-xl cursor-pointer transition-transform duration-300 hover:scale-105 flex flex-col items-center justify-center text-center ${
+      className={`rounded-xl p-6 shadow-xl cursor-pointer transition-transform duration-300 hover:scale-105 flex flex-col items-center justify-center text-center border-4 border-white-500 ${
         clicked ? 'bg-red-500' : 'bg-white'
       }`}
       onClick={handleClick}

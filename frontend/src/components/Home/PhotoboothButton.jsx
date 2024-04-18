@@ -11,7 +11,7 @@ const PhotoboothButton = ({ onClick, title }) => {
       >
         <FaCamera style={{ fontSize: '400%' }} />
       </button>
-      <h2 className="text-base lg:text-xl text-black font-semibold mt-2 lg:mt-4">{title}</h2>
+      <h2 className="text-base lg:text-xl text-red-100 font-semibold mt-2 lg:mt-4">{title}</h2>
     </div>
   );
 };

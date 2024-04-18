@@ -12,8 +12,34 @@ import { MdWork } from "react-icons/md";
 
 const InitialPage = () => {
   const slideshowImages = [
-    '../src/assets/slideshow/slide2.jpg',
-    '../src/assets/slideshow/slide3.jpg',
+    '../src/assets/Slider/1.png',
+    '../src/assets/Slider/2.png',
+    '../src/assets/Slider/3.png',
+    '../src/assets/Slider/4.png',
+    '../src/assets/Slider/5.png',
+    // '../src/assets/Slider/6.png',
+    // '../src/assets/Slider/7.png',
+    // '../src/assets/Slider/8.png',
+    // '../src/assets/Slider/9.png',
+    // '../src/assets/Slider/10.png',
+    // '../src/assets/Slider/11.png',
+    // '../src/assets/Slider/12.png',
+    // '../src/assets/Slider/13.png',
+    // '../src/assets/Slider/14.png',
+    // '../src/assets/Slider/15.png',
+    // '../src/assets/Slider/16.png',
+    // '../src/assets/Slider/17.png',
+    // '../src/assets/Slider/18.png',
+    // '../src/assets/Slider/19.png',
+    // '../src/assets/Slider/20.png',
+    // '../src/assets/Slider/21.png',
+    // '../src/assets/Slider/22.png',
+    // '../src/assets/Slider/23.png',
+    // '../src/assets/Slider/24.png',
+    // '../src/assets/Slider/25.png',
+    // '../src/assets/Slider/26.png',
+    // '../src/assets/Slider/27.png',
+
   ];
 
   const navigate = useNavigate();
