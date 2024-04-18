@@ -5,12 +5,14 @@ import { MdOutlineAddBox } from "react-icons/md";
 import PartnerSingleCard from "../../../components/Partners/PartnerSingleCard";
 import AddPartnerModal from "./AddPartnerModal";
 import BackButton from "../../../components/BackButtonHome"; // Import BackButton component
+import PartnerInfoModal from "../../../components/Partners/PartnerInfoModal";
 
 const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = "/admin/" }) => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [activePartner, setActivePartner] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -57,6 +59,14 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
     setShowAddModal(false);
   };
 
+  const handleOpenModal = (partner) => {
+    setActivePartner(partner);
+  };
+
+  const handleCloseModal = () => {
+    setActivePartner(null);
+  };
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
@@ -90,11 +100,13 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
               key={partner._id} 
               partner={partner} 
               isAdmin={isAdmin} 
+              onOpenModal={() => handleOpenModal(partner)}
             />
           ))}
         </div>
       )}
       {showAddModal && <AddPartnerModal onClose={handleCloseAddModal} />}
+      {activePartner && <PartnerInfoModal partner={activePartner} onClose={handleCloseModal} isAdmin={isAdmin} />}
     </div>
   );
 };

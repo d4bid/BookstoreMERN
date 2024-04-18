@@ -231,7 +231,7 @@ const PartnerInfoModal = ({ partner, onClose, isAdmin }) => {
         <div className="my-4">
           <TextField
             id="outlined-basic"
-            label="Contact"
+            label="Description"
             variant="outlined"
             name="contact"
             value={editedPartner.contact || ""}

@@ -118,7 +118,7 @@ const AddPartnerModal = ({ onClose }) => {
                     />
                 </div>
                 <div className="my-4">
-                    <label className='text-xl mr-4 text-gray-500'>Contact</label>
+                    <label className='text-xl mr-4 text-gray-500'>Description</label>
                     <input
                         type='text'
                         value={contact}
