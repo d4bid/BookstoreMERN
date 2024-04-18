@@ -192,7 +192,7 @@ const PBMainPage = () => {
       {showCountdown && <Timer durationInSeconds={7} onCountdownEnd={handleCountdownEnd} />}
 
       {showFrameSelector && (
-        <div className="mt-auto mb-8">
+        <div className="mt-auto mb-8 ">
           <FrameSelector onSelectFrame={handleSelectFrame} />
         </div>
       )}
