@@ -7,9 +7,10 @@ const BackButton = ({ destination }) => {
       <Link
         to={destination}
         className="bg-white text-red-500 rounded-lg flex items-center justify-center"
-        style={{ padding: "0.5rem 1rem" }} // Adjust padding as needed
       >
-        <BsArrowLeft className="text-4xl lg:text-6xl" /> {/* Adjust icon size */}
+        <button className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" style={{ width: '20vw', height: '20vw', padding: '2rem', margin: '0 10px' }}>
+          <BsArrowLeft className="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-23 w-auto" />
+        </button>
       </Link>
     </div>
   );

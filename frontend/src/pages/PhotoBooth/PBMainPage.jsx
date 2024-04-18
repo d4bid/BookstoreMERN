@@ -3,6 +3,7 @@ import axios from 'axios';
 import Webcam from 'react-webcam';
 import FrameSelector from '../../components/PhotoBooth/FrameSelector';
 import CaptureButton from '../../components/PhotoBooth/CaptureButton';
+import GalleryButton from '../../components/PhotoBooth/GalleryButton';
 import PreviewModal from '../../components/PhotoBooth/PreviewModal';
 import BackButton from '../../components/BackButtonHome';
 import Spinner from '../../components/Spinner';
@@ -19,9 +20,11 @@ const PBMainPage = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [showFrameSelector, setShowFrameSelector] = useState(true); // Manage visibility of frame selector
   const [showCountdown, setShowCountdown] = useState(false); // Manage visibility of countdown timer
-  const [showCaptureButton, setShowCaptureButton]=useState(true);
+  const [showCaptureButton, setShowCaptureButton] = useState(true);
+  const [showFrameSelector, setShowFrameSelector] = useState(true);
+  const [showBackButton, setshowBackButton] = useState(true);
+  const [showGalleryButton, setshowGalleryButton] = useState(true); // M// Manage visibility of frame selector
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -136,13 +139,17 @@ const PBMainPage = () => {
     setShowFrameSelector(false);
     setShowCountdown(true);
     setShowCaptureButton(false);
+    setshowBackButton(false);
+    setshowGalleryButton(false);
   };
 
   const handleCountdownEnd = () => {
     handleCapture(); // Capture photo
+    setShowFrameSelector(true);
     setShowCountdown(false); // Hide countdown timer
-    setShowFrameSelector(true); // Make frame selector reappear
+    setshowBackButton(true); // Make frame selector reappear
     setShowCaptureButton(true);
+    setshowGalleryButton(true);
   };
 
   if (isLoading) {
@@ -155,19 +162,18 @@ const PBMainPage = () => {
   return (
     <div className="flex flex-col items-center justify-center bg-white-500" style={{ touchAction: 'none', msTouchAction: 'none', minHeight: '100vh' }}>
 
-      <div className="absolute top-0 left-0 mt-4 ml-4" style={{width:'10vw', height:'auto'}}>
-        <BackButton destination="/home" />
+      {/* <div className="absolute top-0 left-0 mt-4 ml-4" style={{width:'10vw', height:'auto'}}>
 
-      </div>
+      </div> */}
 
       <div className="flex-grow"></div>
 
-      <div className="flex-grow" style={{maxWidth:'40vw'}}>
+      <div className="flex-grow" style={{ maxWidth: '40vw' }}>
         <img src={hytecLogo} alt="Photo Booth" />
       </div>
 
       <div className="flex flex-col items-center justify-start">
-        <div className="relative mb-8" style={{ width: '80vw', maxWidth:'1536px' }}>
+        <div className="relative mb-8" style={{ width: '80vw', maxWidth: '1536px' }}>
 
           <Webcam
             audio={false}
@@ -196,19 +202,32 @@ const PBMainPage = () => {
           <FrameSelector onSelectFrame={handleSelectFrame} />
         </div>
       )}
-        <div style={{ flex: 1 }}></div>
-      {showCaptureButton && (
-              <div className="mb-8">
-              <CaptureButton onCapture={handleCountdown} />
-            </div>
+      <div style={{ flex: 1 }}></div>
+      <div className="w-full flex items-center justify-between">
+
+      {showBackButton && (
+      <BackButton destination="/home" />
+    )}
+        <div className="flex-grow"></div> {/* Empty flex item to push the next component */}
+
+        {showCaptureButton && (
+
+           <CaptureButton onCapture={handleCountdown}/>
+        )}
+
+        <div className="flex-grow"></div> {/* Empty flex item to push the last component */}
+
+        {showGalleryButton && (
+        <GalleryButton />
       )}
+      </div>
 
       {isPreviewOpen && (
         <PreviewModal
           imageSrc={capturedImage}
           onClose={handleClosePreview}
           onSave={handleSaveImage}
-          // onSendEmail={handleSendEmail}
+        // onSendEmail={handleSendEmail}
         />
       )}
 
