@@ -1,27 +1,36 @@
-import { useState } from "react";
-import PartnerInfoModal from "../../components/Partners/PartnerInfoModal";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
 
-const PartnerSingleCard = ({ partner, isAdmin = false }) => {
-  const [showModal, setShowModal] = useState(false);
-
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+const PartnerSingleCard = ({ partner, isAdmin = false, onOpenModal }) => {
 
   return (
-    <div className="rounded-full px-4 py-2 m-4 relative cursor-pointer text-center" onClick={handleOpenModal}>
-      {partner.image && (
-        <img src={`data:image/png;base64,${partner.image}`} alt={partner.name} className="border-2 border-gray-400 w-40 h-40 object-cover rounded-full mb-2 mx-auto" />
-      )}
-      <div className="flex justify-center items-center gap-x-2">
-        <h2 className="text-2xl">{partner.name}</h2>
-      </div>
-      {showModal && <PartnerInfoModal partner={partner} onClose={handleCloseModal} isAdmin={isAdmin} />}
-    </div>
+    <Card sx={{ maxWidth: 345 }} className="m-4 relative cursor-pointer text-left" onClick={() => onOpenModal(partner)}>
+      <CardActionArea>
+        {partner.image && (
+          <CardMedia
+            component="img"
+            height="140"
+            image={`data:image/png;base64,${partner.image}`}
+            alt={partner.name}
+            className="border-2 border-gray-400 w-40 h-40 object-cover mb-2 mx-auto"
+          />
+        )}
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div" className="font-bold">
+            {partner.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" className="font-semibold">
+            {partner.contact}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" className="italic">
+            {partner.address}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
