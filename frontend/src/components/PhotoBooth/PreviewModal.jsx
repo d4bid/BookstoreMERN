@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaSave, FaShare } from 'react-icons/fa';
 import EmailDialog from '../EmailDialog'; // Import EmailDialog
+import { RiMailSendFill } from "react-icons/ri";
+import { BsSendFill } from "react-icons/bs";
 
 const PreviewModal = ({ imageSrc, onClose, onSave }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false); // State for EmailDialog
+  const [isSelectFocused, setIsSelectFocused] = useState(false); // State to track focus on Select
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -14,7 +17,7 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
     }, 300);
 
     const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+      if (modalRef.current && !modalRef.current.contains(event.target) && !isSelectFocused) {
         onClose();
       }
     };
@@ -25,7 +28,7 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
       clearTimeout(animationTimeout);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [onClose, isSelectFocused]);
 
   const handleSaveImage = async () => {
     onSave();
@@ -40,57 +43,38 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
     setTimeout(() => onClose(), 300);
   };
 
-  const modalStyles = {
-    position: 'fixed',
-    top: isVisible ? '0' : '-100%', // Start off-screen
-    left: '0',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: '999', // Ensure modal covers the entire page
-    transition: 'top 0.3s ease-in-out', // Apply slide-in transition
-  };
+  const modalStyles = `
+    fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 
+    flex items-center justify-center z-50 transition-top duration-300 ease-in-out
+  `;
 
-  const contentStyles = {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    opacity: isAnimationFinished ? '1' : '0', // Fade in after slide-in animation finishes
-    transition: 'opacity 0.3s ease-in-out', // Apply fade-in transition
-    position: 'relative', // Ensure absolute positioning of close button
-  };
+  const contentStyles = `
+    bg-white p-8 rounded-md opacity-${isAnimationFinished ? '100' : '0'} 
+    transition-opacity duration-300 ease-in-out relative
+  `;
 
-  const buttonContainerStyles = {
-    display: 'flex',
-    justifyContent: 'flex-end', // Move buttons to the right
-    marginTop: '10px',
-  };
+  const buttonContainerStyles = `
+    flex justify-end mt-4
+  `;
 
-  const buttonStyles = {
-    border: '2px solid red', // Add red border
-    backgroundColor: 'white',
-    color: 'red',
-    padding: '10px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center', // Align icon and text vertically
-    marginLeft: '10px', // Add margin between buttons
-  };
+  const emailButtonStyles = `
+    bg-blue-500 text-white p-2 rounded cursor-pointer flex items-center ml-2
+  `;
+
+  const saveButtonStyles = `
+    bg-green-500 text-white p-2 rounded cursor-pointer flex items-center ml-2
+  `;
 
   return (
-    <div style={modalStyles}>
-      <div ref={modalRef} style={contentStyles}>
+    <div className={modalStyles}>
+      <div ref={modalRef} className={contentStyles}>
         <img src={imageSrc} alt="Captured" className="w-full rounded-md" />
-        <div style={buttonContainerStyles}>
-          <button onClick={handleSendEmail} style={buttonStyles}>
-            <FaShare style={{ marginRight: '5px' }} /> Share
+        <div className={buttonContainerStyles}>
+          <button onClick={handleSendEmail} className={emailButtonStyles}>
+            <RiMailSendFill className="mr-2" /> Email
           </button>
-          <button onClick={handleSaveImage} style={buttonStyles}>
-            <FaSave style={{ marginRight: '5px' }} /> Save
+          <button onClick={handleSaveImage} className={saveButtonStyles}>
+            <FaSave className="mr-2" /> Save
           </button>
         </div>
         {/* EmailDialog */}
@@ -99,6 +83,7 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
             isOpen={isEmailDialogOpen} 
             onClose={() => setIsEmailDialogOpen(false)} 
             imagePath={imageSrc} 
+            setIsSelectFocused={setIsSelectFocused} // Pass setIsSelectFocused to EmailDialog
           />
         )}
       </div>
