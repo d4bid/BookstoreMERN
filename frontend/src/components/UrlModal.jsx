@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -36,15 +36,30 @@ const containerVariant = {
 
 const UrlModal = ({ isOpen, onClose, url }) => {
   const modalRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true); // State to track loading status
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-      }
-    };
+    // Reset isLoading when modal is opened
+    setIsLoading(true);
+  }, [isOpen]);
 
-    // Add event listener to detect clicks outside the modal
+  useEffect(() => {
+    // Simulating loading delay
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]); // Trigger the loading simulation when isOpen changes
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      onClose();
+    }
+  };
+
+  // Add event listener to detect clicks outside the modal
+  useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
@@ -72,12 +87,21 @@ const UrlModal = ({ isOpen, onClose, url }) => {
               >
                 &times;
               </button>
-              <iframe
-                src={url}
-                title="Modal Content"
-                className="w-full h-full"
-                style={{ border: 'none' }} // Remove iframe border if necessary
-              ></iframe>
+              {isLoading ? (
+                <div className='flex space-x-2 justify-center items-center bg-white h-screen'>
+                  <span className='sr-only'>Loading...</span>
+                  <div className='h-8 w-8 bg-red-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                  <div className='h-8 w-8 bg-red-500 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                  <div className='h-8 w-8 bg-red-500 rounded-full animate-bounce'></div>
+                </div>
+              ) : (
+                <iframe
+                  src={url}
+                  title="Modal Content"
+                  className="w-full h-full"
+                  style={{ border: 'none' }} // Remove iframe border if necessary
+                ></iframe>
+              )}
             </div>
           </ModalContainer>
         </Overlay>
