@@ -49,11 +49,58 @@ router.get('/', async (request, response) => {
     }
 });
 
+// Route for getting all the active slideshow images
+router.get('/active', async (request, response) => {
+    try {
+        const slideshows = await Slideshow.find({ isActive: true });
+
+        // Convert buffer to base64
+        const imagesWithBase64 = slideshows.map(slideshow => ({
+            ...slideshow._doc,
+            image: slideshow.image.toString('base64')
+        }));
+
+        return response.status(200).json({
+            count: imagesWithBase64.length,
+            data: imagesWithBase64
+        });
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send({ message: error.message });
+    }
+});
+
 // Route for getting a slideshow image by id
 router.get('/:id', async (request, response) => {
     try {
         const { id } = request.params;
         const slideshow = await Slideshow.findById(id);
+
+        if (!slideshow) {
+            return response.status(404).json({ message: 'Image not found' });
+        }
+
+        return response.status(200).json({
+            ...slideshow._doc,
+            image: slideshow.image.toString('base64')
+        });
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send({ message: error.message });
+    }
+});
+
+// Route for updating the isActive status of a slideshow image by id
+router.put('/:id', async (request, response) => {
+    try {
+        const { id } = request.params;
+        const { isActive } = request.body;
+
+        const slideshow = await Slideshow.findByIdAndUpdate(
+            id,
+            { isActive },
+            { new: true }
+        );
 
         if (!slideshow) {
             return response.status(404).json({ message: 'Image not found' });

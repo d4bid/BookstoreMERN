@@ -20,7 +20,7 @@ const InitialPage = () => {
   useEffect(() => {
     const fetchSlideshowImages = async () => {
       try {
-        const response = await axios.get('http://localhost:5555/slideshow');
+        const response = await axios.get('http://localhost:5555/slideshow/active');
         const fetchedImages = response.data.data.map(image => `data:image/jpeg;base64,${image.image}`);
         setSlideshowImages(fetchedImages);
       } catch (error) {
