@@ -205,21 +205,21 @@ const PBMainPage = () => {
       <div style={{ flex: 1 }}></div>
       <div className="w-full flex items-center justify-between">
 
-      {showBackButton && (
-      <BackButton destination="/home" />
-    )}
+        {showBackButton && (
+          <BackButton destination="/home" />
+        )}
         <div className="flex-grow"></div> {/* Empty flex item to push the next component */}
 
         {showCaptureButton && (
 
-           <CaptureButton onCapture={handleCountdown}/>
+          <CaptureButton onCapture={handleCountdown} />
         )}
 
         <div className="flex-grow"></div> {/* Empty flex item to push the last component */}
 
         {showGalleryButton && (
-        <GalleryButton />
-      )}
+          <GalleryButton />
+        )}
       </div>
 
       {isPreviewOpen && (
