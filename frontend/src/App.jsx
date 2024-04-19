@@ -14,6 +14,7 @@ import EditFrame from './pages/Admin/Frames/EditFrameModal';
 import AdminPage from './pages/Admin/AdminPage';
 import PartnersPage from './pages/Admin/Partners/PartnerList';
 import AddPartner from './pages/Admin/Partners/AddPartnerModal';
+import Slideshow from './pages/Admin/Slideshow/ImageList';
 import Partners from './pages/PartnersPage';
 import Devs from './pages/Developers';
 
@@ -89,6 +90,7 @@ const App = () => {
       <Route path='/admin/frames/edit/:id' element={<EditFrame />} />
       <Route path="/admin/partners" element={<PartnersPage />} />
       <Route path='/admin/partners/add' element={<AddPartner />} />
+      <Route path='/admin/slideshow' element={<Slideshow />} />
     </Routes>
   );
 };
