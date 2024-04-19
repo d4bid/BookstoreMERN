@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../../../components/Spinner";
-import { Link } from "react-router-dom";
 import { MdOutlineAddBox } from "react-icons/md";
-import FrameCard from "../../../components/Frames/FrameCard";
-import AddFrameModal from "../Frames/AddFrameModal"; // Import the modal component
-import EditFrameModal from '../Frames/EditFrameModal';
-import ConfirmDialog from '../../../components/ConfirmDialog'; // Import the ConfirmDialog component
+import ImageCard from "../../../components/ImageCard"; 
+import AddImageModal from "../../../components/AddImageModal"; 
+import ConfirmDialog from '../../../components/ConfirmDialog'; 
 
-const FrameList = () => {
-  const [frames, setFrames] = useState([]);
+const ImageList = () => {
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedFrameId, setSelectedFrameId] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [confirmFrameId, setConfirmFrameId] = useState(null);
+  const [confirmImageId, setConfirmImageId] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    fetchFrames();
-    window.addEventListener('newFrameAdded', fetchFrames); // Listen to 'newFrameAdded' event
+    fetchImages();
+    window.addEventListener('newImagesAdded', fetchImages); 
     return () => {
-      window.removeEventListener('newFrameAdded', fetchFrames); // Cleanup
+      window.removeEventListener('newImagesAdded', fetchImages); 
     };
   }, []);
 
-  const fetchFrames = async () => {
+  const fetchImages = async () => {
     try {
-      const response = await axios.get("http://localhost:5555/frames");
-      setFrames(response.data.data);
+      const response = await axios.get("http://localhost:5555/slideshow");
+      setImages(response.data.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -38,35 +34,26 @@ const FrameList = () => {
   };
 
   const handleDelete = async (id) => {
-    setConfirmFrameId(id); // Set the frame ID to be deleted
-    setIsConfirmOpen(true); // Open the confirmation dialog
+    setConfirmImageId(id); 
+    setIsConfirmOpen(true); 
   };
 
   const handleConfirmDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5555/frames/${confirmFrameId}`);
-      setFrames(frames.filter((frame) => frame._id !== confirmFrameId));
+      await axios.delete(`http://localhost:5555/slideshow/${confirmImageId}`);
+      setImages(images.filter((image) => image._id !== confirmImageId));
       setLoading(false);
-      setIsConfirmOpen(false); // Close the confirmation dialog
+      setIsConfirmOpen(false); 
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setIsConfirmOpen(false); // Close the confirmation dialog
+      setIsConfirmOpen(false); 
     }
   };
 
   const handleCancelDelete = () => {
-    setIsConfirmOpen(false); // Close the confirmation dialog without deleting
-  };
-
-  const handleEdit = (id) => {
-    setSelectedFrameId(id);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
+    setIsConfirmOpen(false); 
   };
 
   const handleCloseAddModal = () => {
@@ -76,25 +63,23 @@ const FrameList = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Frame List</h1>
+        <h1 className="text-3xl my-8">Image List</h1>
         <div className="flex space-x-4">
           <button onClick={() => setIsAddModalOpen(true)}>
             <MdOutlineAddBox className="text-sky-800 text-4xl" />
           </button>
         </div>
       </div>
-      {isAddModalOpen && <AddFrameModal onClose={handleCloseAddModal} />}
-      {isEditModalOpen && <EditFrameModal frameId={selectedFrameId} onClose={handleCloseEditModal} />}
+      {isAddModalOpen && <AddImageModal onClose={handleCloseAddModal} />}
       {loading ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {frames.map((frame) => (
-            <FrameCard
-              key={frame._id}
-              frame={frame}
-              onDelete={() => handleDelete(frame._id)}
-              onEdit={handleEdit} // Pass the handleEdit function
+          {images.map((image) => (
+            <ImageCard
+              key={image._id}
+              image={image.image}
+              onDelete={() => handleDelete(image._id)}
             />
           ))}
         </div>
@@ -103,7 +88,7 @@ const FrameList = () => {
       {/* ConfirmDialog component */}
       <ConfirmDialog
         title="Confirm Delete"
-        message="Are you sure you want to delete this frame?"
+        message="Are you sure you want to delete this image?"
         isOpen={isConfirmOpen}
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
@@ -112,4 +97,4 @@ const FrameList = () => {
   );
 };
 
-export default FrameList;
+export default ImageList;
