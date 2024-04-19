@@ -104,7 +104,7 @@ const InitialPage = () => {
 
       <div className="mb-4 flex justify-center">
         <PhotoboothButton
-          title="Developers"
+          title="About the devs."
           onClick={handlePhotoboothClick}
         />
       </div>
