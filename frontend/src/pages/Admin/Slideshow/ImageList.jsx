@@ -4,8 +4,8 @@ import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";
 import { MdOutlineAddBox } from "react-icons/md";
 import FrameCard from "../../../components/Frames/FrameCard";
-import AddFrameModal from "./AddFrameModal"; // Import the modal component
-import EditFrameModal from './EditFrameModal';
+import AddFrameModal from "../Frames/AddFrameModal"; // Import the modal component
+import EditFrameModal from '../Frames/EditFrameModal';
 import ConfirmDialog from '../../../components/ConfirmDialog'; // Import the ConfirmDialog component
 
 const FrameList = () => {
