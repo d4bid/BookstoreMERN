@@ -60,7 +60,7 @@ const AdminPage = () => {
                              src={Rhs}
                             className="mx-auto mb-2 w-24 rounded-lg"
                             alt="JC" />
-                        <h5 className="mb-1 text-lg font-medium leading-tight">Rhessan Mamoransing</h5>
+                        <h5 className="mb-1 text-lg font-medium leading-tight">Engr. Rhessan Mamoransing</h5>
                         <p>Supervisor</p>
                         <p className="text-neutral-500 dark:text-neutral-400 italic text-sm"></p>
                     </div>
