@@ -49,10 +49,10 @@ const Timer = ({ durationInSeconds, onCountdownEnd }) => {
       )}
       {/* Display the countdown video if isLoading is false */}
       {!isLoading && (
-        <div style={{ maxWidth: '33vw', maxHeight: '40vh' }}> {/* Adjusted maxHeight */}
+        <div style={{ maxWidth: '40vw', maxHeight: '40vw' }}> {/* Adjusted maxHeight */}
           <video
             autoPlay
-            muted
+            //muted
             onEnded={handleVideoEnd}
             style={{ width: '100%', height: '100%', objectFit: 'fill' }} // Adjusted height and object-fit property
             playbackrate={4.0} // Set the playback rate to 2.5x

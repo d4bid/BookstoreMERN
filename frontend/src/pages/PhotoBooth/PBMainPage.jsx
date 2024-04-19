@@ -26,6 +26,7 @@ const PBMainPage = () => {
   const [showBackButton, setshowBackButton] = useState(true);
   const [showGalleryButton, setshowGalleryButton] = useState(true); // M// Manage visibility of frame selector
   const { enqueueSnackbar } = useSnackbar();
+  const [flashVisible, setFlashVisible] = useState(false);
 
   useEffect(() => {
     const loadCamera = async () => {
@@ -144,13 +145,21 @@ const PBMainPage = () => {
   };
 
   const handleCountdownEnd = () => {
-    handleCapture(); // Capture photo
-    setShowFrameSelector(true);
-    setShowCountdown(false); // Hide countdown timer
-    setshowBackButton(true); // Make frame selector reappear
-    setShowCaptureButton(true);
-    setshowGalleryButton(true);
+    // Trigger flash effect
+    setFlashVisible(true);
+ //setFlashVisible(false);
+    setTimeout(() => {
+      setFlashVisible(false);
+      handleCapture(); // Capture photo
+      setShowFrameSelector(true);
+      setShowCountdown(false); // Hide countdown timer
+      setshowBackButton(true); // Make frame selector reappear
+      setShowCaptureButton(true);
+      setshowGalleryButton(true);
+    }, 100); // Adjust the delay time as needed
   };
+
+
 
   if (isLoading) {
     return (
@@ -175,13 +184,28 @@ const PBMainPage = () => {
       <div className="flex flex-col items-center justify-start">
         <div className="relative mb-8" style={{ width: '80vw', maxWidth: '1536px' }}>
 
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="mb-4"
-            style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)' }}
-          />
+        <Webcam
+    audio={false}
+    ref={webcamRef}
+    screenshotFormat="image/jpeg"
+    className="mb-4"
+    style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)', position: 'relative' }}
+  />
+
+  {flashVisible && (
+    <div
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'white',
+        animation: 'flashAnimation 2s linear',
+      }}
+    />
+  )}
+
 
           {selectedFrame && (
             <img
