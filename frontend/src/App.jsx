@@ -15,6 +15,7 @@ import AdminPage from './pages/Admin/AdminPage';
 import PartnersPage from './pages/Admin/Partners/PartnerList';
 import AddPartner from './pages/Admin/Partners/AddPartnerModal';
 import Partners from './pages/PartnersPage';
+import Devs from './pages/Developers';
 
 const App = () => {
   const navigate = useNavigate();
@@ -64,6 +65,9 @@ const App = () => {
       {/* Home routes */}
       <Route path='/' element={<LandingPage />} />
       <Route path='/home' element={<InitialPage />} />
+
+      {/* Dev route */}
+      <Route path='/devs' element={<Devs />} />
 
       {/* Books CRUD routes */}
       <Route path='/books' element={<BookList />} />

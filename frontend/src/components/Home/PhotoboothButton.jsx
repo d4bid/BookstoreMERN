@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaCamera } from 'react-icons/fa'; // Import the camera icon from react-icons
+import { FaCamera } from 'react-icons/fa';
+
 
 const PhotoboothButton = ({ onClick, title }) => {
   return (
@@ -9,9 +10,12 @@ const PhotoboothButton = ({ onClick, title }) => {
         className="bg-red-500 text-white rounded-full p-4 flex items-center justify-center animate-bounce"
         style={{ width: '15vw', height: '15vw' }}
       >
-        <FaCamera style={{ fontSize: '400%' }} />
+      <FaCamera style={{ fontSize: '400%' }} />
       </button>
-      <h2 className="text-base lg:text-xl text-red-100 font-semibold mt-2 lg:mt-4">{title}</h2>
+
+      <a href="/devs">
+  <h2 className="text-base lg:text-xl text-red-100 font-semibold mt-2 lg:mt-4">{title}</h2>
+</a>
     </div>
   );
 };
