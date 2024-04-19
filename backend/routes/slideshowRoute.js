@@ -6,24 +6,22 @@ const router = express.Router();
 // Route for saving new image for slideshow
 router.post('/', async (request, response) => {
     try {
-        if (!request.body.name || !request.body.image) {
+        if (!request.body.images || !Array.isArray(request.body.images)) {
             return response.status(400).send({
-                message: 'Send all required fields: name, image',
+                message: 'Send all required fields: images',
             });
         }
 
-        // Decode base64 image string
-        const base64Image = request.body.image;
-        const buffer = Buffer.from(base64Image, 'base64');
+        // Decode base64 image strings
+        const images = request.body.images.map(base64Image => Buffer.from(base64Image, 'base64'));
 
-        const newSlideshow = {
-            name: request.body.name,
-            image: buffer,
-        };
+        const newSlideshows = images.map(image => ({
+            image: image,
+        }));
 
-        const slideshow = await Slideshow.create(newSlideshow);
+        const slideshows = await Slideshow.insertMany(newSlideshows);
 
-        return response.status(201).send(slideshow);
+        return response.status(201).send(slideshows);
     } catch (error) {
         console.log(error.message);
         response.status(500).send({ message: error.message });
@@ -57,7 +55,14 @@ router.get('/:id', async (request, response) => {
         const { id } = request.params;
         const slideshow = await Slideshow.findById(id);
 
-        return response.status(200).json(slideshow);
+        if (!slideshow) {
+            return response.status(404).json({ message: 'Image not found' });
+        }
+
+        return response.status(200).json({
+            ...slideshow._doc,
+            image: slideshow.image.toString('base64')
+        });
     } catch (error) {
         console.log(error.message);
         response.status(500).send({ message: error.message });
@@ -83,4 +88,4 @@ router.delete('/:id', async (request, response) => {
     }
 });
 
-export default router
+export default router;
