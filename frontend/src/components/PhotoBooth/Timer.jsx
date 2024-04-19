@@ -55,6 +55,7 @@ const Timer = ({ durationInSeconds, onCountdownEnd }) => {
             muted
             onEnded={handleVideoEnd}
             style={{ width: '100%', height: '100%', objectFit: 'fill' }} // Adjusted height and object-fit property
+            playbackrate={4.0} // Set the playback rate to 2.5x
           >
             <source src={CountdownVideo} type="video/mp4" />
             Your browser does not support the video tag.
