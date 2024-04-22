@@ -4,7 +4,7 @@ import EmailDialog from '../EmailDialog'; // Import EmailDialog
 import { RiMailSendFill } from "react-icons/ri";
 import { BsSendFill } from "react-icons/bs";
 
-const PreviewModal = ({ imageSrc, onClose, onSave }) => {
+const PreviewModal = ({ imageSrc, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false); // State for EmailDialog
@@ -29,10 +29,6 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose, isSelectFocused]);
-
-  const handleSaveImage = async () => {
-    onSave();
-  };
 
   const handleSendEmail = () => {
     setIsEmailDialogOpen(true);
@@ -61,10 +57,6 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
     bg-blue-500 text-white p-2 rounded cursor-pointer flex items-center ml-2
   `;
 
-  const saveButtonStyles = `
-    bg-green-500 text-white p-2 rounded cursor-pointer flex items-center ml-2
-  `;
-
   return (
     <div className={modalStyles}>
       <div ref={modalRef} className={contentStyles}>
@@ -72,9 +64,6 @@ const PreviewModal = ({ imageSrc, onClose, onSave }) => {
         <div className={buttonContainerStyles}>
           <button onClick={handleSendEmail} className={emailButtonStyles}>
             <RiMailSendFill className="mr-2" /> Email
-          </button>
-          <button onClick={handleSaveImage} className={saveButtonStyles}>
-            <FaSave className="mr-2" /> Save
           </button>
         </div>
         {/* EmailDialog */}

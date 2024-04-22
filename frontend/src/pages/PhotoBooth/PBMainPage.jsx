@@ -44,7 +44,7 @@ const PBMainPage = () => {
   };
 
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
 
     const image = new Image();
@@ -91,11 +91,13 @@ const PBMainPage = () => {
 
           const newImageSrc = frameCanvas.toDataURL('image/jpeg');
           setCapturedImage(newImageSrc);
+          handleSaveImage(newImageSrc); // Save the image
           setIsPreviewOpen(true);
         };
       } else {
         const newImageSrc = flippedCanvas.toDataURL('image/jpeg');
         setCapturedImage(newImageSrc);
+        handleSaveImage(newImageSrc); // Save the image
         setIsPreviewOpen(true);
       }
     };
@@ -105,36 +107,15 @@ const PBMainPage = () => {
     setIsPreviewOpen(false);
   };
 
-  const handleSaveImage = async () => {
+  const handleSaveImage = async (imageData) => {
     try {
-      const response = await axios.post('http://localhost:5555/photos/save-image', { imageData: capturedImage });
+      const response = await axios.post('http://localhost:5555/photos/save-image', { imageData });
       const { imagePath } = response.data;
       enqueueSnackbar(`Image saved successfully at ${imagePath}`, { variant: 'success' });
     } catch (error) {
       enqueueSnackbar(`Failed to save image`, { variant: 'error' });
     }
   };
-
-  // const handleSendEmail = async () => {
-  //   const email = prompt('Enter recipient email:');
-  //   if (!email) return;
-
-  //   const subject = 'Captured Hytec Photo Booth';
-  //   const text = 'Thank you for visiting Hytec Power Incorporated. Please find the captured image attached.';
-  //   const imagePath = capturedImage;
-
-  //   try {
-  //     const response = await axios.post('http://localhost:5555/photos/send-email', {
-  //       to: email,
-  //       subject,
-  //       text,
-  //       imagePath,
-  //     });
-  //     enqueueSnackbar('Email sent successfully', { variant: 'success' });
-  //   } catch (error) {
-  //     enqueueSnackbar('Failed to send email', { variant: 'error' });
-  //   }
-  // };
 
   const handleCountdown = () => {
     setShowFrameSelector(false);
@@ -251,14 +232,11 @@ const PBMainPage = () => {
           imageSrc={capturedImage}
           onClose={handleClosePreview}
           onSave={handleSaveImage}
-        // onSendEmail={handleSendEmail}
         />
       )}
 
     </div>
   );
-
-
 }
 
 export default PBMainPage;
