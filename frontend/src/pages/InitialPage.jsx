@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import Slideshow from '../components/Home/Slideshow';
-import Card from '../components/Home/Card';
-import PhotoboothButton from '../components/Home/PhotoboothButton';
-import UrlModal from '../components/UrlModal';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import Slideshow from "../components/Home/Slideshow";
+import Card from "../components/Home/Card";
+import PhotoboothButton from "../components/Home/PhotoboothButton";
+import UrlModal from "../components/UrlModal";
+import { useNavigate } from "react-router-dom";
 import { IoPeopleCircleSharp } from "react-icons/io5";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { MdWork } from "react-icons/md";
-import axios from 'axios';
+import axios from "axios";
+import backgroundImage from "../assets/1.png"; // Import the image
 
 const InitialPage = () => {
   const [slideshowImages, setSlideshowImages] = useState([]);
@@ -20,8 +21,12 @@ const InitialPage = () => {
   useEffect(() => {
     const fetchSlideshowImages = async () => {
       try {
-        const response = await axios.get('http://localhost:5555/slideshow/active');
-        const fetchedImages = response.data.data.map(image => `data:image/jpeg;base64,${image.image}`);
+        const response = await axios.get(
+          "http://localhost:5555/slideshow/active"
+        );
+        const fetchedImages = response.data.data.map(
+          (image) => `data:image/jpeg;base64,${image.image}`
+        );
         setSlideshowImages(fetchedImages);
       } catch (error) {
         console.log(error);
@@ -32,7 +37,7 @@ const InitialPage = () => {
   }, []);
 
   const handlePhotoboothClick = () => {
-    navigate('/photobooth');
+    navigate("/photobooth");
   };
 
   const handleAboutUsClick = () => {
@@ -60,16 +65,22 @@ const InitialPage = () => {
   };
 
   const handleClientsClick = () => {
-    navigate('/partners');
+    navigate("/partners");
   };
 
   const handleProductsClick = () => {
-    navigate('/partners');
+    navigate("/partners");
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center relative">
-
+    <div
+      className="min-h-screen flex flex-col justify-center relative"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="flex-fill">
         <Slideshow images={slideshowImages} className="w-20vw" />
       </div>
@@ -78,11 +89,23 @@ const InitialPage = () => {
 
       <div className="relative flex justify-center">
         <div className="flex flex-wrap justify-center">
-          <Card title="Partners" icon={IoPeopleCircleSharp} onClick={handleClientsClick} />
+          <Card
+            title="Partners"
+            icon={IoPeopleCircleSharp}
+            onClick={handleClientsClick}
+          />
           {/* <Card title="Products" icon={IoPricetagsSharp} onClick={handleClientsClick} /> */}
           <Card title="Careers" icon={MdWork} onClick={handleCareersClick} />
-          <Card title="News" icon={IoNewspaperSharp} onClick={handleNewsClick} />
-          <Card title="About Us" icon={IoInformationCircleSharp} onClick={handleAboutUsClick} />
+          <Card
+            title="News"
+            icon={IoNewspaperSharp}
+            onClick={handleNewsClick}
+          />
+          <Card
+            title="About Us"
+            icon={IoInformationCircleSharp}
+            onClick={handleAboutUsClick}
+          />
         </div>
       </div>
 
@@ -114,6 +137,6 @@ const InitialPage = () => {
       />
     </div>
   );
-}
+};
 
 export default InitialPage;
