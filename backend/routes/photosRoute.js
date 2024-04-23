@@ -4,20 +4,16 @@ import path from 'path';
 import os from 'os';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import OAuth2 from 'google-auth-library';
-import mongoose from 'mongoose';
-import Token from '../models/Token.js';
-import cron from 'node-cron';
+import { Photo } from '../models/photosModel.js';
 
 dotenv.config();
 
 const router = express.Router();
 
-const saveImage = (imageData) => {
+const saveImage = async (imageData) => {
   try {
     const base64Data = imageData.replace(/^data:image\/jpeg;base64,/, '');
     const timestamp = Date.now();
-    //const desktopPath = 'C:\\Users\\Richel\\Desktop';
     const desktopPath = path.join(os.homedir(), 'Desktop');
     const imagePath = path.join(desktopPath, 'PhotoBoothPhotos', `photo-${timestamp}.jpeg`);
 
@@ -27,12 +23,23 @@ const saveImage = (imageData) => {
 
     fs.writeFileSync(imagePath, base64Data, 'base64');
 
-    return imagePath;
+    // Decode base64 image string
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    // Save to database
+    const newPhoto = {
+      image: buffer,
+    };
+
+    const photo = await Photo.create(newPhoto);
+
+    return { imagePath, photo };
   } catch (error) {
     console.error('Error saving image:', error);
     throw new Error('Failed to save image');
   }
 };
+
 
 router.post('/save-image', (req, res) => {
   const { imageData } = req.body;
@@ -86,6 +93,32 @@ router.post('/send-email', async (req, res) => {
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+// Route for saving new photobooth photos
+router.post('/', async (request, response) => {
+  try {
+      if (!request.body.image) {
+          return response.status(400).send({
+              message: 'Send all required fields: image',
+          });
+      }
+
+      // Decode base64 image string
+      const base64Image = request.body.image;
+      const buffer = Buffer.from(base64Image, 'base64');
+
+      const newPhoto = {
+          image: buffer,
+      };
+
+      const photo = await Photo.create(newPhoto);
+
+      return response.status(201).send(photo);
+  } catch (error) {
+      console.log(error.message);
+      response.status(500).send({ message: error.message });
   }
 });
 

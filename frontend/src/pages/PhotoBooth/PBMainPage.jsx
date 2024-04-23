@@ -130,7 +130,7 @@ const PBMainPage = () => {
         { imageData }
       );
       const { imagePath } = response.data;
-      enqueueSnackbar(`Image saved successfully at ${imagePath}`, {
+      enqueueSnackbar(`Image saved successfully at /Desktop/PhotoBoothPhotos`, {
         variant: "success",
       });
     } catch (error) {

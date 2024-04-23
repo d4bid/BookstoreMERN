@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa';
+import BackButton from '../../components/BackButtonHome'; // Assuming BackButton is in the same directory
 
 const AdminPage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
+      <BackButton destination="/" style={{ position: 'absolute', top: '10px', left: '10px' }} />
       <div className="flex-grow"></div>
+
+      
       <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -34,10 +38,10 @@ const AdminPage = () => {
         </Link>
 
         {/* Clients Card Button */}
-        <Link to="/admin/clients" className="group">
+        <Link to="/admin/gallery" className="group">
           <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-            <h2 className="text-2xl font-semibold mb-4">Clients</h2>
-            <p className="text-gray-700 text-lg">Manage Clients</p>
+            <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
+            <p className="text-gray-700 text-lg">Manage Gallery</p>
           </div>
         </Link>
       </div>
