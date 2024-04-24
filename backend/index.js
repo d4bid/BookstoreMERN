@@ -6,6 +6,7 @@ import framesRoute from './routes/framesRoute.js';
 import photosRoute from './routes/photosRoute.js';
 import partnersRoute from './routes/partnersRoute.js';
 import slideshowRoute from './routes/slideshowRoute.js';
+import visitorsRoute from './routes/visitorsRoute.js';
 import cors from 'cors';
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/frames', framesRoute);
 app.use('/photos', photosRoute);
 app.use('/partners', partnersRoute);
 app.use('/slideshow', slideshowRoute);
+app.use('/visitors', visitorsRoute);
 
 mongoose
     .connect(mongoDBURLLocal)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import TextField from '@mui/material/TextField';
@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { useNavigate } from 'react-router-dom';
 
 const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   const [emailType, setEmailType] = useState('@gmail.com');
@@ -15,6 +16,26 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   const [customEmailType, setCustomEmailType] = useState('');
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLatestVisitorEmail = async () => {
+      try {
+        const response = await axios.get('http://localhost:5555/visitors/latest');
+        if (response.status === 200) {
+          const latestEmail = response.data.email.split('@')[0];
+          setEmail(latestEmail);
+        }
+      } catch (error) {
+        console.log(error.response); // Log the error response
+        enqueueSnackbar('Failed to fetch visitor email', { variant: 'error' });
+      }
+    };
+
+    if (isOpen) {
+      fetchLatestVisitorEmail();
+    }
+  }, [isOpen, enqueueSnackbar]);
 
   const handleSend = async () => {
     const completeEmail = customEmailType ? email + customEmailType : email + emailType;
@@ -30,8 +51,14 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
         text,
         imagePath,
       });
-      enqueueSnackbar('Email sent successfully', { variant: 'success' });
-      onClose();
+      if (response.status === 200) {
+        enqueueSnackbar('Email sent successfully', { variant: 'success' });
+        onClose();
+        navigate('/photobooth');
+        setEmail('');
+        setCustomEmailType('');
+        setEmailType('@gmail.com');
+      }
     } catch (error) {
       enqueueSnackbar('Failed to send email', { variant: 'error' });
     } finally {
