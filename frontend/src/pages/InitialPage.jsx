@@ -41,8 +41,12 @@ const InitialPage = () => {
     fetchSlideshowImages();
   }, []);
 
+  // const handlePhotoboothClick = () => {
+  //   setIsInfoModalOpen(true);
+  // };
+
   const handlePhotoboothClick = () => {
-    setIsInfoModalOpen(true);
+    navigate("/photobooth");
   };
 
   const closeInfoModal = () => {

@@ -8,7 +8,7 @@ router.post('/', async (request, response) => {
     try {
         if (!request.body.name || !request.body.organization || !request.body.email) {
             return response.status(400).send({
-                message: 'Send all required fields: name, organization, address, contact, email',
+                message: 'Send all required fields: name, organization, email',
             });
         }
 

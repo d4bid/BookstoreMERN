@@ -25,6 +25,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
         if (response.status === 200) {
           const latestEmail = response.data.email.split('@')[0];
           setEmail(latestEmail);
+          setEmail('')
         }
       } catch (error) {
         console.log(error.response); // Log the error response
