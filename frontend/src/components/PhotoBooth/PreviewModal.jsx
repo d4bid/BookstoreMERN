@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaSave, FaShare } from 'react-icons/fa';
-import EmailDialog from '../EmailDialog'; // Import EmailDialog
+import { motion } from 'framer-motion'; // Import motion from framer-motion
 import { RiMailSendFill } from "react-icons/ri";
-import { BsSendFill } from "react-icons/bs";
+import EmailDialog from '../EmailDialog'; // Import EmailDialog
 
 const PreviewModal = ({ imageSrc, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -39,44 +38,65 @@ const PreviewModal = ({ imageSrc, onClose }) => {
     setTimeout(() => onClose(), 300);
   };
 
-  const modalStyles = `
-    fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 
-    flex items-center justify-center z-50 transition-top duration-300 ease-in-out
-  `;
-
-  const contentStyles = `
-    bg-white p-8 rounded-md opacity-${isAnimationFinished ? '100' : '0'} 
-    transition-opacity duration-300 ease-in-out relative
-  `;
-
-  const buttonContainerStyles = `
-    flex justify-end mt-4
-  `;
-
-  const emailButtonStyles = `
-    bg-blue-500 text-white p-2 rounded cursor-pointer flex items-center ml-2
-  `;
-
   return (
-    <div className={modalStyles}>
-      <div ref={modalRef} className={contentStyles}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)', // Adjusted to black with opacity 0.2
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 50,
+      }}
+    >
+      <motion.div
+        ref={modalRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isAnimationFinished ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          backgroundColor: '#ffffff',
+          padding: '1.6rem',
+          borderRadius: '0.8rem',
+          position: 'relative',
+        }}
+      >
         <img src={imageSrc} alt="Captured" className="w-full rounded-md" />
-        <div className={buttonContainerStyles}>
-          <button onClick={handleSendEmail} className={emailButtonStyles}>
-            <RiMailSendFill className="mr-2" /> Email
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+          <button
+            onClick={handleSendEmail}
+            style={{
+              backgroundColor: '#007bff',
+              color: '#ffffff',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.4rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              marginLeft: '0.5rem',
+            }}
+          >
+            <RiMailSendFill style={{ marginRight: '0.5rem' }} /> Email
           </button>
         </div>
         {/* EmailDialog */}
         {isEmailDialogOpen && (
-          <EmailDialog 
-            isOpen={isEmailDialogOpen} 
-            onClose={() => setIsEmailDialogOpen(false)} 
-            imagePath={imageSrc} 
+          <EmailDialog
+            isOpen={isEmailDialogOpen}
+            onClose={() => setIsEmailDialogOpen(false)}
+            imagePath={imageSrc}
             setIsSelectFocused={setIsSelectFocused} // Pass setIsSelectFocused to EmailDialog
           />
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

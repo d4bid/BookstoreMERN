@@ -10,6 +10,7 @@ import { IoInformationCircleSharp } from "react-icons/io5";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { MdWork } from "react-icons/md";
 import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
 
 const InitialPage = () => {
@@ -19,6 +20,8 @@ const InitialPage = () => {
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
   const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
+
+  const [showPrivacyScreen, setShowPrivacyScreen] = useState(true);
 
   useEffect(() => {
     const fetchSlideshowImages = async () => {
@@ -75,67 +78,90 @@ const InitialPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-center relative"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div className="flex-fill">
-        <Slideshow images={slideshowImages} className="w-20vw" />
-      </div>
+    <AnimatePresence>
+      {showPrivacyScreen && (
+        <motion.div
+          key="privacy-screen"
+          initial={{ scaleX: 1, originX: 0 }} // Starts from the right
+          animate={{ scaleX: 0, transition: { duration: 0.5 } }} // Moves to the left to reveal content
+          exit={{ scaleX: 1, transition: { duration: 0.5 } }} // Returns to the right when exiting
+          style={{ originX: 0 , zIndex: 9999 }}
+          className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-red-500 z-2"
+          onClick={() => setShowPrivacyScreen(false)} // Hide privacy screen when clicked
+        >
 
-      <div className="flex-grow"></div>
+        </motion.div>
+      )}
 
-      <div className="relative flex justify-center">
-        <div className="flex flex-wrap justify-center">
-          <Card
-            title="Partners"
-            icon={IoPeopleCircleSharp}
-            onClick={handleClientsClick}
-          />
-          <Card title="Careers" icon={MdWork} onClick={handleCareersClick} />
-          <Card
-            title="News"
-            icon={IoNewspaperSharp}
-            onClick={handleNewsClick}
-          />
-          <Card
-            title="About Us"
-            icon={IoInformationCircleSharp}
-            onClick={handleAboutUsClick}
+      <motion.div
+        className="min-h-screen flex flex-col justify-center relative"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, transition: { duration: 0.5 } }}
+      >
+        <div className="flex-fill">
+          <Slideshow images={slideshowImages} className="w-20vw" />
+        </div>
+
+        <div className="flex-grow"></div>
+
+        <div className="relative flex justify-center">
+          <div className="flex flex-wrap justify-center">
+            <Card
+              title="Partners"
+              icon={IoPeopleCircleSharp}
+              onClick={handleClientsClick}
+            />
+            <Card
+              title="Careers"
+              icon={MdWork}
+              onClick={handleCareersClick}
+            />
+            <Card
+              title="News"
+              icon={IoNewspaperSharp}
+              onClick={handleNewsClick}
+            />
+            <Card
+              title="About Us"
+              icon={IoInformationCircleSharp}
+              onClick={handleAboutUsClick}
+            />
+          </div>
+        </div>
+
+        <div className="flex-grow"></div>
+
+        <div className="mb-4 flex justify-center">
+          <PhotoboothButton
+            title="About the devs."
+            onClick={handlePhotoboothClick}
           />
         </div>
-      </div>
 
-      <div className="flex-grow"></div>
-
-      <div className="mb-4 flex justify-center">
-        <PhotoboothButton
-          title="About the devs."
-          onClick={handlePhotoboothClick}
+        <InfoModal isOpen={isInfoModalOpen} onClose={closeInfoModal} />
+        <UrlModal
+          isOpen={isAboutUsModalOpen}
+          onClose={closeAboutUsModal}
+          url="https://hytecpower.com/about-us/"
         />
-      </div>
-
-      <InfoModal isOpen={isInfoModalOpen} onClose={closeInfoModal} />
-      <UrlModal
-        isOpen={isAboutUsModalOpen}
-        onClose={closeAboutUsModal}
-        url="https://hytecpower.com/about-us/"
-      />
-      <UrlModal
-        isOpen={isNewsModalOpen}
-        onClose={closeNewsModal}
-        url="https://hytecpower.com/news/"
-      />
-      <UrlModal
-        isOpen={isCareersModalOpen}
-        onClose={closeCareersModal}
-        url="https://hytecpower.com/careers/"
-      />
-    </div>
+        <UrlModal
+          isOpen={isNewsModalOpen}
+          onClose={closeNewsModal}
+          url="https://hytecpower.com/news/"
+        />
+        <UrlModal
+          isOpen={isCareersModalOpen}
+          onClose={closeCareersModal}
+          url="https://hytecpower.com/careers/"
+        />
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

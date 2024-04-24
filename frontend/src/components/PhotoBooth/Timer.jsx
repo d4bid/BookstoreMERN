@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'; // Import the loading icon from React Icons
 import CountdownVideo from '../../assets/Countdown.mp4'; // Import the countdown video
+import CA1 from '../../assets/VFX/Capture_1.mp3';
+import CA2 from '../../assets/VFX/Capture_2.mp3';
+import CA3 from '../../assets/VFX/Capture_3.mp3';
+import CA4 from '../../assets/VFX/Capture_4.mp3';
+
+const audioFiles = [CA1, CA2, CA3, CA4];
+
+const getRandomIndex = () => Math.floor(Math.random() * audioFiles.length);
 
 const Timer = ({ durationInSeconds, onCountdownEnd }) => {
   const [seconds, setSeconds] = useState(durationInSeconds);
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
+  const [audioIndex, setAudioIndex] = useState(getRandomIndex());
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -52,7 +61,7 @@ const Timer = ({ durationInSeconds, onCountdownEnd }) => {
         <div style={{ maxWidth: '40vw', maxHeight: '40vw' }}> {/* Adjusted maxHeight */}
           <video
             autoPlay
-            //muted
+            muted
             onEnded={handleVideoEnd}
             style={{ width: '100%', height: '100%', objectFit: 'fill' }} // Adjusted height and object-fit property
             playbackrate={4.0} // Set the playback rate to 2.5x
@@ -60,12 +69,13 @@ const Timer = ({ durationInSeconds, onCountdownEnd }) => {
             <source src={CountdownVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+
+          <audio src={audioFiles[audioIndex]} autoPlay />
+
         </div>
       )}
     </div>
   );
-
-
 };
 
 export default Timer;

@@ -1,52 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mp4Background from '../../src/assets/hytecscreensaver.mp4';
-import { Ripple, initTWE } from "tw-elements";
-initTWE({ Ripple });
+import { AnimatePresence, motion } from "framer-motion";
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
+  const [showPrivacyScreen, setShowPrivacyScreen] = useState(false);
+
   const handleClick = () => {
-    navigate('/home');
+    setShowPrivacyScreen(true); // Show privacy screen when clicked
+    setTimeout(() => navigate('/home'), 500); // Navigate after hiding privacy screen with a slight delay for animation
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-end"
-      style={{
-        position: 'relative',
-        paddingBottom: '20vh'  // Added padding to the bottom to position the text
-      }}
-      onClick={handleClick}
-    >
+    <div className="relative min-h-screen">
       <video
         autoPlay
         loop
         muted
+        className="absolute top-0 left-0 w-full h-full object-cover"
         style={{
-          position: 'absolute',
           zIndex: '-1',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover'
         }}
       >
         <source src={mp4Background} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <p
-        className="text-white text-5xl cursor-pointer mb-4"
-        data-twe-ripple-init
-        data-twe-ripple-color="white"
-        data-twe-ripple-unbound="true"
-        data-twe-ripple-duration="1000ms"
-      >
-        Touch to Start
-      </p>
-
+      <AnimatePresence>
+        {showPrivacyScreen && (
+          <motion.div
+            key="privacy-screen"
+            initial={{ scaleX: 0, originX: 1 }}
+            animate={{ scaleX: 1, transition: { duration: 0.5 } }}
+            exit={{ scaleX: 1, transition: { duration: 0.5 } }}
+            style={{ originX: 0 }}
+            className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-red-500 z-2"
+            onClick={() => setShowPrivacyScreen(false)}
+          >
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {!showPrivacyScreen && (
+        <div
+          className="min-h-screen flex flex-col items-center justify-end"
+          style={{
+            position: 'relative',
+            paddingBottom: '20vh'
+          }}
+          onClick={handleClick}
+        >
+          <p
+            className="text-white text-5xl cursor-pointer mb-4"
+          >
+            Touch to Start
+          </p>
+        </div>
+      )}
     </div>
   );
 };
