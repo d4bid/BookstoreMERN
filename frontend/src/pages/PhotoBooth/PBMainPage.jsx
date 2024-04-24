@@ -12,6 +12,7 @@ import hytecLogo from "../../assets/hytecLogo.png";
 import Timer from "../../components/PhotoBooth/Timer";
 import CountdownVideo from "../../assets/Countdown.mp4"; //
 
+
 const PBMainPage = () => {
   const webcamRef = useRef(null);
 
@@ -23,7 +24,7 @@ const PBMainPage = () => {
   const [showCaptureButton, setShowCaptureButton] = useState(true);
   const [showFrameSelector, setShowFrameSelector] = useState(true);
   const [showBackButton, setshowBackButton] = useState(true);
-  const [showGalleryButton, setshowGalleryButton] = useState(true); // M// Manage visibility of frame selector
+  const [showGalleryButton, setshowGalleryButton] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const [flashVisible, setFlashVisible] = useState(false);
 
@@ -41,7 +42,9 @@ const PBMainPage = () => {
   const handleSelectFrame = (frame) => {
     setSelectedFrame(frame);
   };
-
+  const toggleFrameSelector = () => {
+    setShowFrameSelector(prevState => !prevState);
+  };
   const handleCapture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
 
@@ -66,8 +69,8 @@ const PBMainPage = () => {
       flippedCanvas.height = canvas.height;
 
       // Flip the image horizontally
-      flippedCtx.translate(flippedCanvas.width, 0);
-      flippedCtx.scale(-1, 1);
+     // flippedCtx.translate(flippedCanvas.width, 0);
+      //flippedCtx.scale(-1, 1);
       flippedCtx.drawImage(
         image,
         0,
@@ -121,6 +124,7 @@ const PBMainPage = () => {
 
   const handleClosePreview = () => {
     setIsPreviewOpen(false);
+    setShowFrameSelector(true);
   };
 
   const handleSaveImage = async (imageData) => {
@@ -153,7 +157,7 @@ const PBMainPage = () => {
     setTimeout(() => {
       setFlashVisible(false);
       handleCapture(); // Capture photo
-      setShowFrameSelector(true);
+      setShowFrameSelector(false);
       setShowCountdown(false); // Hide countdown timer
       setshowBackButton(true); // Make frame selector reappear
       setShowCaptureButton(true);
@@ -168,6 +172,8 @@ const PBMainPage = () => {
       </div>
     );
   }
+
+
   return (
     <div
       className="flex flex-col items-center justify-center bg-white-500"
@@ -196,7 +202,7 @@ const PBMainPage = () => {
             style={{
               width: "100%",
               height: "auto",
-              transform: "scaleX(-1)",
+              //transform: "scaleX(-1)",
               position: "relative",
             }}
           />
@@ -244,8 +250,8 @@ const PBMainPage = () => {
         {showCaptureButton && <CaptureButton onCapture={handleCountdown} />}
         <div className="flex-grow"></div>{" "}
         {/* Empty flex item to push the last component */}
-        {showGalleryButton && <GalleryButton />}
-      </div>
+        {showGalleryButton && <GalleryButton toggleFrameSelector={toggleFrameSelector}/>}
+         </div>
 
       {isPreviewOpen && (
         <PreviewModal
