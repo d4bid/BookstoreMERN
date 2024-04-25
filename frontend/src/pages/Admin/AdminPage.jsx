@@ -37,11 +37,19 @@ const AdminPage = () => {
           </div>
         </Link>
 
-        {/* Clients Card Button */}
+        {/* Gallery Card Button */}
         <Link to="/admin/gallery" className="group">
           <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
             <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
             <p className="text-gray-700 text-lg">Manage Gallery</p>
+          </div>
+        </Link>
+
+        {/* Visitor Log Card Button */}
+        <Link to="/admin/visitors" className="group">
+          <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+            <h2 className="text-2xl font-semibold mb-4">Visitor Log</h2>
+            <p className="text-gray-700 text-lg">View Visitor Log</p>
           </div>
         </Link>
       </div>

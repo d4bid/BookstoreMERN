@@ -16,6 +16,7 @@ import PartnersPage from './pages/Admin/Partners/PartnerList';
 import AddPartner from './pages/Admin/Partners/AddPartnerModal';
 import Slideshow from './pages/Admin/Slideshow/ImageList';
 import Gallery from './pages/Admin/Gallery/ImageGallery';
+import Visitors from './pages/Admin/VisitorLog';
 import Partners from './pages/PartnersPage';
 import Devs from './pages/Developers';
 
@@ -33,7 +34,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 250000); // 30 seconds if 30000
+      }, 2500000000000); // 30 seconds if 30000
       //console.log('Timer reset');
     };
 
@@ -94,6 +95,7 @@ const App = () => {
       <Route path='/admin/partners/add' element={<AddPartner />} />
       <Route path='/admin/slideshow' element={<Slideshow />} />
       <Route path='/admin/gallery' element={<Gallery />} />
+      <Route path='/admin/visitors' element={<Visitors />} />
     </Routes>
   );
 };

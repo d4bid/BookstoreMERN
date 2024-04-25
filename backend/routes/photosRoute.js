@@ -53,6 +53,22 @@ router.post('/save-image', (req, res) => {
   }
 });
 
+// Fetch all photos
+router.get('/', async (req, res) => {
+  try {
+    const photos = await Photo.find({});
+    const formattedPhotos = photos.map((photo) => ({
+      _id: photo._id,
+      image: photo.image.toString('base64'),
+      createdAt: photo.createdAt,
+    }));
+    res.status(200).json(formattedPhotos);
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    res.status(500).json({ error: 'Failed to fetch photos' });
+  }
+});
+
 router.post('/send-email', async (req, res) => {
   const { to, subject, text, imagePath } = req.body;
 
