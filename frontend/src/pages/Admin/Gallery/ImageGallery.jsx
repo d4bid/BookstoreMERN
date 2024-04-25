@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../../../components/Spinner";
 import PhotoCard from "../../../components/PhotoCard"; // Import the PhotoCard component
+import BackButton from "../../../components/BackButtonHome"; // Import the BackButton component
 
 const ImageGallery = () => {
   const [images, setImages] = useState([]);
@@ -28,19 +29,16 @@ const ImageGallery = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Gallery</h1>
+    <div className="p-4 relative">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl">Gallery</h1>
       </div>
       {loading ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
           {images.map((image) => (
-            <div
-              key={image._id}
-              className="flex justify-center"
-            >
+            <div key={image._id} className="flex justify-center">
               <PhotoCard
                 image={image.image}
                 alt={image.alt} // Assuming the alt text is stored in the image object
@@ -49,6 +47,9 @@ const ImageGallery = () => {
           ))}
         </div>
       )}
+      <div className="absolute bottom-4 left-4">
+        <BackButton destination="/photobooth" />
+      </div>
     </div>
   );
 };
