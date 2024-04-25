@@ -10,7 +10,7 @@ const LandingPage = () => {
 
   const handleClick = () => {
     setShowPrivacyScreen(true); // Show privacy screen when clicked
-    setTimeout(() => navigate('/home'), 500); // Navigate after hiding privacy screen with a slight delay for animation
+    setTimeout(() => navigate("/home", { state: { fromLanding: true } }), 1000);
   };
 
   return (

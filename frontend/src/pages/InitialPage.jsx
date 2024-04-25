@@ -12,6 +12,7 @@ import { MdWork } from "react-icons/md";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
+import { useLocation } from 'react-router-dom';
 
 const InitialPage = () => {
   const [slideshowImages, setSlideshowImages] = useState([]);
@@ -20,8 +21,10 @@ const InitialPage = () => {
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
   const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
+  const location = useLocation();
+  const [showPrivacyScreen, setShowPrivacyScreen] = useState(location.state?.fromLanding ?? false);
 
-  const [showPrivacyScreen, setShowPrivacyScreen] = useState(true);
+
 
   useEffect(() => {
     const fetchSlideshowImages = async () => {
@@ -41,12 +44,18 @@ const InitialPage = () => {
     fetchSlideshowImages();
   }, []);
 
+
+
+  console.log("Show Privacy Screen:", showPrivacyScreen);
+
   // const handlePhotoboothClick = () => {
   //   setIsInfoModalOpen(true);
   // };
 
   const handlePhotoboothClick = () => {
-    navigate("/photobooth");
+    //navigate("/photobooth");
+    navigate("/photobooth", { state: { fromLanding: false } }), 1000;
+
   };
 
   const closeInfoModal = () => {
