@@ -12,6 +12,8 @@ import { MdWork } from "react-icons/md";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
+import BG from "../assets/BG.mp4"
+import BG2 from "../assets/BG_2.mp4"
 import { useLocation } from 'react-router-dom';
 
 const InitialPage = () => {
@@ -109,7 +111,7 @@ const InitialPage = () => {
       <motion.div
         className="min-h-screen flex flex-col justify-center relative"
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+         // backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
@@ -117,6 +119,11 @@ const InitialPage = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
       >
+        <video autoPlay muted loop className="absolute inset-0 object-cover">
+    <source src={BG2} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
         <div className="flex-fill">
           <Slideshow images={slideshowImages} className="w-20vw" />
         </div>
