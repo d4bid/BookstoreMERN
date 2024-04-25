@@ -69,6 +69,19 @@ router.get('/', async (req, res) => {
   }
 });
 
+//Route for getting a photo by id
+router.get('/:id', async (request, response) => {
+  try {
+      const { id } = request.params;
+      const photo = await Photo.findById(id);
+
+      return response.status(200).json(photo);
+  } catch (error){
+      console.log(error.message);
+      response.status(500).send({ message: error.message });
+  }
+});
+
 router.post('/send-email', async (req, res) => {
   const { to, subject, text, imagePath } = req.body;
 
