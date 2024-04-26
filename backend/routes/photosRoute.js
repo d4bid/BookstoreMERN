@@ -182,5 +182,25 @@ router.post('/', async (request, response) => {
   }
 });
 
+// Delete multiple photos by IDs
+router.delete('/delete-multiple', async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    // Check if IDs array is provided
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty IDs array' });
+    }
+
+    // Delete photos from the database based on the provided IDs
+    await Photo.deleteMany({ _id: { $in: ids } });
+
+    res.status(200).json({ message: 'Selected items deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting photos:', error);
+    res.status(500).json({ error: 'Failed to delete photos' });
+  }
+});
+
 
 export default router;
