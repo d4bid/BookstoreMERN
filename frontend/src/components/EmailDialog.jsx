@@ -18,25 +18,25 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchLatestVisitorEmail = async () => {
-      try {
-        const response = await axios.get('http://localhost:5555/visitors/latest');
-        if (response.status === 200) {
-          const latestEmail = response.data.email.split('@')[0];
-          setEmail(latestEmail);
-          setEmail('')
-        }
-      } catch (error) {
-        console.log(error.response); // Log the error response
-        enqueueSnackbar('Failed to fetch visitor email', { variant: 'error' });
-      }
-    };
+  // useEffect(() => {
+  //   const fetchLatestVisitorEmail = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:5555/visitors/latest');
+  //       if (response.status === 200) {
+  //         const latestEmail = response.data.email.split('@')[0];
+  //         setEmail(latestEmail);
+  //         setEmail('')
+  //       }
+  //     } catch (error) {
+  //       console.log(error.response); // Log the error response
+  //       enqueueSnackbar('Failed to fetch visitor email', { variant: 'error' });
+  //     }
+  //   };
 
-    if (isOpen) {
-      fetchLatestVisitorEmail();
-    }
-  }, [isOpen, enqueueSnackbar]);
+  //   if (isOpen) {
+  //     fetchLatestVisitorEmail();
+  //   }
+  // }, [isOpen, enqueueSnackbar]);
 
   const handleSend = async () => {
     const completeEmail = customEmailType ? email + customEmailType : email + emailType;
