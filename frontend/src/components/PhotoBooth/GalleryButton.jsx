@@ -9,7 +9,7 @@ const GalleryButton = ({ onCapture }) => {
 
   const handleButtonClick = () => {
     // setIsModalOpen(true);
-    navigate("/admin/gallery");
+    navigate("/gallery");
   };
 
   const handleCloseModal = () => {

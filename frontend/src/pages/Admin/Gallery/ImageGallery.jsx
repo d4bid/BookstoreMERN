@@ -4,31 +4,38 @@ import Spinner from "../../../components/Spinner";
 import PhotoCard from "../../../components/PhotoCard";
 import BackButton from "../../../components/BackButtonHome";
 import hytecLogo from "../../../assets/hytecLogo.png";
-import { MdOutlineChecklist } from "react-icons/md";
-import { MdOutlineIosShare } from "react-icons/md";
-import { MdDeleteForever } from "react-icons/md";
-import { MdOutlineCancel } from "react-icons/md";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { MdOutlineChecklist, MdOutlineIosShare, MdDeleteForever, MdOutlineCancel } from "react-icons/md";
+import { AnimatePresence, motion } from "framer-motion";
 
-const ImageGallery = () => {
+const ImageGallery = ({ isAdmin = true }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showBackButton, setShowBackButton] = useState(true);
-  const controls = useAnimation();
 
   useEffect(() => {
     setLoading(true);
-    fetchImages();
-    window.addEventListener('newImagesAdded', fetchImages);
+    isAdmin ? fetchImagesAdmin() : fetchImages();
+    window.addEventListener('newImagesAdded', isAdmin ? fetchImagesAdmin : fetchImages);
     return () => {
-      window.removeEventListener('newImagesAdded', fetchImages);
+      window.removeEventListener('newImagesAdded', isAdmin ? fetchImagesAdmin : fetchImages);
     };
-  }, []);
+  }, [isAdmin]);
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get("http://localhost:5555/photos");
+      const response = await axios.get("http://localhost:5555/photos/user-gallery");
+      setImages(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchImagesAdmin = async () => {
+    try {
+      const response = await axios.get("http://localhost:5555/photos/");
       setImages(response.data);
       setLoading(false);
     } catch (error) {
@@ -60,26 +67,28 @@ const ImageGallery = () => {
         <div className="flex-grow" style={{ maxWidth: "20vw" }}>
           <img src={hytecLogo} alt="Photo Booth" />
         </div>
-        {/* gawing component ang multiselect */}
         <button className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" onClick={toggleActions} style={{ width: '20vw', height: '20vw', padding: '2rem', margin: '0 10px' }}>
           <MdOutlineChecklist className="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-23 w-auto" />
         </button>
       </div>
 
-      <div style={{ paddingTop: '11rem',paddingBottom:'13rem' }}>
+      <div style={{ paddingTop: '11rem', paddingBottom:'13rem' }}>
         {loading ? (
           <Spinner />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-            {images.map((image) => (
-              <div key={image._id} className="flex justify-center">
-                <PhotoCard
-                  image={image.image}
-                  alt={image.alt}
-                />
-              </div>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+              {images.map((image) => (
+                <div key={image._id} className="flex justify-center">
+                  <PhotoCard
+                    image={image.image}
+                    alt={image.alt}
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-gray-500 mt-4">NOTE: Only pictures taken within the day are displayed here.</p>
+          </>
         )}
       </div>
 

@@ -53,6 +53,37 @@ router.post('/save-image', (req, res) => {
   }
 });
 
+// Middleware to get today's start and end time
+const getTodayStartEnd = () => {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0); // Set to the beginning of the day
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999); // Set to the end of the day
+  return { todayStart, todayEnd };
+};
+
+// Fetch photos captured within the day
+router.get('/user-gallery', async (req, res) => {
+  try {
+    const { todayStart, todayEnd } = getTodayStartEnd();
+
+    const photos = await Photo.find({
+      createdAt: { $gte: todayStart, $lte: todayEnd }
+    });
+
+    const formattedPhotos = photos.map((photo) => ({
+      _id: photo._id,
+      image: photo.image.toString('base64'),
+      createdAt: photo.createdAt,
+    }));
+
+    res.status(200).json(formattedPhotos);
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    res.status(500).json({ error: 'Failed to fetch photos' });
+  }
+});
+
 // Fetch all photos
 router.get('/', async (req, res) => {
   try {

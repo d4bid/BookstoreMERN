@@ -19,6 +19,7 @@ import Gallery from './pages/Admin/Gallery/ImageGallery';
 import Visitors from './pages/Admin/VisitorLog';
 import Partners from './pages/PartnersPage';
 import Devs from './pages/Developers';
+import UserGallery from './pages/UserGallery';
 
 
 const App = () => {
@@ -34,7 +35,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 2500000000000); // 30 seconds if 30000
+      }, 25000); // 30 seconds if 30000
       //console.log('Timer reset');
     };
 
@@ -86,6 +87,9 @@ const App = () => {
       {/* Partners routes */}
       <Route path='/partners' element={<Partners />} />
 
+      {/* Gallery routes */}
+      <Route path='/gallery' element={<UserGallery />} />
+
       {/* ADMIN CRUD routes */}
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/admin/frames" element={<FrameList />} />
@@ -95,9 +99,8 @@ const App = () => {
       <Route path='/admin/partners/add' element={<AddPartner />} />
       <Route path='/admin/slideshow' element={<Slideshow />} />
       <Route path='/admin/gallery' element={<Gallery />} />
+      <Route path='/admin/visitors' element={<Visitors />} />
 
-      
-      <Route path='/visitors' element={<Visitors />} />
     </Routes>
   );
 };
