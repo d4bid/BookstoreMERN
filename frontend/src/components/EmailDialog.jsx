@@ -55,7 +55,6 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
       if (response.status === 200) {
         enqueueSnackbar('Email sent successfully', { variant: 'success' });
         onClose();
-        navigate('/photobooth');
         setEmail('');
         setCustomEmailType('');
         setEmailType('@gmail.com');

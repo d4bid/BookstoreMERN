@@ -95,7 +95,9 @@ const App = () => {
       <Route path='/admin/partners/add' element={<AddPartner />} />
       <Route path='/admin/slideshow' element={<Slideshow />} />
       <Route path='/admin/gallery' element={<Gallery />} />
-      <Route path='/admin/visitors' element={<Visitors />} />
+
+      
+      <Route path='/visitors' element={<Visitors />} />
     </Routes>
   );
 };

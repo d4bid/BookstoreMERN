@@ -27,7 +27,7 @@ const GalleryButton = ({ onCapture }) => {
       </button>
 
       {/* Display UrlModal */}
-      <UrlModal isOpen={isModalOpen} onClose={handleCloseModal} url="/admin/gallery" />
+      <UrlModal isOpen={isModalOpen} onClose={handleCloseModal} url="/gallery" />
     </div>
   );
 };
