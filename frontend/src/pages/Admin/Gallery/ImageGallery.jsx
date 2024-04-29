@@ -146,8 +146,8 @@ const ImageGallery = ({ isAdmin = true }) => {
       // Construct email data with multiple attachments
       const emailData = {
         to: recipientEmail,
-        subject: "Multiple Photos",
-        text: "Here are the photos you requested.",
+        subject: "Hytec Power Inc. Photo Booth",
+        text: "Thank you for visiting Hytec Power Incorporated. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.",
         images: images  // Include images in the email data
       };
   

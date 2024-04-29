@@ -13,10 +13,10 @@ const AdminPage = () => {
     const [flips, setFlips] = useState([false, false, false, false]);
 
     const developers = [
+        { name: "Engr. Rhessan Mamoransing", course: "Supervisor", email: "rhessanjan@hytecpower.com", image: Rhs, num: "+63 977 6520 964" },
         { name: "David Cabrito", course: "BSIT", email: "dvdcabrito@gmail.com", image: Dav, qr: DV_QR, num: "+63 917 3887 798" },
         { name: "Kyle Lejao", course: "BSIT", email: "plejao009@gmail.com", image: Kyl, qr: KP_QR, num: "+63 936 0631 100"},
-        { name: "JC Macalalay", course: "BSIT", email: "macalalayjc@gmail.com", image: JC, qr: JC_QR, num: "+63 928 7082 283"  },
-        { name: "Engr. Rhessan Mamoransing", course: "Supervisor", email: "rhessanjan@hytecpower.com", image: Rhs, num: "+63 977 6520 964" }
+        { name: "JC Macalalay", course: "BSIT", email: "macalalayjc@gmail.com", image: JC, qr: JC_QR, num: "+63 928 7082 283"  }
     ];
 
     const handleFlip = (index) => {

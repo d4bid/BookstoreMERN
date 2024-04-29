@@ -50,15 +50,13 @@ const InitialPage = () => {
 
   console.log("Show Privacy Screen:", showPrivacyScreen);
 
-  const handlePhotoboothClick = () => {
-    setIsInfoModalOpen(true);
-  };
-
   // const handlePhotoboothClick = () => {
-  //   //navigate("/photobooth");
-  //   navigate("/photobooth", { state: { fromLanding: false } }), 1000;
-
+  //   setIsInfoModalOpen(true);
   // };
+
+  const handlePhotoboothClick = () => {
+    navigate("/photobooth", { state: { fromLanding: false } }), 1000;
+  };
 
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
