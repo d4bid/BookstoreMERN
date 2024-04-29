@@ -34,8 +34,8 @@ const PhotoCard = ({ image, alt, checklistMode, onSelectImage, isSelected }) => 
             />
           )}
           {checklistMode && isSelected && (
-            <div className="absolute top-2 right-2 bg-green-500 rounded-full h-6 w-6 flex justify-center items-center text-white">
-              <MdCheck className="h-4 w-4" />
+            <div className="absolute top-2 right-2 bg-green-500 rounded-full h-10 w-10 flex justify-center items-center text-white">
+              <MdCheck style={{ fontSize: "1.5rem" }} />
             </div>
           )}
         </CardActionArea>
@@ -43,6 +43,7 @@ const PhotoCard = ({ image, alt, checklistMode, onSelectImage, isSelected }) => 
       {isModalOpen && <PreviewModal imageSrc={`data:image/png;base64,${image}`} onClose={handleCloseModal} />}
     </>
   );
+  
 };
 
 export default PhotoCard;
