@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mp4Background from '../../src/assets/hytecscreensaver.mp4';
 import { AnimatePresence, motion } from "framer-motion";
+import { MdTouchApp } from "react-icons/md";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -50,10 +51,13 @@ const LandingPage = () => {
           }}
           onClick={handleClick}
         >
+
+          <MdTouchApp className=" text-white  p-4 flex items-center justify-center animate-pulse"
+            style={{ width: '15vw', height: '15vw' }} />
           <p
-            className="text-white text-5xl cursor-pointer mb-4"
+            className="text-white text-3xl cursor-pointer mb-4 animate-pulse"
           >
-            Touch to Start
+            Touch to start
           </p>
         </div>
       )}
