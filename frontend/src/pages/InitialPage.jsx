@@ -100,7 +100,7 @@ const InitialPage = () => {
           initial={{ scaleX: 1, originX: 0 }} // Starts from the right
           animate={{ scaleX: 0, transition: { duration: 0.5 } }} // Moves to the left to reveal content
           exit={{ scaleX: 1, transition: { duration: 0.5 } }} // Returns to the right when exiting
-          style={{ originX: 0 , zIndex: 9999 }}
+          style={{ originX: 0, zIndex: 9999 }}
           className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-red-500 z-2"
           onClick={() => setShowPrivacyScreen(false)} // Hide privacy screen when clicked
         >
@@ -111,7 +111,7 @@ const InitialPage = () => {
       <motion.div
         className="min-h-screen flex flex-col justify-center relative"
         style={{
-         // backgroundImage: `url(${backgroundImage})`,
+          // backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
@@ -120,9 +120,9 @@ const InitialPage = () => {
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
       >
         <video autoPlay muted loop className="absolute inset-0 object-cover">
-    <source src={BG2} type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
+          <source src={BG2} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
         <div className="flex-fill">
           <Slideshow images={slideshowImages} className="w-20vw" />
@@ -159,9 +159,12 @@ const InitialPage = () => {
 
         <div className="mb-4 flex justify-center">
           <PhotoboothButton
-            title="About the devs."
             onClick={handlePhotoboothClick}
+
           />
+          <a href="/devs">
+            <h2 className="absolute right-2 bottom-3 text-base lg:text-xl text-red-500 font-semibold mt-2 lg:mt-4">About the devs.</h2>
+          </a>
         </div>
 
         <InfoModal isOpen={isInfoModalOpen} onClose={closeInfoModal} />

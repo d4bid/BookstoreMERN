@@ -6,6 +6,11 @@ import ImageCard from "../../../components/ImageCard";
 import AddImageModal from "../../../components/AddImageModal";
 import ConfirmDialog from '../../../components/ConfirmDialog';
 
+// navbar
+import BackButton from "../../../components/BackButtonHome";
+import hytecLogo from "../../../assets/hytecLogo.png";
+import { IoMdAdd } from "react-icons/io";
+
 const ImageList = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -87,14 +92,19 @@ const ImageList = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Image List</h1>
-        <div className="flex space-x-4">
-          <button onClick={() => setIsAddModalOpen(true)}>
-            <MdOutlineAddBox className="text-sky-800 text-4xl" />
-          </button>
+        {/* Nav bar */}
+        <div className="w-full flex items-center justify-between fixed top-0 z-10 bg-white">
+        <BackButton destination="/admin" />
+        <div className="flex-grow" style={{ maxWidth: "20vw" }}>
+          <img src={hytecLogo} alt="Photo Booth" />
         </div>
+        <IoMdAdd className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" onClick={() => setIsAddModalOpen(true)} style={{ width: '15vw', height: '15vw', padding: '2rem', margin: '0 10px' }} />
       </div>
+
+
+      <div style={{ paddingTop: '13rem', paddingBottom: '13rem' }}>
+         <h1 className="text-3xl ">Image List</h1>
+
       {isAddModalOpen && <AddImageModal onClose={handleCloseAddModal} />}
       {loading ? (
         <Spinner />
@@ -108,9 +118,9 @@ const ImageList = () => {
               _id={image._id}
               onDelete={() => handleDelete(image._id)}
               onSwitchChange={(isActive) => handleSwitchChange(image._id, isActive)}
-              onOpenModal={handleOpenModal} // Pass the handleOpenModal function
-              onCloseModal={handleCloseModal} // Pass the handleCloseModal function
-              isModalOpen={isModalOpen} // Pass the isModalOpen state
+              onOpenModal={handleOpenModal}
+              onCloseModal={handleCloseModal}
+              isModalOpen={isModalOpen}
             />
           ))}
         </div>
@@ -124,6 +134,7 @@ const ImageList = () => {
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
       />
+    </div>
     </div>
   );
 };

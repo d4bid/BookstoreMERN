@@ -8,6 +8,11 @@ import AddFrameModal from "./AddFrameModal"; // Import the modal component
 import EditFrameModal from './EditFrameModal';
 import ConfirmDialog from '../../../components/ConfirmDialog'; // Import the ConfirmDialog component
 
+// navbar
+import BackButton from "../../../components/BackButtonHome";
+import hytecLogo from "../../../assets/hytecLogo.png";
+import { IoMdAdd } from "react-icons/io";
+
 const FrameList = () => {
   const [frames, setFrames] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,6 +21,8 @@ const FrameList = () => {
   const [selectedFrameId, setSelectedFrameId] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmFrameId, setConfirmFrameId] = useState(null);
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -73,41 +80,54 @@ const FrameList = () => {
     setIsAddModalOpen(false);
   };
 
+
+
+
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Frame List</h1>
-        <div className="flex space-x-4">
-          <button onClick={() => setIsAddModalOpen(true)}>
-            <MdOutlineAddBox className="text-sky-800 text-4xl" />
-          </button>
+
+      {/* Nav bar */}
+      <div className="w-full flex items-center justify-between fixed top-0 z-10 bg-white">
+        <BackButton destination="/admin" />
+        <div className="flex-grow" style={{ maxWidth: "20vw" }}>
+          <img src={hytecLogo} alt="Photo Booth" />
+        </div>
+        <IoMdAdd className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" onClick={() => setIsAddModalOpen(true)} style={{ width: '15vw', height: '15vw', padding: '2rem', margin: '0 10px' }} />
+      </div>
+
+      <div style={{ paddingTop: '13rem', paddingBottom: '13rem' }}>
+        <div>
+          <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-center">Frame List</h1>
+          </div>
+
+          {isAddModalOpen && <AddFrameModal onClose={handleCloseAddModal} />}
+          {isEditModalOpen && <EditFrameModal frameId={selectedFrameId} onClose={handleCloseEditModal} />}
+          {loading ? (
+            <Spinner />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {frames.map((frame) => (
+                <FrameCard
+                  key={frame._id}
+                  frame={frame}
+                  onDelete={() => handleDelete(frame._id)}
+                  onEdit={handleEdit}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* ConfirmDialog component */}
+          <ConfirmDialog
+            title="Confirm Delete"
+            message="Are you sure you want to delete this frame?"
+            isOpen={isConfirmOpen}
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+          />
         </div>
       </div>
-      {isAddModalOpen && <AddFrameModal onClose={handleCloseAddModal} />}
-      {isEditModalOpen && <EditFrameModal frameId={selectedFrameId} onClose={handleCloseEditModal} />}
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {frames.map((frame) => (
-            <FrameCard
-              key={frame._id}
-              frame={frame}
-              onDelete={() => handleDelete(frame._id)}
-              onEdit={handleEdit} // Pass the handleEdit function
-            />
-          ))}
-        </div>
-      )}
-
-      {/* ConfirmDialog component */}
-      <ConfirmDialog
-        title="Confirm Delete"
-        message="Are you sure you want to delete this frame?"
-        isOpen={isConfirmOpen}
-        onCancel={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-      />
     </div>
   );
 };

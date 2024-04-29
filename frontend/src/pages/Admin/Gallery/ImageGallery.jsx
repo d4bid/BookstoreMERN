@@ -141,6 +141,8 @@ const ImageGallery = ({ isAdmin = true }) => {
 
   return (
     <div className="relative">
+
+  {/* Nav bar */}
       <div className="w-full flex items-center justify-between fixed top-0 z-10 bg-white">
         {showBackButton ? (
           <BackButton destination="/photobooth" />

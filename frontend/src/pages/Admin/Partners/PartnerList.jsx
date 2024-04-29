@@ -7,6 +7,10 @@ import AddPartnerModal from "./AddPartnerModal";
 import BackButton from "../../../components/BackButtonHome"; // Import BackButton component
 import PartnerInfoModal from "../../../components/Partners/PartnerInfoModal";
 
+// navbar
+import hytecLogo from "../../../assets/hytecLogo.png";
+import { IoMdAdd } from "react-icons/io";
+
 const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = "/admin/" }) => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -68,11 +72,13 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
   };
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center">
-        <BackButton destination={backDestination} />
-        <div className="flex gap-x-4">
-          <button
+    <div className="relative">
+
+       {/* Nav bar */}
+       <div className="w-full flex items-center justify-between fixed top-0 z-10 bg-white">
+        <BackButton destination="/admin" />
+        <div className="flex">
+        <button
             className={`px-4 py-1 rounded-lg ${selectedType === 'all' ? 'bg-red-600 text-white' : 'bg-red-300'}`}
             onClick={() => setSelectedType("all")}
           >
@@ -91,15 +97,15 @@ const PartnerList = ({ isAdmin = true, hideAddButton = false, backDestination = 
             Academe
           </button>
         </div>
-        {!hideAddButton && <MdOutlineAddBox className="text-sky-800 text-4xl cursor-pointer" onClick={handleOpenAddModal} />}
+        <IoMdAdd className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" onClick={handleOpenAddModal} style={{ width: '15vw', height: '15vw', padding: '2rem', margin: '0 10px' }} />
       </div>
       {loading ? <Spinner /> : (
-        <div className="grid grid-cols-1 md:grid-cols-4">
+        <div className="grid grid-cols-1 md:grid-cols-4" style={{ paddingTop: '13rem', paddingBottom: '13rem' }}>
           {filteredPartners.map(partner => (
-            <PartnerSingleCard 
-              key={partner._id} 
-              partner={partner} 
-              isAdmin={isAdmin} 
+            <PartnerSingleCard
+              key={partner._id}
+              partner={partner}
+              isAdmin={isAdmin}
               onOpenModal={() => handleOpenModal(partner)}
             />
           ))}
