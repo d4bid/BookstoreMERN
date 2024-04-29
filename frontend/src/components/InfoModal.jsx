@@ -33,7 +33,8 @@ const InfoModal = ({ isOpen, onClose }) => {
 
       //enqueueSnackbar('Visitor log created successfully.', { variant: 'success' });
       onClose();
-      navigate('/photobooth');
+      navigate("/photobooth", { state: { fromLanding: false } }), 1000;
+
       // Clearing the input fields
       setName('');
       setOrganization('');
