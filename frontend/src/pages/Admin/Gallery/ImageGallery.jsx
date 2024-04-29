@@ -8,6 +8,7 @@ import { MdOutlineChecklist, MdOutlineIosShare, MdDeleteForever, MdOutlineCancel
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnackbar } from 'notistack';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import ShareDialog from '../../../components/ShareDialog'; // Import ShareDialog component
 
 const ImageGallery = ({ isAdmin = true }) => {
   const [images, setImages] = useState([]);
@@ -19,6 +20,7 @@ const ImageGallery = ({ isAdmin = true }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmImageIds, setConfirmImageIds] = useState([]);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false); // Define isShareDialogOpen state
 
   useEffect(() => {
     setLoading(true);
@@ -128,36 +130,13 @@ const ImageGallery = ({ isAdmin = true }) => {
     try {
       const response = await axios.post("http://localhost:5555/photos/multiple", { ids: selectedImages });
       const images = response.data;
-      console.log("Images received:", images); // Log the images received
-      const recipientEmail = prompt("Please enter your email:");
-  
-      if (recipientEmail !== null) {
-        sendEmailWithMultiplePhotos(recipientEmail, images);
-      }
+      setShowActions(false); // Close action buttons
+      setShowBackButton(true); // Show back button
+      setChecklistMode(false); // Exit checklist mode
+      setIsShareDialogOpen(true); // Open ShareDialog
     } catch (error) {
       console.error('Error fetching multiple photos:', error);
       enqueueSnackbar("Failed to fetch multiple photos", { variant: "error" });
-    }
-  };
-
-  // Function to send email with multiple photos as attachments
-  const sendEmailWithMultiplePhotos = async (recipientEmail, images) => {
-    try {
-      // Construct email data with multiple attachments
-      const emailData = {
-        to: recipientEmail,
-        subject: "Hytec Power Inc. Photo Booth",
-        text: "Thank you for visiting Hytec Power Incorporated. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.",
-        images: images  // Include images in the email data
-      };
-  
-      // Send email with multiple photos
-      await axios.post("http://localhost:5555/photos/send-email-multiple", emailData);
-  
-      enqueueSnackbar("Email sent successfully", { variant: "success" });
-    } catch (error) {
-      console.error('Error sending email with multiple photos:', error);
-      enqueueSnackbar("Failed to send email", { variant: "error" });
     }
   };
 
@@ -239,6 +218,13 @@ const ImageGallery = ({ isAdmin = true }) => {
         isOpen={isConfirmOpen}
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
+      />
+
+      {/* Render ShareDialog if isOpen state is true */}
+      <ShareDialog
+        isOpen={isShareDialogOpen}
+        onClose={() => setIsShareDialogOpen(false)}
+        selectedImages={selectedImages}
       />
     </div>
   );
