@@ -6,8 +6,8 @@ import BackButton from "../../../components/BackButtonHome";
 import hytecLogo from "../../../assets/hytecLogo.png";
 import { MdOutlineChecklist, MdOutlineIosShare, MdDeleteForever, MdOutlineCancel } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSnackbar } from 'notistack'; // Import enqueueSnackbar
-import ConfirmDialog from '../../../components/ConfirmDialog'; // Import the ConfirmDialog component
+import { useSnackbar } from 'notistack';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 
 const ImageGallery = ({ isAdmin = true }) => {
   const [images, setImages] = useState([]);
@@ -16,9 +16,7 @@ const ImageGallery = ({ isAdmin = true }) => {
   const [showBackButton, setShowBackButton] = useState(true);
   const [checklistMode, setChecklistMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
-  const { enqueueSnackbar } = useSnackbar(); // Use enqueueSnackbar for displaying messages
-
-  // Confirmation dialog state
+  const { enqueueSnackbar } = useSnackbar();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmImageIds, setConfirmImageIds] = useState([]);
 
@@ -58,7 +56,6 @@ const ImageGallery = ({ isAdmin = true }) => {
     setShowBackButton(!showBackButton);
     setChecklistMode(!checklistMode);
 
-    // Clear selected images when checklist mode is toggled off
     if (checklistMode) {
       setSelectedImages([]);
     }
@@ -69,7 +66,6 @@ const ImageGallery = ({ isAdmin = true }) => {
     setShowBackButton(true);
     setChecklistMode(false);
 
-    // Clear selected images when checklist mode is toggled off
     if (checklistMode) {
       setSelectedImages([]);
     }
@@ -81,25 +77,20 @@ const ImageGallery = ({ isAdmin = true }) => {
         ? prevSelectedImages.filter(id => id !== imageId)
         : [...prevSelectedImages, imageId];
 
-      console.log("Selected Images:", newSelectedImages); // Log selected images
+      console.log("Selected Images:", newSelectedImages);
       return newSelectedImages;
     });
   };
 
-  // Function to delete selected images
   const handleDeleteSelected = async () => {
-    // Check if there are selected images
     if (selectedImages.length === 0) {
-      // If no items are selected, display a message using enqueueSnackbar
       enqueueSnackbar("No items selected for deletion", { variant: "info" });
       return;
     }
 
-    // Open the confirmation dialog
     handleOpenConfirmDialog(selectedImages);
   };
 
-  // Confirmation dialog handlers
   const handleOpenConfirmDialog = (imageIds) => {
     setConfirmImageIds(imageIds);
     setIsConfirmOpen(true);
@@ -111,32 +102,63 @@ const ImageGallery = ({ isAdmin = true }) => {
 
   const handleConfirmDelete = async () => {
     try {
-      // Send a DELETE request to delete-multiple endpoint
       await axios.delete("http://localhost:5555/photos/delete-multiple", { data: { ids: confirmImageIds } });
-
-      // Refresh images after deletion
       isAdmin ? fetchImagesAdmin() : fetchImages();
-
-      // Clear selected images after deletion
       setSelectedImages([]);
-
-      // Display success message using enqueueSnackbar
       enqueueSnackbar("Selected items deleted successfully", { variant: "success" });
-
-      // Close the confirmation dialog
       handleCloseConfirmDialog();
     } catch (error) {
       console.error('Error deleting selected items:', error);
-      // Handle error, display error message, etc.
       enqueueSnackbar("Failed to delete selected items", { variant: "error" });
-      // Close the confirmation dialog
       handleCloseConfirmDialog();
     }
   };
 
   const handleCancelDelete = () => {
-    // Close the confirmation dialog without deleting
     handleCloseConfirmDialog();
+  };
+
+  // Function to handle sharing multiple photos via email
+  const handleShareMultiplePhotos = async () => {
+    if (selectedImages.length === 0) {
+      enqueueSnackbar("No items selected for sharing", { variant: "info" });
+      return;
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:5555/photos/multiple", { ids: selectedImages });
+      const images = response.data;
+      console.log("Images received:", images); // Log the images received
+      const recipientEmail = prompt("Please enter your email:");
+  
+      if (recipientEmail !== null) {
+        sendEmailWithMultiplePhotos(recipientEmail, images);
+      }
+    } catch (error) {
+      console.error('Error fetching multiple photos:', error);
+      enqueueSnackbar("Failed to fetch multiple photos", { variant: "error" });
+    }
+  };
+
+  // Function to send email with multiple photos as attachments
+  const sendEmailWithMultiplePhotos = async (recipientEmail, images) => {
+    try {
+      // Construct email data with multiple attachments
+      const emailData = {
+        to: recipientEmail,
+        subject: "Multiple Photos",
+        text: "Here are the photos you requested.",
+        images: images  // Include images in the email data
+      };
+  
+      // Send email with multiple photos
+      await axios.post("http://localhost:5555/photos/send-email-multiple", emailData);
+  
+      enqueueSnackbar("Email sent successfully", { variant: "success" });
+    } catch (error) {
+      console.error('Error sending email with multiple photos:', error);
+      enqueueSnackbar("Failed to send email", { variant: "error" });
+    }
   };
 
   return (
@@ -193,7 +215,11 @@ const ImageGallery = ({ isAdmin = true }) => {
             transition={{ duration: 0.3 }}
             className="w-full flex items-center justify-between fixed bottom-0 z-10 bg-red-500 px-4"
           >
-            <button className="bg-red-500 text-white rounded-full p-4 flex items-center justify-center" style={{ width: '20vw', height: '20vw', padding: '2rem', margin: '0 10px' }}>
+            <button
+              className="bg-red-500 text-white rounded-full p-4 flex items-center justify-center"
+              onClick={handleShareMultiplePhotos}
+              style={{ width: '20vw', height: '20vw', padding: '2rem', margin: '0 10px' }}
+            >
               <MdOutlineIosShare className="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-23 w-auto" />
             </button>
             <button
@@ -207,7 +233,6 @@ const ImageGallery = ({ isAdmin = true }) => {
         )}
       </AnimatePresence>
 
-      {/* ConfirmDialog component */}
       <ConfirmDialog
         title="Confirm Delete"
         message="Are you sure you want to delete the selected image(s)?"

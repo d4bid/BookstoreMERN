@@ -156,6 +156,74 @@ router.post('/send-email', async (req, res) => {
   }
 });
 
+// Route for getting multiple photos by IDs
+router.post('/multiple', async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    // Fetch photos from the database based on the provided IDs
+    const photos = await Photo.find({ _id: { $in: ids } });
+
+    // Format the response to include only necessary data
+    const formattedPhotos = photos.map((photo) => ({
+      _id: photo._id,
+      image: photo.image.toString('base64'),
+      createdAt: photo.createdAt,
+    }));
+
+    res.status(200).json(formattedPhotos);
+  } catch (error) {
+    console.error('Error fetching multiple photos:', error);
+    res.status(500).json({ error: 'Failed to fetch multiple photos' });
+  }
+});
+
+// Route for emailing multiple photos
+router.post('/send-email-multiple', async (req, res) => {
+  const { to, subject, text, images } = req.body;
+
+  try {
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_USER,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    // Prepare attachments array from the images data
+    const attachments = images.map(image => ({
+      filename: `photo_${image._id}.jpeg`, // Assuming JPEG format
+      content: image.image, // Base64-encoded image data
+      encoding: 'base64' // Specify encoding
+    }));
+
+    // Define email options with attachments
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      text,
+      attachments
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email with multiple photos:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
 // Route for saving new photobooth photos
 router.post('/', async (request, response) => {
   try {

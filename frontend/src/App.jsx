@@ -35,7 +35,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 250000); // 30 seconds if 30000
+      }, 25000000); // 30 seconds if 30000
       //console.log('Timer reset');
     };
 
