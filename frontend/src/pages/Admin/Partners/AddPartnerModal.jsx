@@ -69,7 +69,7 @@ const AddPartnerModal = ({ onClose }) => {
     };
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-4 rounded-lg w-full md:w-[600px]">
                 <h1 className="text-3xl mb-4">Add Partner</h1>
                 {loading ? <Spinner /> : ''}
