@@ -15,6 +15,7 @@ import CountdownVideo from "../../assets/Countdown.mp4"; //
 
 const PBMainPage = () => {
   const webcamRef = useRef(null);
+  const sessionId = localStorage.getItem('sessionId');
 
   const [selectedFrame, setSelectedFrame] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -131,7 +132,7 @@ const PBMainPage = () => {
     try {
       const response = await axios.post(
         "http://localhost:5555/photos/save-image",
-        { imageData }
+        { imageData, sessionId }
       );
       const { imagePath } = response.data;
       enqueueSnackbar(`Image saved successfully at /Desktop/PhotoBoothPhotos`, {

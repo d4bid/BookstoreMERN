@@ -6,6 +6,10 @@ const photoSchema = mongoose.Schema(
             type: Buffer,
             required: true,
         },
+        sessionID: {
+            type: String,
+            required: true,
+        },
     },
     {
         timestamps: true

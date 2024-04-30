@@ -11,6 +11,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 import ShareDialog from '../../../components/ShareDialog'; // Import ShareDialog component
 
 const ImageGallery = ({ isAdmin = true }) => {
+  const sessionId = localStorage.getItem('sessionId');
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -24,16 +25,16 @@ const ImageGallery = ({ isAdmin = true }) => {
 
   useEffect(() => {
     setLoading(true);
-    isAdmin ? fetchImagesAdmin() : fetchImages();
+    isAdmin ? fetchImagesAdmin() : fetchImages(sessionId);
     window.addEventListener('newImagesAdded', isAdmin ? fetchImagesAdmin : fetchImages);
     return () => {
       window.removeEventListener('newImagesAdded', isAdmin ? fetchImagesAdmin : fetchImages);
     };
   }, [isAdmin]);
 
-  const fetchImages = async () => {
+  const fetchImages = async (sessionId) => { // Modify to accept sessionId as a parameter
     try {
-      const response = await axios.get("http://localhost:5555/photos/user-gallery");
+      const response = await axios.get(`http://localhost:5555/photos/user-gallery/${sessionId}`); // Pass sessionId in the URL
       setImages(response.data);
       setLoading(false);
     } catch (error) {
@@ -179,7 +180,7 @@ const ImageGallery = ({ isAdmin = true }) => {
               ))}
             </div>
             {!isAdmin && (
-              <p className="text-center text-gray-500 mt-4">NOTE: Only pictures taken within the day are displayed here.</p>
+              <p className="text-center text-gray-500 mt-4">NOTE: Only pictures taken within this session are displayed here.</p>
             )}
           </>
         )}

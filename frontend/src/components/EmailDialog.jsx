@@ -18,6 +18,8 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
+  const sessionId = localStorage.getItem('sessionId');
+
   // useEffect(() => {
   //   const fetchLatestVisitorEmail = async () => {
   //     try {
@@ -139,6 +141,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
             endIcon={<SendIcon />}
             variant="contained"
             sx={{ marginRight: 2 }}
+            disabled={!email}
           >
             Send
           </LoadingButton>

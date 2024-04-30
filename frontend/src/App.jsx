@@ -1,5 +1,7 @@
+// Import necessary dependencies
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import axios from "axios";
 import LandingPage from './pages/LandingPage';
 import InitialPage from './pages/InitialPage';
 import BookList from './pages/Books/Booklist';
@@ -21,7 +23,6 @@ import Partners from './pages/PartnersPage';
 import Devs from './pages/Developers';
 import UserGallery from './pages/UserGallery';
 
-
 const App = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(true);
@@ -35,7 +36,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 250000); // 30 seconds if 30000
+      }, 25000000); // 4 minutes (250000 milliseconds)
       //console.log('Timer reset');
     };
 
@@ -57,6 +58,11 @@ const App = () => {
     // Initial timer setup
     resetTimer();
 
+    // Generate session ID when LandingPage (idle page) loads
+    if (window.location.pathname === '/') {
+      generateSessionId();
+    }
+
     // Cleanup
     return () => {
       clearTimeout(timer);
@@ -64,6 +70,20 @@ const App = () => {
       window.removeEventListener('touchend', onActivity);
     };
   }, [isActive, navigate]);
+
+  // Function to generate session ID
+  const generateSessionId = async () => {
+    try {
+      const response = await axios.post('http://localhost:5555/session/startSession');
+      const sessionId = response.data.sessionId;
+      
+      // Store the session ID in local storage
+      localStorage.setItem('sessionId', sessionId);
+      console.log('Session ID generated:', sessionId);
+    } catch (error) {
+      console.error('Error generating session ID:', error);
+    }
+  };
 
   return (
     <Routes>

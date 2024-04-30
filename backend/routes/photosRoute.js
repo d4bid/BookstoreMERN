@@ -10,7 +10,8 @@ dotenv.config();
 
 const router = express.Router();
 
-const saveImage = async (imageData) => {
+// Function to save image and session ID to the database
+const saveImage = async (imageData, sessionId) => {
   try {
     const base64Data = imageData.replace(/^data:image\/jpeg;base64,/, '');
     const timestamp = Date.now();
@@ -26,9 +27,10 @@ const saveImage = async (imageData) => {
     // Decode base64 image string
     const buffer = Buffer.from(base64Data, 'base64');
 
-    // Save to database
+    // Save to database along with the session ID
     const newPhoto = {
       image: buffer,
+      sessionID: sessionId, // Embed session ID for the photo
     };
 
     const photo = await Photo.create(newPhoto);
@@ -41,15 +43,38 @@ const saveImage = async (imageData) => {
 };
 
 
-router.post('/save-image', (req, res) => {
-  const { imageData } = req.body;
+router.post('/save-image', async (req, res) => {
+  const { imageData, sessionId } = req.body; // Retrieve imageData and sessionId from the request body
 
   try {
-    const imagePath = saveImage(imageData);
+    // Save the image with the session ID
+    const imagePath = await saveImage(imageData, sessionId);
     res.status(200).json({ imagePath });
   } catch (error) {
     console.error('Error:', error.message);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Fetch photos captured with a specific session ID
+router.get('/user-gallery/:sessionId', async (req, res) => {
+  const { sessionId } = req.params; // Retrieve the session ID from the request params
+
+  try {
+    // Fetch photos with the specified session ID
+    const photos = await Photo.find({ sessionID: sessionId });
+
+    // Format the fetched photos
+    const formattedPhotos = photos.map((photo) => ({
+      _id: photo._id,
+      image: photo.image.toString('base64'),
+      createdAt: photo.createdAt,
+    }));
+
+    res.status(200).json(formattedPhotos); // Send the formatted photos as response
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    res.status(500).json({ error: 'Failed to fetch photos' });
   }
 });
 
@@ -103,13 +128,13 @@ router.get('/', async (req, res) => {
 //Route for getting a photo by id
 router.get('/:id', async (request, response) => {
   try {
-      const { id } = request.params;
-      const photo = await Photo.findById(id);
+    const { id } = request.params;
+    const photo = await Photo.findById(id);
 
-      return response.status(200).json(photo);
-  } catch (error){
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
+    return response.status(200).json(photo);
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
   }
 });
 
@@ -130,7 +155,7 @@ router.post('/send-email', async (req, res) => {
       tls: {
         rejectUnauthorized: false
       }
-      
+
     });
 
     // Define email options
@@ -227,26 +252,26 @@ router.post('/send-email-multiple', async (req, res) => {
 // Route for saving new photobooth photos
 router.post('/', async (request, response) => {
   try {
-      if (!request.body.image) {
-          return response.status(400).send({
-              message: 'Send all required fields: image',
-          });
-      }
+    if (!request.body.image) {
+      return response.status(400).send({
+        message: 'Send all required fields: image',
+      });
+    }
 
-      // Decode base64 image string
-      const base64Image = request.body.image;
-      const buffer = Buffer.from(base64Image, 'base64');
+    // Decode base64 image string
+    const base64Image = request.body.image;
+    const buffer = Buffer.from(base64Image, 'base64');
 
-      const newPhoto = {
-          image: buffer,
-      };
+    const newPhoto = {
+      image: buffer,
+    };
 
-      const photo = await Photo.create(newPhoto);
+    const photo = await Photo.create(newPhoto);
 
-      return response.status(201).send(photo);
+    return response.status(201).send(photo);
   } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
   }
 });
 
