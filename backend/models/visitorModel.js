@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const visitorSchema = mongoose.Schema(
     {
+        sessionID: {
+            type: String,
+            required: true,
+        },
+
         name: {
             type: String,
             required: true,
