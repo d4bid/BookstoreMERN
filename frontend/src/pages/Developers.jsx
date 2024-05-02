@@ -29,7 +29,7 @@ const AdminPage = () => {
             <div className="flex-grow"></div>
 
             <button
-                className="bg-white-500 text-white rounded-full p-4 flex items-center justify-center animate-pulse"
+                className="bg-white-500 text-white rounded-full p-4 flex items-center justify-center"
                 style={{
                     width: '15vw',
                     height: '15vw',
@@ -56,7 +56,7 @@ const AdminPage = () => {
                             <div className={flips[index] ? "hidden" : "block"}>
                                 <div className="flex">
                                     <img className="block h-24 rounded-full sm:mx-0 sm:shrink-0 mr-4" src={developer.image} alt={developer.name} />
-                                    <div className="ml-10 mt-5 text-left">
+                                    <div className="ml-9 mt-5 text-left">
                                         <p className="text-lg font-semibold">{developer.name}</p>
                                         <p className="text-slate-500 font-medium">{developer.course}</p>
                                     </div>
