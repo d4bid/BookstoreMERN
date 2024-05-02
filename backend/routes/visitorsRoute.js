@@ -6,17 +6,10 @@ const router = express.Router();
 // Route for saving new visitor
 router.post('/', async (request, response) => {
     try {
-        if (!request.body.name || !request.body.organization || !request.body.email) {
-            return response.status(400).send({
-                message: 'Send all required fields: name, organization, email',
-            });
-        }
-
         const newVisitor = {
+            sessionID: request.body.sessionID,
             name: request.body.name,
             organization: request.body.organization,
-            address: request.body.address,
-            contact: request.body.contact,
             email: request.body.email,
         };
 
@@ -26,6 +19,24 @@ router.post('/', async (request, response) => {
     } catch (error) {
         console.log(error.message);
         response.status(500).send({ message: error.message });
+    }
+});
+
+// Route for getting the latest visitor with a specific session ID
+router.get('/latest/:sessionID', async (request, response) => {
+    try {
+        const { sessionID } = request.params;
+        const latestVisitor = await Visitor.findOne({ sessionID }).sort({ createdAt: -1 });
+
+        if (!latestVisitor) {
+            return response.status(404).json({ message: 'No visitors found for the provided session ID' });
+        }
+
+        return response.status(200).json(latestVisitor);
+    } catch (error) {
+        console.log('No visitors found for the provided session ID' );
+        // console.log(error.message);
+        // response.status(500).send({ message: error.message });
     }
 });
 

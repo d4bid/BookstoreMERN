@@ -11,55 +11,89 @@ import FormControl from '@mui/material/FormControl';
 import { useNavigate } from 'react-router-dom';
 
 const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
+  const [name, setName] = useState('');
+  const [organization, setOrganization] = useState('');
   const [emailType, setEmailType] = useState('@gmail.com');
   const [email, setEmail] = useState('');
   const [customEmailType, setCustomEmailType] = useState('');
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const sessionID = localStorage.getItem('sessionId');
 
-  const sessionId = localStorage.getItem('sessionId');
+  useEffect(() => {
+    const fetchLatestVisitor = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5555/visitors/latest/${sessionID}`);
+        const latestVisitor = response.data;
 
-  // useEffect(() => {
-  //   const fetchLatestVisitorEmail = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:5555/visitors/latest');
-  //       if (response.status === 200) {
-  //         const latestEmail = response.data.email.split('@')[0];
-  //         setEmail(latestEmail);
-  //         setEmail('')
-  //       }
-  //     } catch (error) {
-  //       console.log(error.response); // Log the error response
-  //       enqueueSnackbar('Failed to fetch visitor email', { variant: 'error' });
-  //     }
-  //   };
+        if (latestVisitor.sessionID === sessionID) {
+          // Set name and organization
+          setName(latestVisitor.name);
+          setOrganization(latestVisitor.organization);
 
-  //   if (isOpen) {
-  //     fetchLatestVisitorEmail();
-  //   }
-  // }, [isOpen, enqueueSnackbar]);
+          // Split email address into name and domain
+          const [namePart, domain] = latestVisitor.email.split('@');
+
+          // Set email
+          setEmail(namePart);
+
+          // Check domain and set values accordingly
+          if (domain === 'gmail.com') {
+            setEmailType('@gmail.com');
+          } else if (domain === 'yahoo.com') {
+            setEmailType('@yahoo.com');
+          } else if (domain === 'outlook.com') {
+            setEmailType('@outlook.com');
+          } else {
+            setEmailType('others');
+            setCustomEmailType(`@${domain}`);
+          }
+        }
+      } catch (error) {
+        console.log('There is no existing visitor log in this session.');
+      }
+    };
+
+    if (isOpen) {
+      fetchLatestVisitor();
+    }
+  }, [isOpen, sessionID]);
+
 
   const handleSend = async () => {
+    // Check if name, organization, and email are provided
+    if (!name || !organization || !email || !sessionID) {
+      enqueueSnackbar('Please fill all the required fields.', { variant: 'error' });
+      return;
+    }
+
     const completeEmail = customEmailType ? email + customEmailType : email + emailType;
     const subject = 'Hytec Power Inc. Photo Booth';
-    const text = 'Thank you for visiting Hytec Power Incorporated. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.';
+    const text = `Thank you for visiting Hytec Power Incorporated, ${name} from ${organization}. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.`;
 
     setLoading(true);
 
     try {
+      // Log the visitor
+      await axios.post('http://localhost:5555/visitors', {
+        sessionID,
+        name,
+        organization,
+        email: completeEmail,
+      });
+
+      // Send the email with the image
       const response = await axios.post('http://localhost:5555/photos/send-email', {
         to: completeEmail,
         subject,
         text,
         imagePath,
       });
+
       if (response.status === 200) {
         enqueueSnackbar('Email sent successfully', { variant: 'success' });
         onClose();
-        setEmail('');
-        setCustomEmailType('');
-        setEmailType('@gmail.com');
       }
     } catch (error) {
       enqueueSnackbar('Failed to send email', { variant: 'error' });
@@ -67,6 +101,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
       setLoading(false);
     }
   };
+
 
   const handleCancel = () => {
     onClose();
@@ -84,11 +119,11 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   };
 
   const handleSelectFocus = () => {
-    setIsSelectFocused(true); 
+    setIsSelectFocused(true);
   };
 
   const handleSelectBlur = () => {
-    setIsSelectFocused(false); 
+    setIsSelectFocused(false);
   };
 
   if (!isOpen) {
@@ -98,14 +133,37 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Send Email</h2>
+        <h2 className="text-xl font-semibold mb-4">Send Photo</h2>
+        <div className="mb-4">
+          <TextField
+            variant="outlined"
+            label="Name"
+            className="w-full mb-2"
+            value={name}
+            required
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className='mb-4'>
+          <TextField
+            variant="outlined"
+            label="Organization"
+            className="w-full mb-2"
+            value={organization}
+            placeholder='Company / School Name'
+            required
+            onChange={(e) => setOrganization(e.target.value)}
+          />
+        </div>
         <div className="flex mb-4">
           <TextField
             variant="outlined"
-            label="Recipient Email"
+            label="Email"
             type="email"
             className="w-70 p-2 border rounded-r-none"
             value={email}
+            placeholder='e.g. juandelacruz'
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
           <FormControl variant="outlined" className="border rounded-l-none">
@@ -129,7 +187,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
               label="Custom Email Domain"
               className="w-full"
               value={customEmailType}
-              placeholder='e.g. @edu.com'
+              placeholder='e.g. @edu.ph'
               onChange={handleCustomEmailTypeChange}
             />
           </div>
@@ -141,7 +199,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
             endIcon={<SendIcon />}
             variant="contained"
             sx={{ marginRight: 2 }}
-            disabled={!email}
+            disabled={!email || !name || !organization}
           >
             Send
           </LoadingButton>
