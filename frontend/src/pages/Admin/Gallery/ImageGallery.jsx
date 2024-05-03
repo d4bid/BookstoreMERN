@@ -36,8 +36,8 @@ const ImageGallery = ({ isAdmin = true }) => {
 
   const fetchImages = async (sessionId) => { // Modify to accept sessionId as a parameter
     try {
-      // const response = await axios.get(`http://localhost:5555/photos/user-gallery/${sessionId}`); //per session
-      const response = await axios.get(`http://localhost:5555/photos/user-gallery/`); //per day
+      const response = await axios.get(`http://localhost:5555/photos/user-gallery/${sessionId}`); //per session
+      // const response = await axios.get(`http://localhost:5555/photos/user-gallery/`); //per day
       setImages(response.data);
       setLoading(false);
     } catch (error) {
