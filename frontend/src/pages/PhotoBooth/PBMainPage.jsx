@@ -70,7 +70,7 @@ const PBMainPage = () => {
       flippedCanvas.height = canvas.height;
 
       // Flip the image horizontally
-     // flippedCtx.translate(flippedCanvas.width, 0);
+      // flippedCtx.translate(flippedCanvas.width, 0);
       //flippedCtx.scale(-1, 1);
       flippedCtx.drawImage(
         image,
@@ -135,11 +135,11 @@ const PBMainPage = () => {
         { imageData, sessionId }
       );
       const { imagePath } = response.data;
-      enqueueSnackbar(`Image saved successfully at /Desktop/PhotoBoothPhotos`, {
-        variant: "success",
-      });
+      // enqueueSnackbar(`Image saved successfully at /Desktop/PhotoBoothPhotos`, {
+      //   variant: "success",
+      // });
     } catch (error) {
-      enqueueSnackbar(`Failed to save image`, { variant: "error" });
+      // enqueueSnackbar(`Failed to save image`, { variant: "error" });
     }
   };
 
@@ -251,8 +251,8 @@ const PBMainPage = () => {
         {showCaptureButton && <CaptureButton onCapture={handleCountdown} />}
         <div className="flex-grow"></div>{" "}
         {/* Empty flex item to push the last component */}
-        {showGalleryButton && <GalleryButton toggleFrameSelector={toggleFrameSelector}/>}
-         </div>
+        {showGalleryButton && <GalleryButton toggleFrameSelector={toggleFrameSelector} />}
+      </div>
 
       {isPreviewOpen && (
         <PreviewModal

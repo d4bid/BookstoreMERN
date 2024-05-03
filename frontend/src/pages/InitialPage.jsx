@@ -23,6 +23,7 @@ const InitialPage = () => {
   const [isAboutUsModalOpen, setIsAboutUsModalOpen] = useState(false);
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
   const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
+  const [isEHytecModalOpen, setEHytecModalOpen] = useState(false);
   const location = useLocation();
   const [showPrivacyScreen, setShowPrivacyScreen] = useState(location.state?.fromLanding ?? false);
 
@@ -74,6 +75,10 @@ const InitialPage = () => {
     setIsCareersModalOpen(true);
   };
 
+  const handleEhyteckClick = () => {
+    setEHytecModalOpen(true);
+  };
+
   const closeAboutUsModal = () => {
     setIsAboutUsModalOpen(false);
   };
@@ -86,9 +91,13 @@ const InitialPage = () => {
     setIsCareersModalOpen(false);
   };
 
-  const handleClientsClick = () => {
-    navigate("/partners");
+  const closeEHytecModal = () => {
+    setEHytecModalOpen(false);
   };
+
+  // const handleClientsClick = () => {
+  //   navigate("/partners");
+  // };
 
   return (
     <AnimatePresence>
@@ -131,14 +140,14 @@ const InitialPage = () => {
         <div className="relative flex justify-center">
           <div className="flex flex-wrap justify-center">
             <Card
-              title="Partners"
-              icon={IoPeopleCircleSharp}
-              onClick={handleClientsClick}
+              title="About Us"
+              icon={IoInformationCircleSharp}
+              onClick={handleAboutUsClick}
             />
             <Card
-              title="Careers"
-              icon={MdWork}
-              onClick={handleCareersClick}
+              title="E-Hytec"
+              icon={IoPeopleCircleSharp}
+              onClick={handleEhyteckClick}
             />
             <Card
               title="News"
@@ -146,9 +155,9 @@ const InitialPage = () => {
               onClick={handleNewsClick}
             />
             <Card
-              title="About Us"
-              icon={IoInformationCircleSharp}
-              onClick={handleAboutUsClick}
+              title="Careers"
+              icon={MdWork}
+              onClick={handleCareersClick}
             />
           </div>
         </div>
@@ -180,6 +189,11 @@ const InitialPage = () => {
           isOpen={isCareersModalOpen}
           onClose={closeCareersModal}
           url="https://hytecpower.com/careers/"
+        />
+        <UrlModal
+          isOpen={isEHytecModalOpen}
+          onClose={closeEHytecModal}
+          url="https://hytecpower.com/"
         />
       </motion.div>
     </AnimatePresence>
