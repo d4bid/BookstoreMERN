@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useNavigate } from 'react-router-dom';
 
-const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
+const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedImages, isMultiple }) => {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [emailType, setEmailType] = useState('@gmail.com');
@@ -61,7 +61,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   }, [isOpen, sessionID]);
 
 
-  const handleSend = async () => {
+  const handleSendSingleImage = async () => {
     // Check if name, organization, and email are provided
     if (!name || !organization || !email || !sessionID) {
       enqueueSnackbar('Please fill all the required fields.', { variant: 'error' });
@@ -102,6 +102,34 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
     }
   };
 
+  const handleSendMultipleImages = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:5555/photos/multiple", { ids: selectedImages });
+      const images = response.data;
+
+      const completeEmail = customEmailType ? email + customEmailType : email + emailType;
+
+      const emailData = {
+        to: completeEmail,
+        subject: "Hytec Power Inc. Photo Booth",
+        text: `Thank you for visiting Hytec Power Incorporated, ${name} from ${organization}. Please find the attached image. For more information, visit us at https://hytecpower.com or contact Engr. Eric Jude S. Soliman, President & CEO, at 09175311624.`,
+        images: images
+      };
+
+      await axios.post("http://localhost:5555/photos/send-email-multiple", emailData);
+      enqueueSnackbar("Email sent successfully", { variant: "success" });
+      onClose();
+    } catch (error) {
+      console.error('Error sending email with multiple photos:', error);
+      enqueueSnackbar("Failed to send email", { variant: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSend = isMultiple ? handleSendMultipleImages : handleSendSingleImage;
 
   const handleCancel = () => {
     onClose();
@@ -133,7 +161,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Send Photo</h2>
+        <h2 className="text-xl font-semibold mb-4">{isMultiple ? 'Share Photos' : 'Share Photo'}</h2>
         <div className="mb-4">
           <TextField
             variant="outlined"

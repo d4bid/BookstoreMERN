@@ -93,6 +93,7 @@ const PreviewModal = ({ imageSrc, onClose }) => {
             onClose={() => setIsEmailDialogOpen(false)}
             imagePath={imageSrc}
             setIsSelectFocused={setIsSelectFocused} // Pass setIsSelectFocused to EmailDialog
+            isMultiple={false}
           />
         )}
       </motion.div>
