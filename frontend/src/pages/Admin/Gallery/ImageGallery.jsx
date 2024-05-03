@@ -8,7 +8,7 @@ import { MdOutlineChecklist, MdOutlineIosShare, MdDeleteForever, MdOutlineCancel
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnackbar } from 'notistack';
 import ConfirmDialog from '../../../components/ConfirmDialog';
-import ShareDialog from '../../../components/ShareDialog'; // Import ShareDialog component
+import EmailDialog from '../../../components/EmailDialog'; // Import ShareDialog component
 
 const ImageGallery = ({ isAdmin = true }) => {
   const sessionId = localStorage.getItem('sessionId');
@@ -21,7 +21,9 @@ const ImageGallery = ({ isAdmin = true }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmImageIds, setConfirmImageIds] = useState([]);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false); // Define isShareDialogOpen state
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false); // Define isShareDialogOpen state
+  const [isSelectFocused, setIsSelectFocused] = useState(false); // State to track focus on Select
+
 
   useEffect(() => {
     setLoading(true);
@@ -129,12 +131,10 @@ const ImageGallery = ({ isAdmin = true }) => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5555/photos/multiple", { ids: selectedImages });
-      const images = response.data;
       setShowActions(false); // Close action buttons
       setShowBackButton(true); // Show back button
       setChecklistMode(false); // Exit checklist mode
-      setIsShareDialogOpen(true); // Open ShareDialog
+      setIsEmailDialogOpen(true); // Open ShareDialog
     } catch (error) {
       console.error('Error fetching multiple photos:', error);
       enqueueSnackbar("Failed to fetch multiple photos", { variant: "error" });
@@ -221,12 +221,21 @@ const ImageGallery = ({ isAdmin = true }) => {
         onConfirm={handleConfirmDelete}
       />
 
-      {/* Render ShareDialog if isOpen state is true */}
+      {/* Render ShareDialog if isOpen state is true
       <ShareDialog
         isOpen={isShareDialogOpen}
         onClose={() => setIsShareDialogOpen(false)}
         selectedImages={selectedImages}
-      />
+      /> */}
+
+      {/* EmailDialog */}
+        <EmailDialog
+          isOpen={isEmailDialogOpen}
+          onClose={() => setIsEmailDialogOpen(false)}
+          selectedImages={selectedImages}
+          setIsSelectFocused={setIsSelectFocused} // Pass setIsSelectFocused to EmailDialog
+          isMultiple={true}
+        />
     </div>
   );
 };

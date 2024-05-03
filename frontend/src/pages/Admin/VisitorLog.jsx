@@ -21,7 +21,9 @@ const VisitorLog = () => {
         axios
             .get("http://localhost:5555/visitors")
             .then((response) => {
-                setVisitors(response.data.data);
+                // Sort visitors by dateVisited in descending order
+                const sortedVisitors = response.data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setVisitors(sortedVisitors);
                 setLoading(false);
             })
             .catch((error) => {
@@ -58,19 +60,21 @@ const VisitorLog = () => {
 
         // Add headers
         worksheet.columns = [
-            { header: 'No', key: 'no' },
             { header: 'Name', key: 'name' },
             { header: 'Organization', key: 'organization' },
+            { header: 'Position', key: 'position' },
+            { header: 'Contact', key: 'contact' },
             { header: 'Email', key: 'email' },
             { header: 'Date Visited', key: 'dateVisited' },
         ];
 
         // Add data
-        visitors.forEach((visitor, index) => {
+        visitors.forEach((visitor) => {
             worksheet.addRow({
-                no: index + 1,
                 name: visitor.name,
                 organization: visitor.organization,
+                position: visitor.position,
+                contact: visitor.contact,
                 email: visitor.email,
                 dateVisited: new Date(visitor.createdAt).toLocaleString(),
             });
@@ -123,24 +127,28 @@ const VisitorLog = () => {
                         <Table aria-label="visitor log table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>No</TableCell>
                                     <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Name</TableCell>
                                     <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Organization</TableCell>
+                                    <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Position</TableCell>
+                                    <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Contact</TableCell>
                                     <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Email</TableCell>
                                     <TableCell className="border border-slate-600 rounded-md" style={{ fontWeight: 'bold' }}>Date Visited</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {visitors.map((visitor, index) => (
+                                {visitors.map((visitor) => (
                                     <TableRow key={visitor._id} className="h-8">
-                                        <TableCell className="border border-slate-700 rounded-md text-center">
-                                            {index + 1}
-                                        </TableCell>
                                         <TableCell className="border border-slate-700 rounded-md text-center">
                                             {visitor.name}
                                         </TableCell>
                                         <TableCell className="border border-slate-700 rounded-md text-center">
                                             {visitor.organization}
+                                        </TableCell>
+                                        <TableCell className="border border-slate-700 rounded-md text-center">
+                                            {visitor.position}
+                                        </TableCell>
+                                        <TableCell className="border border-slate-700 rounded-md text-center">
+                                            {visitor.contact}
                                         </TableCell>
                                         <TableCell className="border border-slate-700 rounded-md text-center">
                                             {visitor.email}

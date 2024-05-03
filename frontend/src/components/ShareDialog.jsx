@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 
-const ShareDialog = ({ isOpen, onClose, selectedImages }) => {
+const ShareDialog = ({ isOpen, onClose, selectedImages, isMultiple }) => {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [emailType, setEmailType] = useState('@gmail.com');
   const [customEmailType, setCustomEmailType] = useState('');
