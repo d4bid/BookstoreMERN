@@ -36,7 +36,7 @@ const App = () => {
         setIsActive(false);
         navigate('/');
         console.log('Navigated to home page');
-      }, 25000); // 4 minutes (250000 milliseconds)
+      }, 25000000); // 4 minutes (250000 milliseconds)
       //console.log('Timer reset');
     };
 

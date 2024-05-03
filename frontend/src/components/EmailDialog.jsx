@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedImages, isMultiple }) => {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
+  const [position, setPosition] = useState('');
+  const [contact, setContact] = useState('');
   const [emailType, setEmailType] = useState('@gmail.com');
   const [email, setEmail] = useState('');
   const [customEmailType, setCustomEmailType] = useState('');
@@ -31,6 +33,8 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
           // Set name and organization
           setName(latestVisitor.name);
           setOrganization(latestVisitor.organization);
+          setPosition(latestVisitor.position);
+          setContact(latestVisitor.contact);
 
           // Split email address into name and domain
           const [namePart, domain] = latestVisitor.email.split('@');
@@ -80,6 +84,8 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
         sessionID,
         name,
         organization,
+        position,
+        contact,
         email: completeEmail,
       });
 
@@ -183,6 +189,27 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
             onChange={(e) => setOrganization(e.target.value)}
           />
         </div>
+        <div className='mb-4'>
+          <TextField
+            variant="outlined"
+            label="Position"
+            className="w-full mb-2"
+            value={position}
+            placeholder='e.g. Student'
+            required
+            onChange={(e) => setPosition(e.target.value)}
+          />
+        </div>
+        <div className='mb-4'>
+          <TextField
+            variant="outlined"
+            label="Contact"
+            className="w-full mb-2"
+            value={contact}
+            required
+            onChange={(e) => setContact(e.target.value)}
+          />
+        </div>
         <div className="flex mb-4">
           <TextField
             variant="outlined"
@@ -227,7 +254,7 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
             endIcon={<SendIcon />}
             variant="contained"
             sx={{ marginRight: 2 }}
-            disabled={!email || !name || !organization}
+            disabled={!email || !name || !organization || !position || !contact}
           >
             Send
           </LoadingButton>

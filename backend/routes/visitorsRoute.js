@@ -10,6 +10,8 @@ router.post('/', async (request, response) => {
             sessionID: request.body.sessionID,
             name: request.body.name,
             organization: request.body.organization,
+            position: request.body.position,
+            contact: request.body.contact,
             email: request.body.email,
         };
 

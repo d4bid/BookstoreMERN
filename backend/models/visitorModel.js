@@ -17,11 +17,13 @@ const visitorSchema = mongoose.Schema(
             required: true,
         },
 
-        address: {
+        position: {
             type: String,
+            required: true,
         },
         contact: {
             type: String,
+            required: true,
         },
         email: {
             type: String,
