@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
 import BG from "../assets/BG.mp4"
 import BG2 from "../assets/BG_2.mp4"
+import { FaDev } from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
 
 const InitialPage = () => {
@@ -165,13 +166,13 @@ const InitialPage = () => {
         <div className="flex-grow"></div>
 
         <div className="mb-4 flex justify-center">
+        <a href="/devs">
+            <FaDev className="absolute left-2 bottom-3 text-3rem lg:text-4xl text-red-500 mt-2 lg:mt-4">About the devs.</FaDev>
+          </a>
           <PhotoboothButton
             onClick={handlePhotoboothClick}
 
           />
-          <a href="/devs">
-            <h2 className="absolute right-2 bottom-3 text-base lg:text-xl text-red-500 font-semibold mt-2 lg:mt-4">About the devs.</h2>
-          </a>
         </div>
 
         <InfoModal isOpen={isInfoModalOpen} onClose={closeInfoModal} />
