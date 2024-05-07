@@ -46,13 +46,13 @@ const AdminPage = () => {
           </div>
         </Link>
 
-        {/* Partners Card Button */}
+        {/* Partners Card Button
         <Link to="/admin/partners" className="group">
           <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
             <h2 className="text-2xl font-semibold mb-4">Partners</h2>
             <p className="text-gray-700 text-lg">Manage Partners</p>
           </div>
-        </Link>
+        </Link> */}
 
         {/* Gallery Card Button */}
         <Link to="/admin/gallery" className="group">
@@ -70,12 +70,12 @@ const AdminPage = () => {
           </div>
         </Link>
 
-        <Link to="/admin/frames" className="group">
+        {/* <Link to="/admin/frames" className="group">
           <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
             <h2 className="text-2xl font-semibold mb-4">XXXXXX</h2>
             <p className="text-gray-700 text-lg">xxxxxx</p>
           </div>
-        </Link>
+        </Link> */}
       </div>
 
       <div className="flex-grow"></div>
