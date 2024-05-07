@@ -222,13 +222,6 @@ const ImageGallery = ({ isAdmin = true, toDestination = '/admin' }) => {
         onConfirm={handleConfirmDelete}
       />
 
-      {/* Render ShareDialog if isOpen state is true
-      <ShareDialog
-        isOpen={isShareDialogOpen}
-        onClose={() => setIsShareDialogOpen(false)}
-        selectedImages={selectedImages}
-      /> */}
-
       {/* EmailDialog */}
         <EmailDialog
           isOpen={isEmailDialogOpen}

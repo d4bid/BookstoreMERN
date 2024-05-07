@@ -1,7 +1,6 @@
 import express, { request, response } from "express";
 import { PORT, mongoDBURL, mongoDBURLLocal } from "./config.js";
 import mongoose from "mongoose";
-import booksRoute from './routes/booksRoute.js';
 import framesRoute from './routes/framesRoute.js';
 import photosRoute from './routes/photosRoute.js';
 import partnersRoute from './routes/partnersRoute.js';
@@ -23,10 +22,9 @@ app.use(cors());
 
 app.get('/', (request, response) => {
     console.log(request)
-    return response.status(234).send('Welcome to MERN Stack Tutorial');
+    return response.status(234).send('Backend is running properly.');
 });
 
-app.use('/books', booksRoute);
 app.use('/frames', framesRoute);
 app.use('/photos', photosRoute);
 app.use('/partners', partnersRoute);

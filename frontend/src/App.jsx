@@ -4,12 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import LandingPage from './pages/LandingPage';
 import InitialPage from './pages/InitialPage';
-import BookList from './pages/Books/Booklist';
-import CreateBook from './pages/Books/CreateBook';
-import ShowBook from './pages/Books/ShowBook';
-import EditBook from './pages/Books/EditBook';
-import DeleteBook from './pages/Books/DeleteBook';
-import PhotoBook from './pages/PhotoBooth/PBMainPage';
+import PhotoBooth from './pages/PhotoBooth/PBMainPage';
 import FrameList from './pages/Admin/Frames/Framelist';
 import AddFrame from './pages/Admin/Frames/AddFrameModal';
 import EditFrame from './pages/Admin/Frames/EditFrameModal';
@@ -94,15 +89,8 @@ const App = () => {
       {/* Dev route */}
       <Route path='/devs' element={<Devs />} />
 
-      {/* Books CRUD routes */}
-      <Route path='/books' element={<BookList />} />
-      <Route path='/books/create' element={<CreateBook />} />
-      <Route path='/books/details/:id' element={<ShowBook />} />
-      <Route path='/books/edit/:id' element={<EditBook />} />
-      <Route path='/books/delete/:id' element={<DeleteBook />} />
-
       {/* Photo booth routes */}
-      <Route path='/photobooth' element={<PhotoBook />} />
+      <Route path='/photobooth' element={<PhotoBooth />} />
 
       {/* Partners routes */}
       <Route path='/partners' element={<Partners />} />
