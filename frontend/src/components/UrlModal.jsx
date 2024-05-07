@@ -36,21 +36,19 @@ const containerVariant = {
 
 const UrlModal = ({ isOpen, onClose, url }) => {
   const modalRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true); // State to track loading status
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Reset isLoading when modal is opened
     setIsLoading(true);
   }, [isOpen]);
 
   useEffect(() => {
-    // Simulating loading delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [isOpen]); // Trigger the loading simulation when isOpen changes
+  }, [isOpen]);
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -58,13 +56,11 @@ const UrlModal = ({ isOpen, onClose, url }) => {
     }
   };
 
-  // Add event listener to detect clicks outside the modal
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
-    // Remove event listener on cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -99,7 +95,7 @@ const UrlModal = ({ isOpen, onClose, url }) => {
                   src={url}
                   title="Modal Content"
                   className="w-full h-full"
-                  style={{ border: 'none' }} // Remove iframe border if necessary
+                  style={{ border: 'none' }}
                 ></iframe>
               )}
             </div>
