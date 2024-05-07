@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mp4Background from '../../src/assets/idle.mp4';
+import mp4Background from '../../../idle video/idle.mp4';
 import { AnimatePresence, motion } from "framer-motion";
 import { MdTouchApp } from "react-icons/md";
 

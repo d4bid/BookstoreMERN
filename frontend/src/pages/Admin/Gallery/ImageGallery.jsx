@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import EmailDialog from '../../../components/EmailDialog'; // Import ShareDialog component
 
-const ImageGallery = ({ isAdmin = true }) => {
+const ImageGallery = ({ isAdmin = true, toDestination = '/admin' }) => {
   const sessionId = localStorage.getItem('sessionId');
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -148,7 +148,7 @@ const ImageGallery = ({ isAdmin = true }) => {
   {/* Nav bar */}
       <div className="w-full flex items-center justify-between fixed top-0 z-10 bg-white">
         {showBackButton ? (
-          <BackButton destination="/photobooth" />
+          <BackButton destination={toDestination} />
         ) : (
           <button className="bg-white text-red-500 rounded-full p-4 flex items-center justify-center" onClick={toggleBackButton} style={{ width: '20vw', height: '20vw', padding: '2rem', margin: '0 10px' }}>
             <MdOutlineCancel className="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-23 w-auto" />
