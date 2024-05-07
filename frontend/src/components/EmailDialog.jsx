@@ -160,6 +160,14 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
     setIsSelectFocused(false);
   };
 
+  const handleContactChange = (e) => {
+    const input = e.target.value;
+    // Check if input is a number
+    if (!isNaN(input)) {
+      setContact(input);
+    }
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -201,14 +209,16 @@ const EmailDialog = ({ isOpen, onClose, imagePath, setIsSelectFocused, selectedI
           />
         </div>
         <div className='mb-4'>
-          <TextField
-            variant="outlined"
-            label="Contact"
-            className="w-full mb-2"
-            value={contact}
-            required
-            onChange={(e) => setContact(e.target.value)}
-          />
+          <div className='mb-4'>
+            <TextField
+              variant="outlined"
+              label="Contact"
+              className="w-full mb-2"
+              value={contact}
+              required
+              onChange={handleContactChange}
+            />
+          </div>
         </div>
         <div className="flex mb-4">
           <TextField

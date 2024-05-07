@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Spinner from './Spinner';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress, Grid, Card, CardMedia } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
@@ -43,7 +43,7 @@ const AddImageModal = ({ onClose }) => {
                 images: base64Images,
             };
 
-            await axios.post('http://localhost:5555/slideshow', formData); // Updated API endpoint
+            await axios.post('http://localhost:5555/slideshow', formData);
 
             setLoading(false);
             enqueueSnackbar('Images Added Successfully', { variant: 'success' });
@@ -58,39 +58,47 @@ const AddImageModal = ({ onClose }) => {
     };
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-4 rounded-lg w-full md:w-[600px]">
-                <h1 className="text-3xl mb-4">Add Images</h1>
-                {loading ? <Spinner /> : ''}
-                <div className="my-4">
-                    <label className='text-xl mr-4 text-gray-500'>Images</label>
-                    <input
-                        type='file'
-                        onChange={handleImageChange}
-                        className='border-2 border-gray-500 px-4 py-2 w-full'
-                        multiple
-                    />
-                    <div className="mt-4 grid grid-cols-3 gap-4">
-                        {imagePreviews.map((preview, index) => (
-                            <img
-                                key={index}
-                                src={`data:image/jpeg;base64,${preview}`}
-                                alt="Selected Image"
-                                className="max-w-[100px] mx-auto"
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="flex justify-end">
-                    <button className='p-2 bg-sky-300 mr-4' onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button className='p-2 bg-sky-300' onClick={handleSaveImages}>
-                        Save
-                    </button>
-                </div>
-            </div>
-        </div>
+        <Dialog open={true} onClose={onClose}>
+            <DialogTitle>Add Images</DialogTitle>
+            <DialogContent>
+                {loading ? <CircularProgress /> : ''}
+                <input
+                    type='file'
+                    accept="image/png, image/jpeg, image/gif, image/bmp, image/webp"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                    multiple
+                    id="image-upload"
+                />
+                <label htmlFor="image-upload">
+                    <Button variant="contained" component="span">
+                        Select File(s)
+                    </Button>
+                </label>
+                <Grid container spacing={2} mt={4}>
+                    {imagePreviews.map((preview, index) => (
+                        <Grid item xs={4} key={index}>
+                            <Card>
+                                <CardMedia
+                                    component="img"
+                                    src={`data:image/jpeg;base64,${preview}`}
+                                    alt="Selected Image"
+                                    style={{ maxWidth: '100px', margin: 'auto' }}
+                                />
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleSaveImages} color="primary" variant="contained">
+                    Save
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 

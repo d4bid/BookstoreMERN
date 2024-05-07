@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Spinner from '../../../components/Spinner';
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -10,11 +10,17 @@ const AddFrameModal = ({ onClose }) => {
     const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
+    const allowedImageTypes = ['image/png', 'image/jpeg', 'image/bmp', 'image/webp'];
 
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
-        setImage(selectedImage);
-        previewImage(selectedImage);
+        if (selectedImage && allowedImageTypes.includes(selectedImage.type)) {
+            setImage(selectedImage);
+            previewImage(selectedImage);
+        } else {
+            // Handle invalid file type
+            enqueueSnackbar('Please select a valid image file (JPEG, PNG, BMP, WEBP)', { variant: 'warning' });
+        }
     };
 
     const convertImageToBase64 = (file) => {
@@ -37,6 +43,17 @@ const AddFrameModal = ({ onClose }) => {
     const handleSaveFrame = async () => {
         try {
             setLoading(true);
+            if (!name) {
+                setLoading(false);
+                enqueueSnackbar('Frame name is required.', { variant: 'warning' });
+                return;
+            }
+
+            if (!image) {
+                setLoading(false);
+                enqueueSnackbar('No image selected.', { variant: 'warning' });
+                return;
+            }
 
             const base64Image = await convertImageToBase64(image);
 
@@ -60,44 +77,47 @@ const AddFrameModal = ({ onClose }) => {
     };
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-4 rounded-lg w-full md:w-[600px]">
-                <h1 className="text-3xl mb-4">Add Frame</h1>
-                {loading ? <Spinner /> : ''}
-                <div className="my-4">
-                    <label className='text-xl mr-4 text-gray-500'>Name</label>
-                    <input
-                        type='text'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className='border-2 border-gray-500 px-4 py-2 w-full'
+        <Dialog open={true} onClose={onClose}>
+            <DialogTitle>Add Frame</DialogTitle>
+            <DialogContent>
+                {loading ? <CircularProgress /> : ''}
+                <TextField
+                    label="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                />
+                <input
+                    type='file'
+                    accept="image/png, image/jpeg, image/bmp, image/webp"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                    id="image-upload"
+                />
+                <label htmlFor="image-upload">
+                    <Button variant="contained" component="span">
+                        Select File
+                    </Button>
+                </label>
+                {imagePreview && (
+                    <img
+                        src={imagePreview}
+                        alt="Selected Frame"
+                        style={{ maxWidth: '300px', margin: '20px auto', display: 'block' }}
                     />
-                </div>
-                <div className="my-4">
-                    <label className='text-xl mr-4 text-gray-500'>Image</label>
-                    <input
-                        type='file'
-                        onChange={handleImageChange}
-                        className='border-2 border-gray-500 px-4 py-2 w-full'
-                    />
-                    {imagePreview && (
-                        <img
-                            src={imagePreview}
-                            alt="Selected Frame"
-                            className="mt-4 max-w-[300px] mx-auto"
-                        />
-                    )}
-                </div>
-                <div className="flex justify-end">
-                    <button className='p-2 bg-sky-300 mr-4' onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button className='p-2 bg-sky-300' onClick={handleSaveFrame}>
-                        Save
-                    </button>
-                </div>
-            </div>
-        </div>
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleSaveFrame} color="primary" variant="contained">
+                    Save
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 
