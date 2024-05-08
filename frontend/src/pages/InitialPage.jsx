@@ -12,7 +12,7 @@ import { MdWork } from "react-icons/md";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
-import BG2 from "../assets/bg.mp4"
+import BG2 from "../assets/BG.mp4"
 import { FaDev } from "react-icons/fa";
 import { FaCode } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
