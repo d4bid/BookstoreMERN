@@ -1,0 +1,7 @@
+To change the idle video displayed in this application, follow these steps:
+
+1. Ensure your new video file is named exactly as the current video: idle.mp4.
+2. Place your replacement idle.mp4 file in this folder, replacing the existing one.
+3. After replacing the video file, reload the page where the video is displayed to see the changes.
+
+#REPLACE the current file, not add another file. Same file name and format.
