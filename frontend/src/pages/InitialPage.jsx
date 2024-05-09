@@ -12,9 +12,9 @@ import { MdWork } from "react-icons/md";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import backgroundImage from "../assets/1.png";
-import BG from "../assets/BG.mp4"
-import BG2 from "../assets/BG_2.mp4"
+import BG2 from "../assets/BG.mp4"
 import { FaDev } from "react-icons/fa";
+import { FaCode } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
 
 const InitialPage = () => {
@@ -167,7 +167,7 @@ const InitialPage = () => {
 
         <div className="mb-4 flex justify-center">
         <a href="/devs">
-            <FaDev className="absolute left-2 bottom-3 text-3rem lg:text-4xl text-red-500 mt-2 lg:mt-4">About the devs.</FaDev>
+            <FaDev className="absolute left-2 bottom-3 text-3rem lg:text-4xl text-red-500 mt-2 lg:mt-4 scale-150 ml-4 mb-4">About the devs.</FaDev>
           </a>
           <PhotoboothButton
             onClick={handlePhotoboothClick}
