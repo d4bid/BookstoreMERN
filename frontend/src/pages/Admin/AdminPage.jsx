@@ -23,7 +23,9 @@ const AdminPage = () => {
           </button>
           <h2 className="text-base lg:text-xl text-black font-semibold mt-2 lg:mt-4">Developed by: </h2>
 
-          <h1 className="text-base lg:text-xl text-black font-semibold mt-2 lg:mt-4">Cabrito, D., & Lejao, K.P., & Macalalay, J.C. </h1>
+          <h1 className=" text-black  mt-2 lg:mt-4">David Cabrito </h1>
+          <h1 className=" text-black mt-2 lg:mt-4">Kyle Lejao</h1>
+          <h1 className=" text-black mt-2 lg:mt-4">JC Macalalay</h1>
         </div>
       </div>
       <div className="flex-grow"></div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import ImageViewModal from "./ImageViewModal";
 import { FormControlLabel } from '@mui/material';
-import IOSSwitch from './IOSSwitch'; // Import the IOSSwitch
+import IOSSwitch from './IOSSwitch'; 
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 const ImageCard = ({ image, isActive, _id, onDelete, onSwitchChange, onOpenModal, onCloseModal, isModalOpen }) => {
