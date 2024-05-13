@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa';
-import BackButton from '../../components/BackButtonHome'; // Assuming BackButton is in the same directory
+import BackButton from '../../components/BackButtonHome';
+
+{/* change manual here */}
+import manual from '../../assets/Manual/manual.pdf';
 
 const AdminPage = () => {
   return (
@@ -48,13 +51,6 @@ const AdminPage = () => {
           </div>
         </Link>
 
-        {/* Partners Card Button
-        <Link to="/admin/partners" className="group">
-          <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-            <h2 className="text-2xl font-semibold mb-4">Partners</h2>
-            <p className="text-gray-700 text-lg">Manage Partners</p>
-          </div>
-        </Link> */}
 
         {/* Gallery Card Button */}
         <Link to="/admin/gallery" className="group">
@@ -72,12 +68,19 @@ const AdminPage = () => {
           </div>
         </Link>
 
-        {/* <Link to="/admin/frames" className="group">
+        {/* Manual Card Button */}
+        <div className="group">
           <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-            <h2 className="text-2xl font-semibold mb-4">XXXXXX</h2>
-            <p className="text-gray-700 text-lg">xxxxxx</p>
+            <h2 className="text-2xl font-semibold mb-4">Help</h2>
+            <p className="text-gray-700 text-lg">
+
+
+              <a href={manual} target="_blank" rel="noopener noreferrer">View User Manual</a>
+
+            </p>
           </div>
-        </Link> */}
+        </div>
+
       </div>
 
       <div className="flex-grow"></div>
@@ -85,9 +88,7 @@ const AdminPage = () => {
       <div className="flex-grow"></div>
 
       <div className='w-full flex flex-wrap'>
-        <BackButton className="absolute top-0 left-0 mt-4 ml-4" destination="/" />
-        <div className="flex"></div>
-        <div className="flex"></div>
+        <BackButton className=" mt-4 ml-4" destination="/" />
       </div>
 
     </div>

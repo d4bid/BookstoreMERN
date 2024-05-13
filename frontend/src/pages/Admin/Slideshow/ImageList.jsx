@@ -103,7 +103,9 @@ const ImageList = () => {
 
 
       <div style={{ paddingTop: '13rem', paddingBottom: '13rem' }}>
-         <h1 className="text-3xl ">Image List</h1>
+         <h1 className="text-3xl ">15 MB max size per image</h1>
+
+
 
       {isAddModalOpen && <AddImageModal onClose={handleCloseAddModal} />}
       {loading ? (
